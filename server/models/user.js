@@ -8,7 +8,7 @@ class User extends Model {
       username: { dataType: 'varchar', required: true },
       password: { dataType: 'varchar', required: true },
       nickname: { dataType: 'varchar', required: true },
-      isActive: { dataType: 'tinyint', required: false },
+      isDeleted: { dataType: 'boolean', required: false },
       createdAt: { dataType: 'datetime', required: false },
       updatedAt: { dataType: 'datetime', required: false },
     })
