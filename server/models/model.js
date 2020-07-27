@@ -12,19 +12,19 @@ class Model {
     connectionLimit: 10,
     queueLimit: 0,
   })
-  static defaultWhere = {}
 
   static validationError = createHttpError(400, 'invalid input')
 
-  static init = function (attributes) {
+  static init = function (attributes, { defaultWhere }) {
     this.attributes = attributes
+    this.defaultWhere = defaultWhere
   }
 
   static validate = function (input) {
     const validatedInput = {}
     for (const [name, value] of Object.entries(input)) {
       console.log(name, value)
-      if (!this.attributes[name] || !value) continue
+      if (!this.attributes[name] || value === false) continue
       switch (this.attributes[name].dataType) {
         case 'tinyint':
           if (value == 0 || value == 1) validatedInput[name] = value
@@ -34,6 +34,9 @@ class Model {
           if (typeof value === 'number' || Number(value).toString() === value) {
             validatedInput[name] = value
           } else throw this.validationError
+          break
+        case 'datetime':
+          validatedInput[name] = `'${value}'`
           break
         case 'varchar':
           validatedInput[name] = `'${value}'`
@@ -56,19 +59,23 @@ class Model {
   static generateFindQueryStmt = function (
     isOne,
     attributes = '*',
-    where = {}
+    where = {},
+    rawWhere
   ) {
     const validatedWhere = this.validate({ ...where, ...this.defaultWhere })
     const queryStmt = `
       SELECT ${attributes === '*' ? '*' : wrapBacktick(attributes)} 
       FROM ${this.name}
+      ${rawWhere || !isEmpty(validatedWhere) ? `WHERE ` : ''}
       ${
         !isEmpty(validatedWhere)
-          ? `WHERE ${Object.entries(validatedWhere)
+          ? `${Object.entries(validatedWhere)
               .map((o) => `${o[0]}=${o[1]}`)
               .join(' AND ')}`
           : ''
-      }
+      } 
+      ${rawWhere && isEmpty(validatedWhere) ? `` : ` AND `}
+      ${rawWhere ?? ''}
       ${isOne ? 'LIMIT 1' : ''}
     `
     return queryStmt
@@ -106,19 +113,30 @@ class Model {
   static generateDeleteQueryStmt = function (id) {
     const queryStmt = `
       UPDATE ${this.name}
-      SET isActive = 0
+      SET isDeleted = 1
       WHERE id = ${id}
     `
     return queryStmt
   }
 
-  static findOne = async function (attributes, where) {
-    const queryStmt = this.generateFindQueryStmt(true, attributes, where)
+  static findOne = async function (attributes, where, rawWhere) {
+    const queryStmt = this.generateFindQueryStmt(
+      true,
+      attributes,
+      where,
+      rawWhere
+    )
     return (await this.pool.query(queryStmt))[0][0]
   }
 
-  static findAll = async function (attributes, where) {
-    const queryStmt = this.generateFindQueryStmt(false, attributes, where)
+  static findAll = async function (attributes, where, rawWhere) {
+    const queryStmt = this.generateFindQueryStmt(
+      false,
+      attributes,
+      where,
+      rawWhere
+    )
+    console.log(queryStmt)
     return (await this.pool.query(queryStmt))[0]
   }
 
