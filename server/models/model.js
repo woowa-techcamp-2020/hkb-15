@@ -77,7 +77,7 @@ class Model {
               .join(' AND ')}`
           : ''
       } 
-      ${rawWhere && isEmpty(validatedWhere) ? `` : ` AND `}
+      ${!rawWhere || isEmpty(validatedWhere) ? `` : ` AND `}
       ${rawWhere ?? ''}
       ${isOne ? 'LIMIT 1' : ''}
     `
