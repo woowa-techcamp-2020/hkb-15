@@ -1,13 +1,12 @@
 const Model = require('./model')
 
-class User extends Model {
+class Category extends Model {
   static init() {
     return super.init(
       {
         id: { dataType: 'int', required: false },
-        username: { dataType: 'varchar', required: true },
-        password: { dataType: 'varchar', required: true },
-        nickname: { dataType: 'varchar', required: true },
+        type: { dataType: 'varchar', required: true },
+        name: { dataType: 'varchar', required: true },
         isDeleted: { dataType: 'tinyint', required: false },
         createdAt: { dataType: 'datetime', required: false },
         updatedAt: { dataType: 'datetime', required: false },
@@ -19,4 +18,4 @@ class User extends Model {
   }
 }
 
-module.exports = User
+module.exports = Category
