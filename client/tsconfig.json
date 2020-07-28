@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "incremental": true,
+    "target": "ES6",
+    "module": "commonjs",
+    "outDir": "./dist",
+    "strict": false,
+    "baseUrl": "./",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    "esModuleInterop": true
+  }
+}
