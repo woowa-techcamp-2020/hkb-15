@@ -1,8 +1,18 @@
 const express = require('express')
 const router = express.Router()
-const historyRouter = require('./history')
-const paymentRouter = require('./payment')
 const userController = require('../controllers/user')
+const historyController = require('../controllers/history')
+const paymentController = require('../controllers/payment')
+const categoryController = require('../controllers/category')
+
+const routerGen = (controller) => {
+  const router = express.Router()
+  router.post('/', controller.create)
+  router.get('/', controller.findAll)
+  router.put('/', controller.update)
+  router.delete('/:id', controller.delete)
+  return router
+}
 
 const { authenticate, isAuthenticated } = require('../utils/auth')
 
@@ -11,8 +21,9 @@ router.post('/user', userController.create)
 
 // router.use(isAuthenticated)
 
-router.use('/history', historyRouter)
-router.use('/payment', paymentRouter)
+router.use('/history', routerGen(historyController))
+router.use('/payment', routerGen(paymentController))
+router.use('/category', routerGen(categoryController))
 
 /* GET home page. */
 router.get('/', function (req, res) {
