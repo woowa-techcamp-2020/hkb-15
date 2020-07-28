@@ -24,7 +24,7 @@ class Model {
     const validatedInput = {}
     for (const [name, value] of Object.entries(input)) {
       console.log(name, value)
-      if (!this.attributes[name] || value === false) continue
+      if (!this.attributes[name] || value === undefined) continue
       switch (this.attributes[name].dataType) {
         case 'tinyint':
           if (value == 0 || value == 1) validatedInput[name] = value
