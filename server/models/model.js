@@ -15,6 +15,9 @@ class Model {
 
   static validationError = createHttpError(400, 'invalid input')
 
+  /**
+   * @param {Record<string, { dataType: string, required: boolean }>} attributes
+   */
   static init = function (attributes, { defaultWhere }) {
     this.attributes = attributes
     this.defaultWhere = defaultWhere
