@@ -1,0 +1,28 @@
+@import './reset.scss';
+
+.content-wrap > * {
+  margin-left: 1rem;
+}
+
+li {
+  list-style: none;
+  display: inline-block;
+  padding: 0.8rem;
+}
+
+nav li {
+  background-color: #e7a61a;
+  margin-left: 1rem;
+  box-shadow: 10px 7px 7px -10px rgba(0, 0, 0, 0.75);
+  cursor: pointer;
+  color: #fff;
+  font-weight: bold;
+}
+
+.content-wrap li {
+  display: block;
+}
+
+.button-inset {
+  box-shadow: inset 3px 3px 12px #7e5b10;
+}
