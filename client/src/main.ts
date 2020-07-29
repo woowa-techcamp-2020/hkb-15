@@ -1,4 +1,8 @@
-type Content = Record<string, string | number | string[]>
+import 'regenerator-runtime/runtime'
+import { Content } from './types'
+import model from './models'
+import cem from './utils/custom-event'
+console.log(model)
 
 // Util
 function getPath(): string {
@@ -49,33 +53,37 @@ function onLink(): void {
   document
     .querySelector('nav ul')
     .addEventListener('click', async (e: Event) => {
-      const listNode = (<Element>e.target).closest('li')
-      if (!listNode) return
+      const { target } = e
 
+      if (!(target instanceof HTMLElement)) return
+      const listNode = target.closest('li')
       const path = getCurrentPath(e, listNode)
-      const state = await getStates(path)
+      const state = {
+        path,
+        year: 2020,
+        month: 7,
+      }
 
       //push state
       history.pushState(state, '', path)
 
       //render page
-      popStateHandler({ state })
+      stateChangeHandler({ state })
     })
 }
 
-function popStateHandler(data?: Record<'state', Content>) {
-  const renderTargetWrap = document.querySelector('.content-wrap')
-  const targetView = getPath()
-
-  const contentViewHTML = viewMap[targetView](data?.state.content)
-  render(renderTargetWrap, contentViewHTML)
-
-  setInsetStyle(targetView)
+function stateChangeHandler(data?: Record<'state', Content>) {
+  const { path, year, month } = data.state
+  switch (path) {
+    case '/':
+      cem.fire('getHistory', { year, month })
+    case '/calendar':
+  }
 }
 
 // Pop State
 function onRouter() {
-  window.addEventListener('popstate', popStateHandler)
+  window.addEventListener('popstate', stateChangeHandler)
 }
 
 // View
@@ -104,5 +112,4 @@ const viewMap = {
 ;(function () {
   onLink()
   onRouter()
-  popStateHandler()
 })()
