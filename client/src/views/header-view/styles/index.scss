@@ -1,0 +1,10 @@
+header {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  @import './navigator';
+  @import './month-selector';
+  @import './sum-selector';
+}
