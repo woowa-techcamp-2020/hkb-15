@@ -7,7 +7,7 @@ const defaultOptions = (method: Method): RequestInit => ({
   },
 })
 
-const serverUrl = ''
+const serverUrl = 'http://localhost:3000'
 
 const createQuery = (data: Input): string => {
   return data
@@ -44,8 +44,8 @@ export default {
   updateHistory: async (data: Input) => await PUT('/history', data),
   deleteHistory: async (id: number) => await DELETE(`/history/${id}`),
   createPayment: async (data: Input) => await POST('/payment', data),
-  findPayment: async (data: Input) => await GET('/payment', data),
+  findPayment: async (data?: Input) => await GET('/payment', data),
   updatePayment: async (data: Input) => await PUT('/payment', data),
   deletePayment: async (id: number) => await DELETE(`/payment/${id}`),
-  findCategory: async (data: Input) => await GET('/category', data),
+  findCategory: async (data?: Input) => await GET('/category', data),
 }
