@@ -1,50 +1,27 @@
 import apis from './apis'
+import { Store } from '../types'
 import cem from '../utils/custom-event'
-type Category = {
-  id: number
-  name: string
-  type: string
-}
-type Payment = {
-  id: number
-  name: string
-}
-
-type History = {
-  id: number
-  type: string
-  date: Date
-  content: string
-}
-
-type Store = {
-  categories?: Category[]
-  payments?: Payment[]
-  histories?: History[]
-}
 
 class Model {
   store: Store
 
   constructor() {
-    cem.subscribe('getHistory', this.getHistory)
+    this.store = {}
+    cem.subscribe('initstore', (e: CustomEvent) => this.getInitialData(e))
   }
 
-  async getHistory(e) {
+  async getInitialData(e: CustomEvent) {
     const { year, month } = e.detail
-    const startDate = `${year}-${month}-1`
-    const endDate = `${year}-${month}-31`
-    const histories = await (
-      await apis.findHistory({ startDate, endDate })
+    this.store.payments = await (await apis.findPayment()).json()
+    this.store.categories = await (await apis.findCategory()).json()
+    this.store.histories = await (
+      await apis.findHistory({
+        startDate: `${year}-${month}-01`,
+        endDate: `${year}-${month}-31`,
+      })
     ).json()
-    console.log(histories)
+    cem.fire('storeupdated', { ...e.detail, ...this.store })
   }
-
-  //   async init(year, month): Promise<void> {
-  //     this.store.histories = (await (
-  //       await apis.findHistory(month)
-  //     ).json()) as History[]
-  //   }
 }
 
-export default new Model()
+export default Model
