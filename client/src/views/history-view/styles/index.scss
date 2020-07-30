@@ -8,7 +8,9 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-
-  @include meta.load-css('./date-indicator');
-  @include meta.load-css('./history-card');
+  .date-history-column {
+    width: 100%;
+    @include meta.load-css('./date-indicator');
+    @include meta.load-css('./history-card');
+  }
 }

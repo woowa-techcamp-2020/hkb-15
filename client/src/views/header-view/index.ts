@@ -1,5 +1,6 @@
 import { View } from '../../types'
 import cem from '../../utils/custom-event'
+import { numberWithCommas, monthStr } from '../../utils/helper'
 import './styles'
 
 export default class HeaderView implements View {
@@ -10,34 +11,36 @@ export default class HeaderView implements View {
         this.navigationIconClickHandler(e)
       )
     cem.subscribe('storeupdated', (e: CustomEvent) => this.render(e))
-    cem.subscribe('popstate', (e: CustomEvent) => this.render(e))
   }
 
   render(e: CustomEvent): void {
-    const { path, year, month, expeditureSum, incomeSum } = e.detail
-
+    const { path, year, month, expenditureSum, incomeSum } = e.detail
     document.querySelector('header').innerHTML = `
       ${this.createNavigator()}
       ${this.createMonthSelector(year, month)}
-      ${this.createSumIndicator(incomeSum, expeditureSum)}
+      ${this.createSumIndicator(incomeSum, expenditureSum)}
     `
     this.setInsetStyle(path)
   }
 
   createMonthSelector(year: number, month: number): string {
+    const prevYear = month === 1 ? year - 1 : year
+    const prevMonth = month === 1 ? 12 : month - 1
+    const nextYear = month === 12 ? year + 1 : year
+    const nextMonth = month === 12 ? 1 : month + 1
     return `
 <div class="month-selector">
   <div class="month-indicator">
-    <div class="year">2020</div>
-    <div class="month">May</div>
+    <div class="year">${prevYear}</div>
+    <div class="month">${monthStr[prevMonth]}</div>
   </div>
   <div class="month-indicator">
-    <div class="year">2020</div>
-    <div class="month">June</div>
+    <div class="year">${year}</div>
+    <div class="month">${monthStr[month]}</div>
   </div>
   <div class="month-indicator">
-    <div class="year">2020</div>
-    <div class="month">July</div>
+    <div class="year">${nextYear}</div>
+    <div class="month">${monthStr[nextMonth]}</div>
   </div>
 </div>
 `
@@ -47,8 +50,10 @@ export default class HeaderView implements View {
     return `
 <div class="sum-indicator-wrap">
   <div class="sum-indicator">
-    <div class="income money-button">+4,000,000</div>
-    <div class="expediture money-button">-444.790</div>
+    <div class="income money-button">+${numberWithCommas(incomeSum)}</div>
+    <div class="expediture money-button">-${numberWithCommas(
+      expeditureSum
+    )}</div>
   </div>
 </div>
 `
@@ -88,9 +93,9 @@ export default class HeaderView implements View {
   navigationIconClickHandler(e: Event): void {
     const { target } = e
     if (!(target instanceof HTMLElement)) return
-    const listNode = target.closest('.icon-wrap')
-    if (!listNode) return
-    const path = this.getCurrentPath(e, listNode)
+    const icon = target.closest('.icon-wrap')
+    if (!icon) return
+    const path = this.getCurrentPath(e, icon)
     const state = {
       path,
       year: 2020,

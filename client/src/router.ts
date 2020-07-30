@@ -14,14 +14,13 @@ export default class Router {
     cem.subscribe('statechange', (event: CustomEvent) =>
       this.stateChangeHandler({ state: event.detail })
     )
-    cem.fire('initstore', history.state ?? this.defaultState)
+    this.stateChangeHandler({ state: history.state ?? this.defaultState })
   }
   stateChangeHandler(event?: Record<'state', Record<string, string | number>>) {
     const { path, year, month } = event.state
     switch (path) {
-      case '/':
-        cem.fire('getHistory', { year, month })
-      case '/calendar':
+      default:
+        cem.fire('initstore', event.state)
     }
   }
 }

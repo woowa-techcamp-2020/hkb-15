@@ -5,19 +5,23 @@
   flex-direction: row;
   justify-content: space-between;
 
-  .year {
-    color: var(--gray);
-    font-size: 16px;
-    font-weight: 500;
-    font-size: 16px;
-    line-height: 19px;
-    text-align: center;
-  }
-  .month {
-    margin-top: 2px;
-    font-weight: bold;
-    font-size: 50px;
-    line-height: 61px;
-    text-align: center;
+  .month-indicator {
+    width: 100%;
+    flex: 1;
+    .year {
+      color: var(--gray);
+      font-size: 16px;
+      font-weight: 500;
+      font-size: 16px;
+      line-height: 19px;
+      text-align: center;
+    }
+    .month {
+      margin-top: 2px;
+      font-weight: bold;
+      font-size: 50px;
+      line-height: 61px;
+      text-align: center;
+    }
   }
 }
