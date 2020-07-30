@@ -1,3 +1,4 @@
+@use './cards';
 @use './reset';
 @use './fonts';
 
@@ -7,9 +8,25 @@
   --red: #f8123b;
   --gray: #979797;
   --light-blue: #f5f5f7;
+}
+
+html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+  font-size: 90%;
+}
+
+@media only screen and (max-width: 700px) {
+  html {
+    font-size: 75%;
+  }
+}
+
+@media only screen and (min-width: 1400px) {
+  html {
+    font-size: 100%;
+  }
 }
 
 .body-wrap {
