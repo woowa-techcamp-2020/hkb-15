@@ -7,12 +7,12 @@ nav {
 
   height: 47px;
   width: calc(100% - #{$content-padding * 2});
+  max-width: $content-width;
 
   .icon-wrap {
     flex: 1;
     text-align: center;
     height: 100%;
-    background-color: white;
 
     .icon {
       width: 47px;

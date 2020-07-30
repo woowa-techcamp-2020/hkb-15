@@ -42,6 +42,8 @@ export default class HeaderView implements View {
     <div class="year">${nextYear}</div>
     <div class="month">${monthStr[nextMonth]}</div>
   </div>
+  <div class="shader left"></div>
+  <div class="shader right"></div>
 </div>
 `
   }
