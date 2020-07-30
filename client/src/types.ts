@@ -21,8 +21,8 @@ export interface Store {
   categories?: Category[]
   payments?: Payment[]
   histories?: History[]
-  expenditureSum?: number | 0
-  incomeSum?: number | 0
+  expenditureSum?: number
+  incomeSum?: number
 }
 export interface View {
   render(e: Event): void
