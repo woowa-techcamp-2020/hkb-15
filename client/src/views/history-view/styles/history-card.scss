@@ -1,12 +1,12 @@
 .history-card {
   display: flex;
   justify-content: space-between;
-  margin-top: 17px;
   padding: 23px 31px;
   height: 87px;
   width: 100%;
   background: var(--light-blue);
   border-radius: 20px;
+  margin-bottom: 17px;
 
   .front {
     display: flex;
@@ -37,6 +37,10 @@
       font-feature-settings: 'tnum' on, 'lnum' on;
       line-height: 24px;
       color: var(--red);
+    }
+
+    .income {
+      color: var(--blue);
     }
   }
 }
