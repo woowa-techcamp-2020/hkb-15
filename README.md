@@ -6,7 +6,7 @@
 
 **Woowahan Financial Ledger** is a web application that helps you manage your daily expenses. With its simple and flexible UI, you can use the app universally on both desktop and mobile devices(WIP). We provide you sophisticated design elements including dark mode and custom-designed, colorful cards for each vendor which harmonizes each other perfectly.
 
-Unlike the previous To Do projects, we chose to bundle the app with **Parcel** instead of webpack to improve the productivity and scalability without hassle.
+Unlike the previous To Do projects, we chose **Parcel** to bundle the app instead of webpack to improve the productivity and scalability without hassle.
 
 ```zsh
 npm install
