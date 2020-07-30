@@ -1,10 +1,15 @@
+@use 'sass:meta';
+@use '../../../styles/variables.scss' as *;
+
 header {
   width: 100%;
   display: flex;
+  max-width: $content-width;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  @import './navigator';
-  @import './month-selector';
-  @import './sum-selector';
+
+  @include meta.load-css('./navigator');
+  @include meta.load-css('./month-selector');
+  @include meta.load-css('./sum-selector');
 }

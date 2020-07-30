@@ -1,10 +1,12 @@
+@use '../../../styles/variables.scss' as *;
+
 nav {
-  margin-top: 55.79px;
+  margin-top: 55px;
   display: flex;
   justify-content: space-around;
 
-  height: 47.58px;
-  width: 80%;
+  height: 47px;
+  width: calc(100% - #{$content-padding * 2});
 
   .icon-wrap {
     flex: 1;
@@ -13,10 +15,10 @@ nav {
     background-color: white;
 
     .icon {
-      width: 47.58px;
-      height: 47.58px;
+      width: 47px;
+      height: 47px;
       border-radius: 10px;
-      line-height: 47.58px;
+      line-height: 47px;
       font-size: 32px;
     }
 

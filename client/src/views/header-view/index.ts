@@ -12,6 +12,7 @@ export default class HeaderView implements View {
     cem.subscribe('storeupdated', (e: CustomEvent) => this.render(e))
     cem.subscribe('popstate', (e: CustomEvent) => this.render(e))
   }
+
   render(e: CustomEvent): void {
     const { path, year, month, expeditureSum, incomeSum } = e.detail
 
@@ -24,41 +25,49 @@ export default class HeaderView implements View {
   }
 
   createMonthSelector(year: number, month: number): string {
-    return `<div class="month-selector">
-      <div class="month-indicator">
-        <div class="year">2020</div>
-        <div class="month">May</div>
-      </div>
-      <div class="month-indicator">
-        <div class="year">2020</div>
-        <div class="month">June</div>
-      </div>
-      <div class="month-indicator">
-        <div class="year">2020</div>
-        <div class="month">July</div>
-      </div>
-    </div>`
+    return `
+<div class="month-selector">
+  <div class="month-indicator">
+    <div class="year">2020</div>
+    <div class="month">May</div>
+  </div>
+  <div class="month-indicator">
+    <div class="year">2020</div>
+    <div class="month">June</div>
+  </div>
+  <div class="month-indicator">
+    <div class="year">2020</div>
+    <div class="month">July</div>
+  </div>
+</div>
+`
   }
 
   createSumIndicator(incomeSum: number, expeditureSum: number): string {
-    return `<div class="sum-indicator">
-      <div class="income money-button">+4,000,000</div>
-      <div class="expediture money-button">-444.790</div>
-    </div>`
+    return `
+<div class="sum-indicator-wrap">
+  <div class="sum-indicator">
+    <div class="income money-button">+4,000,000</div>
+    <div class="expediture money-button">-444.790</div>
+  </div>
+</div>
+`
   }
 
   createNavigator(): string {
-    return `<nav>
-    <div class="icon-wrap">
-      <a href="/"><i class="icon">clock</i></a>
-    </div>
-    <div class="icon-wrap">
-      <a href="/calendar"><i class="icon">calendar</i></a>
-    </div>
-    <div class="icon-wrap">
-      <a href="/analytics"><i class="icon">chart_bar</i></a>
-    </div>
-  </nav>`
+    return `
+<nav>
+  <div class="icon-wrap">
+    <a href="/"><i class="icon">clock</i></a>
+  </div>
+  <div class="icon-wrap">
+    <a href="/calendar"><i class="icon">calendar</i></a>
+  </div>
+  <div class="icon-wrap">
+    <a href="/analytics"><i class="icon">chart_bar</i></a>
+  </div>
+</nav>
+`
   }
   setInsetStyle(pathName: string): void {
     const styleName = 'selected'

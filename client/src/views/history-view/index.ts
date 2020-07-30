@@ -14,17 +14,21 @@ export default class HistoryView implements View {
     `
   }
   createDateIndicator(date?: string): string {
-    return `<div class="date-indicator">TUE 16th</div>`
+    return `
+<div class="date-indicator">TUE 16th</div>
+`
   }
   createHistoryCard(history?: History): string {
-    return `<div class="history-card" id="history-1">
-      <div class="front">
-        <div class="payment">KakaoBank</div>
-        <div class="content">Haircut</div>
-      </div>
-      <div class="back">
-        <div class="amount">-14,000</div>
-      </div>
-    </div>`
+    return `
+<div class="history-card" id="history-1">
+  <div class="front">
+    <div class="payment">KakaoBank</div>
+    <div class="content">Haircut</div>
+  </div>
+  <div class="back">
+    <div class="amount">-14,000</div>
+  </div>
+</div>
+`
   }
 }
