@@ -25,20 +25,22 @@ export default class HistoryView implements View {
   createDateColumn(date: string, histories: History[]) {
     console.log(histories)
     return `
-  <div class="date-history-column">
-    ${this.createDateIndicator(date)}
-    ${histories.reduce(
-      (a: string, b: History) => a + this.createHistoryCard(b),
-      ''
-    )}
-  </div>
-  `
+<div class="date-history-column">
+  ${this.createDateIndicator(date)}
+  ${histories.reduce(
+    (a: string, b: History) => a + this.createHistoryCard(b),
+    ''
+  )}
+</div>
+`
   }
+
   createDateIndicator(date: string): string {
     return `
 <div class="date-indicator">${date}</div>
 `
   }
+
   createHistoryCard(history: History): string {
     return `
 <div class="history-card" id="history-1">
