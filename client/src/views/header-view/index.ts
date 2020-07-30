@@ -7,7 +7,7 @@ export default class HeaderView implements View {
   constructor() {
     document
       .querySelector('header')
-      .addEventListener('click', async (e: Event) =>
+      .addEventListener('click', async (e: MouseEvent) =>
         this.navigationIconClickHandler(e)
       )
     cem.subscribe('storeupdated', (e: CustomEvent) => this.render(e))
@@ -74,6 +74,7 @@ export default class HeaderView implements View {
 </nav>
 `
   }
+
   setInsetStyle(pathName: string): void {
     const styleName = 'selected'
     document.querySelector(`nav .${styleName}`)?.classList.remove(styleName)
@@ -84,18 +85,18 @@ export default class HeaderView implements View {
     node.classList.toggle(styleName)
   }
 
-  getCurrentPath(e: Event, listNode: Element): string {
+  getPathFromLink(e: MouseEvent, icon: Element): string {
     e.preventDefault()
-    const path = listNode.querySelector('a').getAttribute('href')
+    const path = icon.querySelector('a').getAttribute('href')
     return path
   }
 
-  navigationIconClickHandler(e: Event): void {
+  navigationIconClickHandler(e: MouseEvent): void {
     const { target } = e
     if (!(target instanceof HTMLElement)) return
     const icon = target.closest('.icon-wrap')
     if (!icon) return
-    const path = this.getCurrentPath(e, icon)
+    const path = this.getPathFromLink(e, icon)
     const state = {
       path,
       year: 2020,
