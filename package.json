@@ -1,0 +1,10 @@
+{
+  "name": "woowahan-financial-ledger",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "concurrently \"npm run --prefix client start\" \"npm run --prefix server start\""
+  },
+  "devDependencies": {
+    "concurrently": "^5.2.0"
+  }
+}
