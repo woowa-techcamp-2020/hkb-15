@@ -7,9 +7,17 @@ export default class HeaderView implements View {
   constructor() {
     document
       .querySelector('header')
-      .addEventListener('click', async (e: MouseEvent) =>
-        this.navigationIconClickHandler(e)
-      )
+      .addEventListener('click', (e: MouseEvent) => {
+        e.preventDefault()
+        const { target } = e
+        if (!(target instanceof HTMLElement)) return
+        const aTag = target.closest('a')
+
+        if (aTag) return this.navigationIconClickHandler(target)
+        const button = target.closest('.money-button')
+        console.log(button)
+        if (button) return button.classList.toggle('selected')
+      })
     cem.subscribe('storeupdated', (e: CustomEvent) => this.render(e))
   }
 
@@ -50,8 +58,8 @@ export default class HeaderView implements View {
     return `
 <div class="sum-indicator-wrap">
   <div class="sum-indicator">
-    <div class="income money-button">+${numberWithCommas(incomeSum)}</div>
-    <div class="expediture money-button">-${numberWithCommas(
+    <div class="money-button income">+${numberWithCommas(incomeSum)}</div>
+    <div class="money-button expenditure">-${numberWithCommas(
       expeditureSum
     )}</div>
   </div>
@@ -85,18 +93,13 @@ export default class HeaderView implements View {
     node.classList.toggle(styleName)
   }
 
-  getPathFromLink(e: MouseEvent, icon: Element): string {
-    e.preventDefault()
-    const path = icon.querySelector('a').getAttribute('href')
+  getPathFromLink(aTag: Element): string {
+    const path = aTag.getAttribute('href')
     return path
   }
 
-  navigationIconClickHandler(e: MouseEvent): void {
-    const { target } = e
-    if (!(target instanceof HTMLElement)) return
-    const icon = target.closest('.icon-wrap')
-    if (!icon) return
-    const path = this.getPathFromLink(e, icon)
+  navigationIconClickHandler(target: Element): void {
+    const path = this.getPathFromLink(target)
     const state = {
       path,
       year: 2020,
