@@ -1,0 +1,38 @@
+.history-card {
+  display: flex;
+  margin-top: 17px;
+  padding: 23px 31px 23px 31px;
+  height: 87px;
+  width: 100%;
+  background: var(--light-blue);
+  border-radius: 20px;
+
+  .front {
+    display: flex;
+    flex: none;
+    flex-direction: column;
+    .payment {
+      font-weight: 500;
+      font-size: 13px;
+      line-height: 16px;
+      color: var(--gray);
+    }
+    .content {
+      font-weight: bold;
+      font-size: 20px;
+      line-height: 24px;
+    }
+  }
+  .back {
+    margin-left: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    .amount {
+      font-weight: bold;
+      font-size: 20px;
+      line-height: 24px;
+      color: var(--red);
+    }
+  }
+}

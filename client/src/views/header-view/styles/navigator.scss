@@ -1,0 +1,27 @@
+nav {
+  margin-top: 55.79px;
+  display: flex;
+  justify-content: space-around;
+
+  height: 47.58px;
+  width: 80%;
+
+  .icon-wrap {
+    flex: 1;
+    text-align: center;
+    height: 100%;
+    background-color: white;
+
+    .icon {
+      width: 47.58px;
+      height: 47.58px;
+      border-radius: 10px;
+      line-height: 47.58px;
+      font-size: 32px;
+    }
+
+    .selected {
+      background-color: var(--light-blue);
+    }
+  }
+}

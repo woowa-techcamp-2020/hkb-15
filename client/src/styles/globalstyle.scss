@@ -1,0 +1,31 @@
+@import './reset.scss';
+@import './fonts.scss';
+
+:root {
+  --black: #333333;
+  --blue: #166ff3;
+  --red: #f8123b;
+  --gray: #979797;
+  --light-blue: #f5f5f7;
+}
+html {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: 'PAYW Pro', 'PAYW Pro KR', sans-serif;
+  font-feature-settings: 'tnum' on, 'lnum' on;
+  color: #333;
+  height: 100%;
+  width: 100%;
+  scroll-behavior: smooth;
+  max-width: 792.31px;
+}
