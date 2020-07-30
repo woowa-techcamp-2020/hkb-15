@@ -12,8 +12,9 @@ export interface Payment {
 export interface History {
   id: number
   type: string
-  date: Date
+  date: string
   content: string
+  amount: number
 }
 
 export interface Store {
