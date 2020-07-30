@@ -2,7 +2,7 @@
 
 .sum-indicator-wrap {
   margin-top: 54px;
-  width: calc(100% - #{$content-padding});
+  width: calc(100% - #{$content-padding * 2});
   max-width: $content-width;
 
   .sum-indicator {

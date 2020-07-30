@@ -6,7 +6,7 @@ nav {
   justify-content: space-around;
 
   height: 47px;
-  width: calc(100% - #{$content-padding});
+  width: calc(100% - #{$content-padding * 2});
 
   .icon-wrap {
     flex: 1;

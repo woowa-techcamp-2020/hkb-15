@@ -2,7 +2,7 @@
 @use '../../../styles/variables' as *;
 
 .content-wrap {
-  width: calc(100% - #{$content-padding});
+  width: calc(100% - #{$content-padding * 2});
   max-width: $content-width;
   margin-top: 81px;
   display: flex;
