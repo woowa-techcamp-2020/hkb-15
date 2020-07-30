@@ -1,10 +1,14 @@
+@use 'sass:meta';
+@use '../../../styles/variables' as *;
+
 .content-wrap {
-  width: 80%;
+  width: calc(100% - #{$content-padding});
+  max-width: $content-width;
   margin-top: 81px;
   display: flex;
   flex-direction: column;
   align-items: center;
 
-  @import './date-indicator.scss';
-  @import './history-card.scss';
+  @include meta.load-css('./date-indicator');
+  @include meta.load-css('./history-card');
 }

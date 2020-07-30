@@ -1,38 +1,48 @@
-.sum-indicator {
-  margin-top: 54.61px;
-  display: flex;
-  flex-direction: row;
-  .money-button {
-    flex: auto;
-    display: flex;
-    padding: 0 56.7px 0 56.7px;
-    justify-content: center;
-    align-items: center;
-    border-radius: 15px;
-    height: 55.99px;
-    line-height: 30px;
-    font-size: 25px;
-    text-align: center;
-    font-weight: bold;
-  }
-  .income {
-    margin-right: 15.22px;
-    background: white;
-    border: 2px solid var(--blue);
-    color: var(--blue);
-    .selected {
-      background: var(--blue);
-      color: white;
-    }
-  }
-  .expediture {
-    background: white;
-    border: 2px solid var(--red);
-    color: var(--red);
+@use '../../../styles/variables.scss' as *;
 
-    .selected {
-      background: var(--red);
-      color: white;
+.sum-indicator-wrap {
+  margin-top: 54px;
+  width: calc(100% - #{$content-padding});
+  max-width: $content-width;
+  .sum-indicator {
+    display: flex;
+    flex-direction: row;
+
+    .money-button {
+      flex: auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 15px;
+      height: 56px;
+      line-height: 30px;
+      font-size: 25px;
+      text-align: center;
+      font-weight: bold;
+      font-feature-settings: 'tnum' on, 'lnum' on;
+    }
+
+    .income {
+      margin-right: 15px;
+      background: white;
+      border: 2px solid var(--blue);
+      color: var(--blue);
+
+      .selected {
+        background: var(--blue);
+        color: white;
+      }
+    }
+
+    .expediture {
+      background: white;
+      border: 2px solid var(--red);
+      color: var(--red);
+
+      .selected {
+        background: var(--red);
+        color: white;
+      }
     }
   }
 }
