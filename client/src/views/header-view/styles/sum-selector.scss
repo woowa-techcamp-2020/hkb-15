@@ -28,22 +28,22 @@
       background: white;
       border: 2px solid var(--blue);
       color: var(--blue);
-    }
 
-    .income.selected {
-      background: var(--blue);
-      color: white;
+      &.selected {
+        background: var(--blue);
+        color: white;
+      }
     }
 
     .expenditure {
       background: white;
       border: 2px solid var(--red);
       color: var(--red);
-    }
 
-    .expenditure.selected {
-      background: var(--red);
-      color: white;
+      &.selected {
+        background: var(--red);
+        color: white;
+      }
     }
   }
 }
