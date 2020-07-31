@@ -5,6 +5,8 @@
   box-shadow: 0 4px 10px rgba(#000, 0.2);
   border-radius: calc(var(--size) * 0.04);
 
+  position: relative;
+
   background-color: var(--blue);
   background-image: radial-gradient(
     circle at 0% 0%,
@@ -12,13 +14,13 @@
     var(--end, var(--red))
   );
 
-  .name::before {
-    content: var(--name, 'kakao');
+  &::before {
+    content: var(--name, 'Card');
 
     font-family: 'PAYW Pro', 'PAYW Pro KR', sans-serif;
     font-size: calc(var(--size) / 13);
     font-weight: 600;
-    color: var(--text-color, black);
+    color: var(--text-color, #fff);
 
     display: inline-block;
     margin: calc(var(--size) / 13) 0 0 calc(var(--size) / 13);
