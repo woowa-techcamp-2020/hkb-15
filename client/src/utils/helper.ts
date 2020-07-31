@@ -26,7 +26,7 @@ export const monthStr = [
   'Dec',
 ]
 
-const dayStr = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT']
+export const dayStr = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT']
 
 export function dateWithDay(dateStr: string): string {
   const dateObj = new Date(dateStr)
