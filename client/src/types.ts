@@ -27,3 +27,11 @@ export interface Store {
 export interface View {
   render(e: Event): void
 }
+
+export interface CalendarDayData {
+  date: number
+  isInThisMonth: boolean
+  isHoliday: boolean
+  incomeSum: number
+  expeditureSum: number
+}
