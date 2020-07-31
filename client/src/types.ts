@@ -24,6 +24,13 @@ export interface Store {
   expenditureSum?: number
   incomeSum?: number
 }
+
 export interface View {
   render(e: Event): void
+}
+
+export type WindowHistoryState = {
+  path?: string
+  year?: number
+  month?: number
 }
