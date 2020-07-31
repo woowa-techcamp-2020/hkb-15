@@ -10,7 +10,7 @@ new Router()
 cem.fire(
   'statechange',
   history.state ?? {
-    path: '/calendar',
+    path: '/',
     year: 2020,
     month: 7,
   }
