@@ -8,6 +8,7 @@
   .month-indicator {
     width: 100%;
     flex: 1;
+
     .year {
       color: var(--gray);
       font-size: 16px;
@@ -16,6 +17,7 @@
       line-height: 19px;
       text-align: center;
     }
+
     .month {
       margin-top: 2px;
       font-weight: bold;

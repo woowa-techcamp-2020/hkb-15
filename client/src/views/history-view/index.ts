@@ -1,7 +1,7 @@
 import { View, History } from '../../types'
 import cem from '../../utils/custom-event'
 import './styles'
-import { numberWithCommas, groupBy } from '../../utils/helper'
+import { numberWithCommas, groupBy, dateWithDay } from '../../utils/helper'
 
 export default class HistoryView implements View {
   constructor() {
@@ -23,22 +23,23 @@ export default class HistoryView implements View {
   }
 
   createDateColumn(date: string, histories: History[]) {
-    console.log(histories)
     return `
-  <div class="date-history-column">
-    ${this.createDateIndicator(date)}
-    ${histories.reduce(
-      (a: string, b: History) => a + this.createHistoryCard(b),
-      ''
-    )}
-  </div>
-  `
-  }
-  createDateIndicator(date: string): string {
-    return `
-<div class="date-indicator">${date}</div>
+<div class="date-history-column">
+  ${this.createDateIndicator(date)}
+  ${histories.reduce(
+    (a: string, b: History) => a + this.createHistoryCard(b),
+    ''
+  )}
+</div>
 `
   }
+
+  createDateIndicator(date: string): string {
+    return `
+<div class="date-indicator">${dateWithDay(date)}</div>
+`
+  }
+
   createHistoryCard(history: History): string {
     return `
 <div class="history-card" id="history-1">
@@ -47,8 +48,10 @@ export default class HistoryView implements View {
     <div class="content">${history.content}</div>
   </div>
   <div class="back">
-    <div class="amount ${history.type === '수입' ? 'income' : ''}">
-      ${history.type === '지출' ? '-' : '+'}${numberWithCommas(history.amount)}
+    <div class="amount ${history.type === 'income' ? 'income' : ''}">
+      ${history.type === 'expenditure' ? '-' : '+'}${numberWithCommas(
+      history.amount
+    )}
     </div>
   </div>
 </div>

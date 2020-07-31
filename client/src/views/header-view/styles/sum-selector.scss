@@ -29,18 +29,18 @@
       border: 2px solid var(--blue);
       color: var(--blue);
 
-      .selected {
+      &.selected {
         background: var(--blue);
         color: white;
       }
     }
 
-    .expediture {
+    .expenditure {
       background: white;
       border: 2px solid var(--red);
       color: var(--red);
 
-      .selected {
+      &.selected {
         background: var(--red);
         color: white;
       }
