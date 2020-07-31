@@ -1,6 +1,6 @@
-import { View } from '../../types'
+import { View, WindowHistoryState } from '../../types'
 import cem from '../../utils/custom-event'
-import { numberWithCommas, monthStr } from '../../utils/helper'
+import { monthStr, numberWithCommas, dommer } from '../../utils/helper'
 import './styles'
 
 export default class HeaderView implements View {
@@ -18,6 +18,12 @@ export default class HeaderView implements View {
 
       const button = target.closest('.money-button')
       if (button) return this.moneyButtonClickHandler(button)
+
+      const shader = target.closest<HTMLElement>('.shader')
+
+      if (shader) {
+        return this.shaderClickHandler(shader)
+      }
     })
     cem.subscribe('storeupdated', (e: CustomEvent) => this.render(e))
   }
@@ -56,6 +62,80 @@ export default class HeaderView implements View {
     cem.fire('statechange', state)
   }
 
+  shaderClickHandler(shader: HTMLElement): void {
+    const toRight = shader.classList.contains('left')
+
+    const transform = `translateX(${((toRight ? +1 : -1) * 100) / 3}%)`
+
+    const monthSelector = shader.parentElement.querySelector<HTMLElement>(
+      '.month-selector'
+    )
+
+    monthSelector.style.transform = transform
+
+    const state = history.state as WindowHistoryState
+
+    const calculatedAppearingMonth = state.month + (toRight ? -2 : +2)
+
+    const destinationMonth = toRight
+      ? state.month - 1 < 1
+        ? 12
+        : state.month - 1
+      : state.month + 1 > 12
+      ? 1
+      : state.month + 1
+
+    const destinationYear = toRight
+      ? state.month - 1 < 1
+        ? state.year - 1
+        : state.year
+      : state.month + 1 > 12
+      ? state.year + 1
+      : state.year
+
+    // -1: previous year
+    // 0: current year
+    // 1: next year
+    const overflowFlag: -1 | 0 | 1 =
+      calculatedAppearingMonth > 12 ? 1 : calculatedAppearingMonth < 1 ? -1 : 0
+
+    const appearingMonth =
+      overflowFlag === 1
+        ? calculatedAppearingMonth - 12
+        : overflowFlag === -1
+        ? calculatedAppearingMonth + 12
+        : calculatedAppearingMonth
+
+    const appearingYear = state.year + overflowFlag
+
+    const appearingMonthIndicator = dommer(
+      this.createMonthIndicator(appearingYear, appearingMonth)
+    ).firstElementChild as HTMLElement
+
+    appearingMonthIndicator.style.position = 'absolute'
+    appearingMonthIndicator.style.width = 100 / 3 + '%'
+
+    if (toRight) {
+      appearingMonthIndicator.style.right = '100%'
+    } else {
+      appearingMonthIndicator.style.left = '100%'
+    }
+
+    const method = toRight ? 'prepend' : 'append'
+
+    monthSelector[method](appearingMonthIndicator)
+
+    shader.classList.add('forcedly-shaded')
+
+    monthSelector.addEventListener('transitionend', () => {
+      cem.fire('statechange', {
+        ...state,
+        year: destinationYear,
+        month: destinationMonth,
+      })
+    })
+  }
+
   setInsetStyle(pathName: string): void {
     const styleName = 'selected'
     document.querySelector(`nav .${styleName}`)?.classList.remove(styleName)
@@ -82,10 +162,14 @@ export default class HeaderView implements View {
     const nextYear = month === 12 ? year + 1 : year
     const nextMonth = month === 12 ? 1 : month + 1
     return `
-<div class="month-selector">
-  ${this.createMonthIndicator(prevYear, prevMonth)}
-  ${this.createMonthIndicator(year, month)}
-  ${this.createMonthIndicator(nextYear, nextMonth)}
+<div class="month-selector-wrapper">
+  <div class="month-selector">
+    ${this.createMonthIndicator(prevYear, prevMonth)}
+    ${this.createMonthIndicator(year, month)}
+    ${this.createMonthIndicator(nextYear, nextMonth)}
+  </div>
+  <div class="shader left"></div>
+  <div class="shader right"></div>
 </div>
 `
   }

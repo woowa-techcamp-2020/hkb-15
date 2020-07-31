@@ -24,6 +24,7 @@ export interface Store {
   expenditureSum?: number
   incomeSum?: number
 }
+
 export interface View {
   render(e: Event): void
 }
@@ -34,4 +35,10 @@ export interface CalendarDayData {
   isHoliday: boolean
   incomeSum: number
   expeditureSum: number
+}
+
+export type WindowHistoryState = {
+  path?: string
+  year?: number
+  month?: number
 }
