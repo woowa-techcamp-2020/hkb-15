@@ -3,7 +3,7 @@ import cem from './utils/custom-event'
 export default class Router {
   constructor() {
     window.addEventListener('popstate', (event) => {
-      if (event.state == null) return
+      if (event.state === null) return
       cem.fire('statepop', event.state)
     })
     cem.subscribe('statechange', (event: CustomEvent) =>
