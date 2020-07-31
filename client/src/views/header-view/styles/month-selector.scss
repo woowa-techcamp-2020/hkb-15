@@ -2,8 +2,14 @@
   margin-top: 54px;
   display: flex;
   width: 100%;
+  max-width: 1200px;
   flex-direction: row;
   justify-content: space-between;
+  position: relative;
+
+  @media only screen and (max-width: 700px) {
+    width: 130%;
+  }
 
   .month-indicator {
     width: 100%;
@@ -24,6 +30,34 @@
       font-size: 50px;
       line-height: 61px;
       text-align: center;
+    }
+  }
+
+  .shader {
+    position: absolute;
+    top: 0;
+    width: 33.33333%;
+    height: 100%;
+    transition: opacity 800ms ease;
+    opacity: 1;
+
+    &:hover {
+      opacity: 0;
+    }
+
+    &.left {
+      left: 0;
+      background-image: linear-gradient(
+        to right,
+        #fff,
+        #fff 40%,
+        rgba(#fff, 0)
+      );
+    }
+
+    &.right {
+      right: 0;
+      background-image: linear-gradient(to left, #fff, #fff 40%, rgba(#fff, 0));
     }
   }
 }

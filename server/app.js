@@ -4,6 +4,7 @@ const path = require('path')
 const session = require('express-session')
 const logger = require('morgan')
 const passport = require('passport')
+const cors = require('cors')
 
 require('dotenv').config()
 require('./models').init()
@@ -11,6 +12,8 @@ require('./models').init()
 const router = require('./routes')
 
 const app = express()
+
+app.use(cors())
 
 // view engine setup
 app.set('view engine', 'ejs')

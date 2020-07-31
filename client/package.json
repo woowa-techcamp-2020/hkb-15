@@ -2,18 +2,23 @@
   "name": "client",
   "version": "1.0.0",
   "description": "",
-  "private": true,
   "scripts": {
     "start": "npx parcel src/index.html"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "license": "MIT",
+  "browserslist": [
+    "> 1%",
+    "last 2 versions"
+  ],
   "devDependencies": {
     "@babel/cli": "^7.10.5",
     "@babel/core": "^7.10.5",
     "@babel/preset-env": "^7.10.4",
+    "autoprefixer": "^9.8.5",
     "parcel": "^1.12.4",
+    "postcss-modules": "^3.2.0",
+    "postcss-pixels-to-rem": "^0.8.0",
+    "postcss-preset-env": "^6.7.0",
     "sass": "^1.26.10",
     "typescript": "^3.9.7"
   },
