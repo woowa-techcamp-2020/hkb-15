@@ -19,17 +19,16 @@ export default class CreateHistoryView implements View {
     if (!(target instanceof HTMLElement)) return
 
     if (target.closest('.close-icon') || !target.closest('.history-form')) {
-      const historyFormWrap = document.querySelector('.history-form-wrap')
+      const modal = document.querySelector('.modal')
 
-      if (!historyFormWrap) return
+      if (!modal) return
 
       e.stopImmediatePropagation()
 
-      const modal = document.querySelector('.modal')
-      historyFormWrap.classList.toggle('remove')
+      modal.classList.toggle('remove')
 
       Promise.all(
-        historyFormWrap.getAnimations().map((animation) => animation.finished)
+        modal.getAnimations().map((animation) => animation.finished)
       ).then(() => modal.remove())
     }
   }

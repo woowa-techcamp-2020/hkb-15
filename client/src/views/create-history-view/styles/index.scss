@@ -1,3 +1,43 @@
+@keyframes blur {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+  }
+}
+
+@keyframes unblur {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+  }
+}
+
+@keyframes up {
+  from {
+    bottom: -315px;
+  }
+  to {
+    bottom: 0px;
+  }
+}
+
+@keyframes down {
+  from {
+    bottom: 0px;
+  }
+  to {
+    bottom: -700px;
+  }
+}
+
 .modal {
   display: flex;
   position: fixed;
@@ -9,34 +49,18 @@
   background: rgba(0, 0, 0, 0.25);
   // backdrop-filter: blur(50px);
   animation-name: blur;
-  animation-duration: 1s;
+  animation-duration: 0.5s;
 
-  @keyframes blur {
-    0% {
-      opacity: 0;
-    }
-    50% {
-      opacity: 1;
-    }
-    100% {
-    }
-  }
+  &.remove {
+    animation-name: unblur;
+    animation-duration: 0.5s;
+    animation-fill-mode: forwards;
+    opacity: 0;
 
-  @keyframes up {
-    from {
-      bottom: -315px;
-    }
-    to {
-      bottom: 0px;
-    }
-  }
-
-  @keyframes down {
-    from {
-      bottom: 0px;
-    }
-    to {
-      bottom: -700px;
+    .history-form-wrap {
+      animation-name: down;
+      animation-duration: 0.5s;
+      animation-fill-mode: forwards;
     }
   }
 
@@ -51,11 +75,6 @@
     border-radius: 30px 30px 0px 0px;
     overflow-y: scroll;
     overflow-x: hidden;
-
-    &.remove {
-      animation-name: down;
-      animation-duration: 0.5s;
-    }
 
     .history-form {
       display: flex;
