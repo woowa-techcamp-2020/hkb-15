@@ -34,7 +34,7 @@ export interface CalendarDayData {
   isInThisMonth: boolean
   isHoliday: boolean
   incomeSum: number
-  expeditureSum: number
+  expenditureSum: number
 }
 
 export type WindowHistoryState = {
