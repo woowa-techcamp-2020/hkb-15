@@ -56,3 +56,21 @@ export const dommer = (markup: TemplateStringsArray | string) => {
 
   return frag
 }
+
+const getChildHtml = (child: string): string => {
+  if (child)
+    if (Array.isArray(child)) return `${child.reduce((a, b) => a + b, '')}`
+    else return child
+}
+
+export const Container = ({
+  className = 'default',
+  child = undefined,
+  id = undefined,
+}) => {
+  return `
+<div class='${className}' ${id ? `id= ${id}` : ''}>
+ ${getChildHtml(child)}
+</div>
+`
+}
