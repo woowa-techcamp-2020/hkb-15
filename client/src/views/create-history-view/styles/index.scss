@@ -196,5 +196,39 @@
         }
       }
     }
+
+    .input-wrap {
+      width: 100%;
+      padding: 0 83px;
+      display: flex;
+      flex-direction: column;
+
+      input {
+        background: white;
+        border: 1px solid var(--gray);
+        box-sizing: border-box;
+        border-radius: 15px;
+        height: 69px;
+        padding: 19px 38px;
+        outline: none;
+
+        font-weight: 500;
+        font-size: 25px;
+        line-height: 30px;
+
+        &::placeholder {
+          color: var(--gray);
+        }
+      }
+
+      .content-input {
+        margin-top: 71px;
+      }
+
+      .amount-input {
+        margin-top: 57px;
+        text-align: end;
+      }
+    }
   }
 }
