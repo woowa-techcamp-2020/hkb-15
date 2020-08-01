@@ -150,5 +150,51 @@
         }
       }
     }
+
+    .card-picker {
+      margin-top: 58px;
+      display: flex;
+      flex-flow: row nowrap;
+      width: 100%;
+
+      .card-container {
+        width: 100%;
+        display: flex;
+        overflow: auto;
+        flex: none;
+
+        scroll-snap-type: x mandatory;
+        padding-left: 150px;
+        padding-right: 150px;
+
+        &::-webkit-scrollbar {
+          display: none;
+        }
+
+        .card {
+          flex: none;
+          margin-right: 32px;
+          scroll-snap-align: center;
+
+          cursor: pointer;
+
+          &:last-child:after {
+            content: '';
+            display: block;
+            position: absolute;
+            right: -150px;
+            width: 150px;
+            height: 20px;
+          }
+
+          .icon {
+            font-size: 41px;
+            position: relative;
+            left: 170px;
+            top: 145px;
+          }
+        }
+      }
+    }
   }
 }
