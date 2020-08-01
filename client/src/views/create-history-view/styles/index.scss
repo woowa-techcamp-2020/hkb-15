@@ -8,16 +8,54 @@
   height: 100%;
   background: rgba(0, 0, 0, 0.25);
   // backdrop-filter: blur(50px);
+  animation-name: blur;
+  animation-duration: 1s;
+
+  @keyframes blur {
+    0% {
+      opacity: 0;
+    }
+    50% {
+      opacity: 1;
+    }
+    100% {
+    }
+  }
+
+  @keyframes up {
+    from {
+      bottom: -315px;
+    }
+    to {
+      bottom: 0px;
+    }
+  }
+
+  @keyframes down {
+    from {
+      bottom: 0px;
+    }
+    to {
+      bottom: -700px;
+    }
+  }
 
   .history-form-wrap {
     position: relative;
     width: 670px;
     margin-top: 315px;
+    animation-name: up;
+    animation-duration: 0.5s;
 
     background: white;
     border-radius: 30px 30px 0px 0px;
     overflow-y: scroll;
     overflow-x: hidden;
+
+    &.remove {
+      animation-name: down;
+      animation-duration: 0.5s;
+    }
 
     .history-form {
       display: flex;
@@ -149,113 +187,113 @@
           cursor: pointer;
         }
       }
-    }
 
-    .card-picker {
-      margin-top: 58px;
-      display: flex;
-      flex-flow: row nowrap;
-      width: 100%;
-
-      .card-container {
-        width: 100%;
+      .card-picker {
+        margin-top: 58px;
         display: flex;
-        overflow: auto;
-        flex: none;
+        flex-flow: row nowrap;
+        width: 100%;
 
-        scroll-snap-type: x mandatory;
-        padding-left: 150px;
-        padding-right: 150px;
+        .card-container {
+          width: 100%;
+          display: flex;
+          overflow: auto;
+          flex: none;
 
-        &::-webkit-scrollbar {
-          display: none;
+          scroll-snap-type: x mandatory;
+          padding-left: 150px;
+          padding-right: 150px;
+
+          &::-webkit-scrollbar {
+            display: none;
+          }
+
+          .card {
+            flex: none;
+            margin-right: 32px;
+            scroll-snap-align: center;
+
+            cursor: pointer;
+
+            &:last-child:after {
+              content: '';
+              display: block;
+              position: absolute;
+              right: -150px;
+              width: 150px;
+              height: 20px;
+            }
+
+            .icon {
+              font-size: 41px;
+              position: relative;
+              left: 170px;
+              top: 145px;
+            }
+          }
+        }
+      }
+
+      .input-wrap {
+        width: 100%;
+        padding: 0 83px;
+        display: flex;
+        flex-direction: column;
+
+        input {
+          background: white;
+          border: 1px solid var(--gray);
+          box-sizing: border-box;
+          border-radius: 15px;
+          height: 69px;
+          padding: 19px 38px;
+          outline: none;
+
+          font-weight: 500;
+          font-size: 25px;
+          line-height: 30px;
+
+          &::placeholder {
+            color: var(--gray);
+          }
         }
 
-        .card {
-          flex: none;
-          margin-right: 32px;
-          scroll-snap-align: center;
+        .content-input {
+          margin-top: 71px;
+        }
+
+        .amount-input {
+          margin-top: 57px;
+          text-align: end;
+        }
+      }
+
+      .submit-button-wrap {
+        width: 100%;
+        margin-top: 71px;
+        padding: 0 83px;
+        height: 67px;
+
+        .submit-button {
+          width: 100%;
+          height: 100%;
+          border-radius: 15px;
+          border: none;
+          background: var(--blue);
+          outline: none;
+
+          font-weight: 600;
+          font-size: 25px;
+          line-height: 30px;
+          text-align: center;
+
+          color: white;
 
           cursor: pointer;
 
-          &:last-child:after {
-            content: '';
-            display: block;
-            position: absolute;
-            right: -150px;
-            width: 150px;
-            height: 20px;
+          &:disabled {
+            opacity: 0.7;
           }
-
-          .icon {
-            font-size: 41px;
-            position: relative;
-            left: 170px;
-            top: 145px;
-          }
-        }
-      }
-    }
-
-    .input-wrap {
-      width: 100%;
-      padding: 0 83px;
-      display: flex;
-      flex-direction: column;
-
-      input {
-        background: white;
-        border: 1px solid var(--gray);
-        box-sizing: border-box;
-        border-radius: 15px;
-        height: 69px;
-        padding: 19px 38px;
-        outline: none;
-
-        font-weight: 500;
-        font-size: 25px;
-        line-height: 30px;
-
-        &::placeholder {
-          color: var(--gray);
-        }
-      }
-
-      .content-input {
-        margin-top: 71px;
-      }
-
-      .amount-input {
-        margin-top: 57px;
-        text-align: end;
-      }
-    }
-
-    .submit-button-wrap {
-      width: 100%;
-      margin-top: 71px;
-      padding: 0 83px;
-      height: 67px;
-
-      .submit-button {
-        width: 100%;
-        height: 100%;
-        border-radius: 15px;
-        border: none;
-        background: var(--blue);
-        outline: none;
-
-        font-weight: 600;
-        font-size: 25px;
-        line-height: 30px;
-        text-align: center;
-
-        color: white;
-
-        cursor: pointer;
-
-        &:disabled {
-          opacity: 0.7;
         }
       }
     }
