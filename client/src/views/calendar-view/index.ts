@@ -59,7 +59,8 @@ export default class HistoryView implements View {
       })
     }
 
-    for (let i = 0; i < 42 - calendarData.length; i++) {
+    const neededCellCnt = 42 - calendarData.length
+    for (let i = 0; i < neededCellCnt; i++) {
       const date = i + 1
       calendarData.push(this.getEmptyCellData(date))
     }
