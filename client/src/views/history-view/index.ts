@@ -64,7 +64,7 @@ ${this.createFloatingButton()}
     return `
 <div class="float">
     <i class="icon">plus_circle_fill</i>
-    Add History
+    <div class="text">Add History</div>
 </div>
   `
   }
