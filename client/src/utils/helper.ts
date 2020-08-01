@@ -58,9 +58,10 @@ export const dommer = (markup: TemplateStringsArray | string) => {
 }
 
 const getChildHtml = (child: string): string => {
-  if (child)
-    if (Array.isArray(child)) return `${child.reduce((a, b) => a + b, '')}`
-    else return child
+  if (!child) return ''
+  if (Array.isArray(child)) {
+    return `${child.reduce((a, b) => a + getChildHtml(b), '')}`
+  } else return child
 }
 
 export const Container = ({
@@ -73,4 +74,8 @@ export const Container = ({
  ${getChildHtml(child)}
 </div>
 `
+}
+
+export const sum = <T>(objArr: object[], prop: string, initialValue: T): T => {
+  return objArr.reduce((sum, item) => sum + item[prop], initialValue)
 }

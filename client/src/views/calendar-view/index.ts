@@ -6,6 +6,7 @@ import {
   dayStr,
   numberWithCommas,
   groupBy,
+  sum,
 } from '../../utils/helper'
 
 export default class HistoryView implements View {
@@ -23,47 +24,50 @@ export default class HistoryView implements View {
     }
   }
 
+  getTypeSum(histories: History[], type: 'expenditure' | 'income'): number {
+    return sum(
+      histories.filter((history) => history.type === type),
+      'amount',
+      0
+    )
+  }
+
   getCalendarData(year: number, month: number, histories: History[]) {
-    month = month - 1
     const calendarData: CalendarDayData[] = []
     const historiesByDate = groupBy(histories, 'date')
     const thisMonthStartDay = new Date(year, month, 1).getDay()
     const lastMonthEndDate = new Date(year, month, 0).getDate()
     const thisMonthEndDate = new Date(year, month + 1, 0).getDate()
-    console.log(lastMonthEndDate, thisMonthStartDay)
     const lastMonthStartDate = lastMonthEndDate - thisMonthStartDay + 1
-    Array.from(
-      Array(thisMonthStartDay),
-      (_, i) => i + lastMonthStartDate
-    ).forEach((date) => calendarData.push(this.getEmptyCellData(date)))
-    Array.from(Array(thisMonthEndDate), (_, i) => i + 1).forEach((date) => {
-      const dateObj = new Date(year, month, date)
-      const histories = historiesByDate[dateObj.toISOString().slice(0, 10)]
 
-      const expenditureSum = histories
-        ? histories
-            .filter((history) => history.type === 'expenditure')
-            .reduce((sum, history) => sum + history.amount, 0)
-        : 0
+    for (let i = 0; i < thisMonthStartDay; i++) {
+      const date = i + lastMonthStartDate
+      calendarData.push(this.getEmptyCellData(date))
+    }
 
-      const incomeSum = histories
-        ? histories
-            .filter((history) => history.type === 'income')
-            .reduce((sum, history) => sum + history.amount, 0)
-        : 0
+    for (let i = 0; i < thisMonthEndDate; i++) {
+      const date = i + 1
+      const dateIndex = new Date(year, month, date).toISOString().slice(0, 10)
+      const histories = historiesByDate[dateIndex] ?? []
 
       calendarData.push({
         date,
         isInThisMonth: true,
         isHoliday: false,
-        expenditureSum,
-        incomeSum,
+        expenditureSum: this.getTypeSum(histories, 'expenditure'),
+        incomeSum: this.getTypeSum(histories, 'income'),
       })
-    })
-    Array.from(
-      Array(42 - calendarData.length),
-      (_, i) => i + 1
-    ).forEach((date) => calendarData.push(this.getEmptyCellData(date)))
+    }
+
+    for (let i = 0; i < 42 - calendarData.length; i++) {
+      const date = i + 1
+      calendarData.push(this.getEmptyCellData(date))
+    }
+
+    calendarData
+      .filter((data, index) => index % 7 === 0)
+      .forEach((data) => (data.isHoliday = true))
+
     return calendarData
   }
 
@@ -71,7 +75,7 @@ export default class HistoryView implements View {
     if (e.detail.path !== '/calendar') return
 
     const { histories, year, month } = e.detail
-    const calendarData = this.getCalendarData(year, month, histories)
+    const calendarData = this.getCalendarData(year, month - 1, histories)
     const contentWrap = document.querySelector('.content-wrap')
     contentWrap.innerHTML = this.Calendar(calendarData)
   }
