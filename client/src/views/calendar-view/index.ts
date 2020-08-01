@@ -1,4 +1,4 @@
-import { View, History } from '../../types'
+import { View, History, CalendarDayData } from '../../types'
 import cem from '../../utils/custom-event'
 import './styles'
 import { dayStr, numberWithCommas, groupBy } from '../../utils/helper'
@@ -8,27 +8,75 @@ export default class HistoryView implements View {
     cem.subscribe('storeupdated', (e: CustomEvent) => this.render(e))
   }
 
+  getEmptyCellData(date: number): CalendarDayData {
+    return {
+      incomeSum: 0,
+      expenditureSum: 0,
+      date,
+      isHoliday: false,
+      isInThisMonth: false,
+    }
+  }
+
   getCalendarData(year: number, month: number, histories: History[]) {
+    month = month - 1
+    const calendarData: CalendarDayData[] = []
     const historiesByDate = groupBy(histories, 'date')
-    const startDay = new Date(year, month, 1)
-    const endDay = new Date(year, month + 1, 0)
+    const thisMonthStartDay = new Date(year, month, 1).getDay()
+    const lastMonthEndDate = new Date(year, month, 0).getDate()
+    const thisMonthEndDate = new Date(year, month + 1, 0).getDate()
+    console.log(lastMonthEndDate, thisMonthStartDay)
+    const lastMonthStartDate = lastMonthEndDate - thisMonthStartDay + 1
+    Array.from(
+      Array(thisMonthStartDay),
+      (_, i) => i + lastMonthStartDate
+    ).forEach((date) => calendarData.push(this.getEmptyCellData(date)))
+    Array.from(Array(thisMonthEndDate), (_, i) => i + 1).forEach((date) => {
+      const dateObj = new Date(year, month, date)
+      const histories = historiesByDate[dateObj.toISOString().slice(0, 10)]
+
+      const expenditureSum = histories
+        ? histories
+            .filter((history) => history.type === 'expenditure')
+            .reduce((sum, history) => sum + history.amount, 0)
+        : 0
+
+      const incomeSum = histories
+        ? histories
+            .filter((history) => history.type === 'income')
+            .reduce((sum, history) => sum + history.amount, 0)
+        : 0
+
+      calendarData.push({
+        date,
+        isInThisMonth: true,
+        isHoliday: false,
+        expenditureSum,
+        incomeSum,
+      })
+    })
+    Array.from(
+      Array(42 - calendarData.length),
+      (_, i) => i + 1
+    ).forEach((date) => calendarData.push(this.getEmptyCellData(date)))
+    return calendarData
   }
 
   render(e: CustomEvent): void {
     if (e.detail.path !== '/calendar') return
 
     const { histories, year, month } = e.detail
-    this.getCalendarData(year, month, histories)
-
+    const calendarData = this.getCalendarData(year, month, histories)
+    console.log(calendarData)
     const contentWrap = document.querySelector('.content-wrap')
-    contentWrap.innerHTML = this.createCalendar()
+    contentWrap.innerHTML = this.createCalendar(calendarData)
   }
 
-  createCalendar() {
+  createCalendar(data: CalendarDayData[]): string {
     return `
   <div class="calendar">
     ${this.createHeader()}
-    ${this.createTable()}
+    ${this.createTable(data)}
   </div>
   `
   }
@@ -47,69 +95,35 @@ export default class HistoryView implements View {
   `
   }
 
-  createTable() {
+  createTable(data: CalendarDayData[]): string {
     return `
 <div class="table">
-  ${this.createDateCell(1, true, true, 2000, 5000)}
-  <div class="date-cell 1">2</div>
-  <div class="date-cell 1">3</div>
-  <div class="date-cell 1">4</div>
-  <div class="date-cell 1">5</div>
-  <div class="date-cell 1">6</div>
-  <div class="date-cell 1">7</div>
-
-  <div class="date-cell 1">1</div>
-  <div class="date-cell 1">2</div>
-  <div class="date-cell 1">3</div>
-  <div class="date-cell 1">4</div>
-  <div class="date-cell 1">5</div>
-  <div class="date-cell 1">6</div>
-  <div class="date-cell 1">7</div>
-
-  <div class="date-cell 1"></div>
-  <div class="date-cell 1"></div>
-  <div class="date-cell 1"></div>
-  <div class="date-cell 1"></div>
-  <div class="date-cell 1"></div>
-  <div class="date-cell 1"></div>
-  <div class="date-cell 1"></div>
-
-  <div class="date-cell 1"></div>
-  <div class="date-cell 1"></div>
-  <div class="date-cell 1"></div>
-  <div class="date-cell 1"></div>
-  <div class="date-cell 1"></div>
-  <div class="date-cell 1"></div>
-  <div class="date-cell 1"></div>
-
-  <div class="date-cell 1"></div>
-  <div class="date-cell 1"></div>
-  <div class="date-cell 1"></div>
-  <div class="date-cell 1"></div>
-  <div class="date-cell 1"></div>
-  <div class="date-cell 1"></div>
-  <div class="date-cell 1"></div>
+  ${data.reduce((a, b) => a + this.createDateCell(b), '')}
 </div>
   `
   }
 
-  createDateCell(
-    date: number,
-    isInThisMonth: boolean,
-    isHoliday: boolean,
-    incomeSum: number,
-    expeditureSum: number
-  ): string {
+  createDateCell(data: CalendarDayData): string {
     return `
-<div class="date-cell">
+<div class="date-cell
+${data.isInThisMonth ? '' : 'blur'} 
+">
   <div class="date-indicator 
-  ${isInThisMonth ? '' : 'blur'} 
-  ${isHoliday ? 'holiday' : ''}"
-  >${date}</div>
+  ${data.isHoliday ? 'holiday' : ''}"
+  >${data.date}</div>
   <div class="sum-indicator">
-    <div class="income">+${numberWithCommas(incomeSum)}</div>
-    <div class="expenditure">-${numberWithCommas(expeditureSum)}</div>
+    ${this.createSumIndicator(data.incomeSum, 'income')}
+    ${this.createSumIndicator(data.incomeSum, 'expenditure')}
   </div>
 </div>`
+  }
+
+  createSumIndicator(sum: number, type: 'income' | 'expenditure'): string {
+    if (sum === 0) return ''
+    return `
+<div class="${type}">
+  ${type === 'income' ? '+' : '-'}${numberWithCommas(sum)}
+</div>
+`
   }
 }
