@@ -15,11 +15,13 @@ export default class HistoryView implements View {
 
     const contentWrap = document.querySelector('.content-wrap')
 
-    contentWrap.innerHTML = Object.keys(historiesByDate).reduce(
-      (a: string, b: string) =>
-        a + this.createDateColumn(b, historiesByDate[b]),
-      ''
-    )
+    contentWrap.innerHTML = `
+${Object.keys(historiesByDate).reduce(
+  (a: string, b: string) => a + this.createDateColumn(b, historiesByDate[b]),
+  ''
+)}
+${this.createFloatingButton()}
+`
   }
 
   createDateColumn(date: string, histories: History[]) {
@@ -56,5 +58,14 @@ export default class HistoryView implements View {
   </div>
 </div>
 `
+  }
+
+  createFloatingButton(): string {
+    return `
+<div class="float">
+    <i class="icon">plus_circle_fill</i>
+    Add History
+</div>
+  `
   }
 }
