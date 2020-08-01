@@ -84,6 +84,46 @@
           }
         }
       }
+
+      .date-picker {
+        --width: 194px;
+        display: flex;
+        justify-content: center;
+        align-items: flex-end;
+        margin-top: 71px;
+        width: var(--width);
+        height: 36px;
+
+        font-weight: 600;
+        font-size: 30px;
+        line-height: 36px;
+        text-align: center;
+        font-feature-settings: 'tnum' on, 'lnum' on;
+
+        input {
+          border: none;
+          -webkit-appearance: none;
+          font-weight: 600;
+          font-size: 30px;
+          line-height: 36px;
+          text-align: center;
+          font-feature-settings: 'tnum' on, 'lnum' on;
+          outline: none;
+
+          &.year {
+            width: 74px;
+          }
+          &.month {
+            width: 37px;
+          }
+          &.day {
+            width: 37px;
+          }
+          &:focus {
+            color: #ff7d1f;
+          }
+        }
+      }
     }
   }
 }
