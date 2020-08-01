@@ -1,3 +1,5 @@
+@use 'sass:meta';
+
 .content-wrap {
   margin-top: 81px;
   background-image: none;
@@ -13,76 +15,7 @@
     padding: 34px 22px;
     background-color: white;
 
-    .header {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      grid-row-gap: 7px;
-      width: 100%;
-      height: 55px;
-      margin-bottom: 37px;
-
-      .day-indicator {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-        font-weight: 600;
-        font-size: 17px;
-        line-height: 21px;
-        text-align: center;
-
-        &.holiday {
-          color: var(--red);
-        }
-      }
-    }
-
-    .table {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      grid-template-rows: repeat(6, 1fr);
-      grid-column-gap: 7px;
-      grid-row-gap: 7px;
-      width: 100%;
-      height: 100%;
-
-      .date-cell {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        background-color: var(--light-blue);
-        border-radius: 10px;
-        padding: 10px 9px 4px 7px;
-
-        font-weight: 600;
-        font-size: 14px;
-        line-height: 16px;
-
-        &.blur {
-          opacity: 0.3;
-          .sum-indicator {
-            display: none;
-          }
-        }
-
-        .date-indicator.holiday {
-          color: var(--red);
-        }
-
-        .sum-indicator {
-          display: flex;
-          flex-direction: column;
-          align-items: flex-end;
-
-          .income {
-            color: var(--blue);
-          }
-
-          .expenditure {
-            color: var(--red);
-          }
-        }
-      }
-    }
+    @include meta.load-css('./calendar-header');
+    @include meta.load-css('./calendar-table');
   }
 }
