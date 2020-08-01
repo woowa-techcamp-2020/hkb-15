@@ -6,6 +6,23 @@ import { numberWithCommas, groupBy, dateWithDay } from '../../utils/helper'
 export default class HistoryView implements View {
   constructor() {
     cem.subscribe('storeupdated', (e: CustomEvent) => this.render(e))
+
+    const contentWrap = document.querySelector('.content-wrap')
+    contentWrap.addEventListener('click', (e: MouseEvent) =>
+      this.clickEventHandler(e)
+    )
+  }
+
+  clickEventHandler(e: MouseEvent) {
+    e.preventDefault()
+
+    const { target } = e
+    if (!(target instanceof HTMLElement)) return
+
+    if (target.closest('.float')) {
+      e.stopImmediatePropagation()
+      cem.fire('createhistorymodal')
+    }
   }
 
   render(e: CustomEvent): void {

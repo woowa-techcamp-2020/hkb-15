@@ -4,6 +4,36 @@ import cem from '../../utils/custom-event'
 import './styles'
 
 export default class CreateHistoryView implements View {
+  constructor() {
+    cem.subscribe('createhistorymodal', (e: CustomEvent) => this.render(e))
+    const contentWrap = document.querySelector('.content-wrap')
+    contentWrap.addEventListener('click', (e: MouseEvent) =>
+      this.clickEventHandler(e)
+    )
+  }
+
+  clickEventHandler(e: MouseEvent) {
+    e.preventDefault()
+
+    const { target } = e
+    if (!(target instanceof HTMLElement)) return
+
+    if (target.closest('.close-icon') || !target.closest('.history-form')) {
+      const historyFormWrap = document.querySelector('.history-form-wrap')
+
+      if (!historyFormWrap) return
+
+      e.stopImmediatePropagation()
+
+      const modal = document.querySelector('.modal')
+      historyFormWrap.classList.toggle('remove')
+
+      Promise.all(
+        historyFormWrap.getAnimations().map((animation) => animation.finished)
+      ).then(() => modal.remove())
+    }
+  }
+
   render(e: Event): void {
     const contentWrap = document.querySelector('.content-wrap')
     contentWrap.innerHTML += this.createModal()
