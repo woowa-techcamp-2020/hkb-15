@@ -124,6 +124,31 @@
           }
         }
       }
+
+      .category-picker {
+        display: flex;
+        flex-wrap: wrap;
+        margin-top: 71px;
+        padding: 0 83px;
+
+        .category-indicator {
+          height: 50px;
+          display: flex;
+          align-items: center;
+          margin: 0 13px 13px 0;
+          border-radius: 15px;
+          padding: 13px 20px;
+
+          background: var(--light-blue);
+          color: var(--black);
+          font-weight: 600;
+          font-size: 20px;
+          line-height: 24px;
+          text-align: center;
+
+          cursor: pointer;
+        }
+      }
     }
   }
 }
