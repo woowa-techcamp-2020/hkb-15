@@ -1,7 +1,12 @@
 import { View, History, CalendarDayData } from '../../types'
 import cem from '../../utils/custom-event'
 import './styles'
-import { dayStr, numberWithCommas, groupBy } from '../../utils/helper'
+import {
+  Container,
+  dayStr,
+  numberWithCommas,
+  groupBy,
+} from '../../utils/helper'
 
 export default class HistoryView implements View {
   constructor() {
@@ -67,63 +72,58 @@ export default class HistoryView implements View {
 
     const { histories, year, month } = e.detail
     const calendarData = this.getCalendarData(year, month, histories)
-    console.log(calendarData)
     const contentWrap = document.querySelector('.content-wrap')
-    contentWrap.innerHTML = this.createCalendar(calendarData)
+    contentWrap.innerHTML = this.Calendar(calendarData)
   }
 
-  createCalendar(data: CalendarDayData[]): string {
-    return `
-  <div class="calendar">
-    ${this.createHeader()}
-    ${this.createTable(data)}
-  </div>
-  `
+  Calendar(data: CalendarDayData[]): string {
+    return Container({
+      className: 'calendar',
+      child: [this.TableHeader(), this.Table(data)],
+    })
   }
 
-  createHeader() {
-    return `
-<div class="header">
-  ${dayStr.reduce((a, b) => a + this.createDayIndicator(b, b === 'SUN'), '')}
-</div>
-`
-  }
+  TableHeader = (): string =>
+    Container({
+      className: 'header',
+      child: dayStr.map((day) => this.DayIndicator(day, day === 'SUN')),
+    })
 
-  createDayIndicator(day: string, isHoliday: boolean): string {
-    return `
-  <div class="day-indicator ${isHoliday ? 'holiday' : ''}">${day}</div>  
-  `
-  }
+  DayIndicator = (day: string, isHoliday: boolean): string =>
+    Container({
+      className: `day-indicator ${isHoliday ? 'holiday' : ''}`,
+      child: day,
+    })
 
-  createTable(data: CalendarDayData[]): string {
-    return `
-<div class="table">
-  ${data.reduce((a, b) => a + this.createDateCell(b), '')}
-</div>
-  `
-  }
+  Table = (data: CalendarDayData[]): string =>
+    Container({
+      className: 'table',
+      child: data.map((dayData) => this.DateCell(dayData)),
+    })
 
-  createDateCell(data: CalendarDayData): string {
-    return `
-<div class="date-cell
-${data.isInThisMonth ? '' : 'blur'} 
-">
-  <div class="date-indicator 
-  ${data.isHoliday ? 'holiday' : ''}"
-  >${data.date}</div>
-  <div class="sum-indicator">
-    ${this.createSumIndicator(data.incomeSum, 'income')}
-    ${this.createSumIndicator(data.incomeSum, 'expenditure')}
-  </div>
-</div>`
-  }
+  DateCell = (data: CalendarDayData): string =>
+    Container({
+      className: `date-cell ${data.isInThisMonth ? '' : 'blur'}`,
+      child: [
+        Container({
+          className: `date-indicator ${data.isHoliday ? 'holiday' : ''}`,
+          child: data.date,
+        }),
+        Container({
+          className: `sum-indicator`,
+          child: [
+            this.SumIndicator(data.incomeSum, 'income'),
+            this.SumIndicator(data.incomeSum, 'expenditure'),
+          ],
+        }),
+      ],
+    })
 
-  createSumIndicator(sum: number, type: 'income' | 'expenditure'): string {
+  SumIndicator = (sum: number, type: 'income' | 'expenditure'): string => {
     if (sum === 0) return ''
-    return `
-<div class="${type}">
-  ${type === 'income' ? '+' : '-'}${numberWithCommas(sum)}
-</div>
-`
+    return Container({
+      className: type,
+      child: `${type === 'income' ? '+' : '-'}${numberWithCommas(sum)}`,
+    })
   }
 }
