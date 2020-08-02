@@ -31,7 +31,19 @@ export default class CreateHistoryView implements View {
         modal.getAnimations().map((animation) => animation.finished)
       ).then(() => modal.remove())
     }
+
+    const typeIndicator = target.closest('.type-indicator')
+    if (typeIndicator) {
+      const styleName = 'selected'
+      document
+        .querySelector(`.type-picker .${styleName}`)
+        ?.classList.remove(styleName)
+
+      typeIndicator.classList.toggle(styleName)
+    }
   }
+
+  onTypeClickHandler(pathName: string): void {}
 
   render(e: Event): void {
     const contentWrap = document.querySelector('.content-wrap')
@@ -53,12 +65,12 @@ export default class CreateHistoryView implements View {
       </div>
       
       <div class="date-picker">
-        <input class="year" type="text" maxlength="4" max="9999" value="2020"></input>.
+        <input class="year" type="text" maxlength="4" value="2020"></input>.
         <input class="month" type="text" maxlength="2" value="06"></input>.
         <input class="day" type="text" maxlength="2" value="20"></input>          
       </div>
       <div class="category-picker">
-        <div class="category-indicator">Food</div>
+        <div class="category-indicator selected">Food</div>
         <div class="category-indicator">Medical</div>
         <div class="category-indicator">Transport</div>
         <div class="category-indicator">Culture</div>
