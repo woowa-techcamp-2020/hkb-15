@@ -10,6 +10,9 @@
     "> 1%",
     "last 2 versions"
   ],
+  "alias": {
+    "src": "./src"
+  },
   "devDependencies": {
     "@babel/cli": "^7.10.5",
     "@babel/core": "^7.10.5",
