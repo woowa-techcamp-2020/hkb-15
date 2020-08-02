@@ -118,7 +118,7 @@ export default class HistoryView implements View {
           className: `sum-indicator`,
           child: [
             this.SumIndicator(data.incomeSum, 'income'),
-            this.SumIndicator(data.incomeSum, 'expenditure'),
+            this.SumIndicator(data.expenditureSum, 'expenditure'),
           ],
         }),
       ],
