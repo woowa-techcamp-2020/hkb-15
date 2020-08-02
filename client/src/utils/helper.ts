@@ -64,6 +64,8 @@ const getChildHtml = (child: string | string[]): string => {
   } else return child
 }
 
+export const loadHtml = getChildHtml
+
 export const Container = ({
   className = 'default',
   child = undefined,
