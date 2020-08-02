@@ -125,14 +125,6 @@
 
           &.income {
             margin-right: 21px;
-
-            &::before {
-              content: 'Income';
-            }
-          }
-
-          &.expenditure::before {
-            content: 'Expenditure';
           }
 
           &.selected {
@@ -249,10 +241,17 @@
             }
 
             .icon {
+              display: none;
               font-size: 41px;
               position: absolute;
               right: 18px;
               bottom: 18px;
+            }
+
+            &.selected {
+              .icon {
+                display: block;
+              }
             }
           }
         }
@@ -276,6 +275,7 @@
           font-weight: 500;
           font-size: 25px;
           line-height: 30px;
+          font-feature-settings: 'tnum' on, 'lnum' on;
 
           &::placeholder {
             color: var(--gray);

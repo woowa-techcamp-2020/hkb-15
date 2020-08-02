@@ -79,3 +79,6 @@ export const Container = ({
 export const sum = <T>(objArr: object[], prop: string, initialValue: T): T => {
   return objArr.reduce((sum, item) => sum + item[prop], initialValue)
 }
+
+export const getNumber = (str: string) =>
+  str ? Number(str.replace(/[^0-9]/g, '')) : undefined

@@ -10,11 +10,14 @@ export interface Payment {
 }
 
 export interface History {
-  id: number
+  id?: number
   type: string
   date: string
   content: string
   amount: number
+  paymentId?: number
+  categoryId?: number
+  isThisMonth?: boolean
 }
 
 export interface Store {
