@@ -44,7 +44,7 @@ export default class CreateHistoryView implements View {
     }
   }
 
-  datePickerKeyValidator(e: KeyboardEvent): boolean {
+  numberKeyValidator(e: KeyboardEvent): boolean {
     return (
       e.code.includes('Digit') ||
       e.code.includes('Arrow') ||
@@ -59,7 +59,7 @@ export default class CreateHistoryView implements View {
     if (!(target instanceof HTMLElement)) return
 
     if (target.closest('.date-picker')) {
-      if (!this.datePickerKeyValidator(e)) {
+      if (!this.numberKeyValidator(e)) {
         e.preventDefault()
       }
     }
@@ -100,9 +100,17 @@ export default class CreateHistoryView implements View {
 
       categoryIndicator.classList.toggle(styleName)
     }
-  }
 
-  onTypeClickHandler(pathName: string): void {}
+    const card = target.closest('.card')
+    if (card) {
+      const pickIcon = document.querySelector(`.card-picker .icon`)
+      target.appendChild(pickIcon)
+      target.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+      })
+    }
+  }
 
   render(e: Event): void {
     const contentWrap = document.querySelector('.content-wrap')
