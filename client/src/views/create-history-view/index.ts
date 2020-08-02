@@ -41,6 +41,16 @@ export default class CreateHistoryView implements View {
 
       typeIndicator.classList.toggle(styleName)
     }
+
+    const categoryIndicator = target.closest('.category-indicator')
+    if (categoryIndicator) {
+      const styleName = 'selected'
+      document
+        .querySelector(`.category-picker .${styleName}`)
+        ?.classList.remove(styleName)
+
+      categoryIndicator.classList.toggle(styleName)
+    }
   }
 
   onTypeClickHandler(pathName: string): void {}
