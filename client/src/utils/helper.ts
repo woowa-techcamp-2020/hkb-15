@@ -57,7 +57,7 @@ export const dommer = (markup: TemplateStringsArray | string) => {
   return frag
 }
 
-const getChildHtml = (child: string): string => {
+const getChildHtml = (child: string | string[]): string => {
   if (!child) return ''
   if (Array.isArray(child)) {
     return `${child.reduce((a, b) => a + getChildHtml(b), '')}`
