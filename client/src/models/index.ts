@@ -1,5 +1,5 @@
 import apis from './apis'
-import { Store } from '../types'
+import { Store, History } from '../types'
 import cem from '../utils/custom-event'
 
 class Model {
@@ -8,6 +8,24 @@ class Model {
   constructor() {
     cem.subscribe('statepop', (e: CustomEvent) => this.getData(e))
     cem.subscribe('statechange', (e: CustomEvent) => this.getData(e))
+    cem.subscribe('historycreate', (e: CustomEvent) => this.createHistory(e))
+  }
+
+  async createHistory(e: CustomEvent) {
+    const { historyData, state } = e.detail
+
+    const newHistory: History = await (
+      await apis.createHistory(historyData)
+    ).json()
+    if (historyData.isThisMonth) {
+      this.store.histories.push(newHistory)
+      if (newHistory.type === 'income') {
+        this.store.incomeSum += newHistory.amount
+      } else {
+        this.store.expenditureSum += newHistory.amount
+      }
+    }
+    cem.fire('storeupdated', { ...state, ...this.store })
   }
 
   async getData(e: CustomEvent) {
