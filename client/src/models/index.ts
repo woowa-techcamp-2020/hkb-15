@@ -34,10 +34,7 @@ class Model {
       incomeSum = 0
 
     this.store.histories = await (
-      await apis.findHistory({
-        startDate: `${year}-${month}-01`,
-        endDate: `${year}-${month}-31`,
-      })
+      await apis.findHistory({ year, month })
     ).json()
 
     this.store.histories.forEach((history) => {

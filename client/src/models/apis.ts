@@ -1,5 +1,5 @@
 type Method = 'GET' | 'POST' | 'PUT' | 'DELETE'
-type Input = Record<string, string | number>
+type Input = object
 const defaultOptions = (method: Method): RequestInit => ({
   method,
   headers: {
