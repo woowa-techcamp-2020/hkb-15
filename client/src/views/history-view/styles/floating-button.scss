@@ -1,0 +1,33 @@
+.float {
+  position: fixed;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+
+  bottom: 43px;
+  width: 195px;
+  height: 51px;
+  box-shadow: 0px 4px 30px rgba(0, 0, 0, 0.3);
+  background: var(--black);
+  border-radius: 8514px;
+  padding-left: 4px;
+
+  cursor: pointer;
+
+  .icon {
+    color: white;
+    font-size: 45px;
+    background-color: var(--black);
+    border-radius: 500px;
+  }
+
+  .text {
+    width: 100%;
+
+    text-align: center;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 24px;
+    color: white;
+  }
+}

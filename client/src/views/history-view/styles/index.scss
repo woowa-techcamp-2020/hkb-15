@@ -14,4 +14,6 @@
     @include meta.load-css('./date-indicator');
     @include meta.load-css('./history-card');
   }
+
+  @include meta.load-css('./floating-button');
 }

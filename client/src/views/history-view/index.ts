@@ -6,6 +6,23 @@ import { numberWithCommas, groupBy, dateWithDay } from '../../utils/helper'
 export default class HistoryView implements View {
   constructor() {
     cem.subscribe('storeupdated', (e: CustomEvent) => this.render(e))
+
+    const contentWrap = document.querySelector('.content-wrap')
+    contentWrap.addEventListener('click', (e: MouseEvent) =>
+      this.clickEventHandler(e)
+    )
+  }
+
+  clickEventHandler(e: MouseEvent) {
+    e.preventDefault()
+
+    const { target } = e
+    if (!(target instanceof HTMLElement)) return
+
+    if (target.closest('.float')) {
+      e.stopImmediatePropagation()
+      cem.fire('createhistorymodal')
+    }
   }
 
   render(e: CustomEvent): void {
@@ -15,11 +32,13 @@ export default class HistoryView implements View {
 
     const contentWrap = document.querySelector('.content-wrap')
 
-    contentWrap.innerHTML = Object.keys(historiesByDate).reduce(
-      (a: string, b: string) =>
-        a + this.createDateColumn(b, historiesByDate[b]),
-      ''
-    )
+    contentWrap.innerHTML = `
+${Object.keys(historiesByDate).reduce(
+  (a: string, b: string) => a + this.createDateColumn(b, historiesByDate[b]),
+  ''
+)}
+${this.createFloatingButton()}
+`
   }
 
   createDateColumn(date: string, histories: History[]) {
@@ -56,5 +75,14 @@ export default class HistoryView implements View {
   </div>
 </div>
 `
+  }
+
+  createFloatingButton(): string {
+    return `
+<div class="float">
+    <i class="icon">plus_circle_fill</i>
+    <div class="text">Add History</div>
+</div>
+  `
   }
 }

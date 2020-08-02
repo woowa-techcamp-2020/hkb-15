@@ -17,10 +17,13 @@
       border-radius: 15px;
       height: 56px;
       line-height: 30px;
+
       font-size: 25px;
       text-align: center;
       font-weight: bold;
       font-feature-settings: 'tnum' on, 'lnum' on;
+
+      cursor: pointer;
     }
 
     .income {

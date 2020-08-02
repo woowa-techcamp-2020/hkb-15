@@ -1,0 +1,320 @@
+@keyframes blur {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+  }
+}
+
+@keyframes unblur {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+  }
+}
+
+@keyframes up {
+  from {
+    bottom: -315px;
+  }
+  to {
+    bottom: 0px;
+  }
+}
+
+@keyframes down {
+  from {
+    bottom: 0px;
+  }
+  to {
+    bottom: -700px;
+  }
+}
+
+.modal {
+  display: flex;
+  position: fixed;
+  justify-content: center;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.25);
+  // backdrop-filter: blur(50px);
+  animation-name: blur;
+  animation-duration: 0.5s;
+
+  &.remove {
+    animation-name: unblur;
+    animation-duration: 0.5s;
+    animation-fill-mode: forwards;
+    opacity: 0;
+
+    .history-form-wrap {
+      animation-name: down;
+      animation-duration: 0.5s;
+      animation-fill-mode: forwards;
+    }
+  }
+
+  .history-form-wrap {
+    position: relative;
+    width: 670px;
+    margin-top: 315px;
+    animation-name: up;
+    animation-duration: 0.5s;
+
+    background: white;
+    border-radius: 30px 30px 0px 0px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+
+    .history-form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      margin-bottom: 75px;
+
+      .icon-wrap {
+        display: flex;
+        width: 100%;
+        justify-content: flex-end;
+
+        .close-icon {
+          position: relative;
+          top: 15px;
+          right: 15px;
+          width: 36px;
+          height: 36px;
+          font-size: 36px;
+
+          cursor: pointer;
+        }
+      }
+
+      .type-picker {
+        display: flex;
+        width: 100%;
+        height: 55px;
+        margin-top: 80px;
+        padding: 0 83px;
+
+        .type-indicator {
+          --type: 'income';
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          flex: 1;
+          background: var(--light-blue);
+          border-radius: 15px;
+
+          font-weight: 600;
+          font-size: 25px;
+          line-height: 30px;
+          text-align: center;
+
+          cursor: pointer;
+
+          &.income {
+            margin-right: 21px;
+
+            &::before {
+              content: 'Income';
+            }
+          }
+
+          &.expenditure::before {
+            content: 'Expenditure';
+          }
+
+          &.selected {
+            background: var(--black);
+            color: white;
+          }
+        }
+      }
+
+      .date-picker {
+        --width: 194px;
+        display: flex;
+        justify-content: center;
+        align-items: flex-end;
+        margin-top: 71px;
+        width: var(--width);
+        height: 36px;
+
+        font-weight: 600;
+        font-size: 30px;
+        line-height: 36px;
+        text-align: center;
+        font-feature-settings: 'tnum' on, 'lnum' on;
+
+        input {
+          border: none;
+          -webkit-appearance: none;
+          font-weight: 600;
+          font-size: 30px;
+          line-height: 36px;
+          text-align: center;
+          font-feature-settings: 'tnum' on, 'lnum' on;
+          outline: none;
+
+          &.year {
+            width: 74px;
+          }
+          &.month {
+            width: 37px;
+          }
+          &.day {
+            width: 37px;
+          }
+          &:focus {
+            color: #ff7d1f;
+          }
+        }
+      }
+
+      .category-picker {
+        display: flex;
+        flex-wrap: wrap;
+        margin-top: 71px;
+        padding: 0 83px;
+
+        .category-indicator {
+          height: 50px;
+          display: flex;
+          align-items: center;
+          margin: 0 13px 13px 0;
+          border-radius: 15px;
+          padding: 13px 20px;
+
+          background: var(--light-blue);
+          color: var(--black);
+          font-weight: 600;
+          font-size: 20px;
+          line-height: 24px;
+          text-align: center;
+
+          cursor: pointer;
+        }
+      }
+
+      .card-picker {
+        margin-top: 58px;
+        display: flex;
+        flex-flow: row nowrap;
+        width: 100%;
+
+        .card-container {
+          width: 100%;
+          display: flex;
+          overflow: auto;
+          flex: none;
+
+          scroll-snap-type: x mandatory;
+          padding-left: 150px;
+          padding-right: 150px;
+
+          &::-webkit-scrollbar {
+            display: none;
+          }
+
+          .card {
+            flex: none;
+            margin-right: 32px;
+            scroll-snap-align: center;
+
+            cursor: pointer;
+
+            &:last-child:after {
+              content: '';
+              display: block;
+              position: absolute;
+              right: -150px;
+              width: 150px;
+              height: 20px;
+            }
+
+            .icon {
+              font-size: 41px;
+              position: relative;
+              left: 170px;
+              top: 145px;
+            }
+          }
+        }
+      }
+
+      .input-wrap {
+        width: 100%;
+        padding: 0 83px;
+        display: flex;
+        flex-direction: column;
+
+        input {
+          background: white;
+          border: 1px solid var(--gray);
+          box-sizing: border-box;
+          border-radius: 15px;
+          height: 69px;
+          padding: 19px 38px;
+          outline: none;
+
+          font-weight: 500;
+          font-size: 25px;
+          line-height: 30px;
+
+          &::placeholder {
+            color: var(--gray);
+          }
+        }
+
+        .content-input {
+          margin-top: 71px;
+        }
+
+        .amount-input {
+          margin-top: 57px;
+          text-align: end;
+        }
+      }
+
+      .submit-button-wrap {
+        width: 100%;
+        margin-top: 71px;
+        padding: 0 83px;
+        height: 67px;
+
+        .submit-button {
+          width: 100%;
+          height: 100%;
+          border-radius: 15px;
+          border: none;
+          background: var(--blue);
+          outline: none;
+
+          font-weight: 600;
+          font-size: 25px;
+          line-height: 30px;
+          text-align: center;
+
+          color: white;
+
+          cursor: pointer;
+
+          &:disabled {
+            opacity: 0.7;
+          }
+        }
+      }
+    }
+  }
+}
