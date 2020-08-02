@@ -10,8 +10,60 @@ export default class CreateHistoryView implements View {
     contentWrap.addEventListener('click', (e: MouseEvent) =>
       this.clickEventHandler(e)
     )
+    contentWrap.addEventListener('keydown', (e: KeyboardEvent) => {
+      this.keydownEventHandler(e)
+    })
+    contentWrap.addEventListener('focusout', (e: FocusEvent) => {
+      this.focusoutHandler(e)
+    })
   }
 
+  focusoutHandler(e: FocusEvent) {
+    const { target } = e
+    if (!(target instanceof HTMLInputElement)) return
+
+    if (target.closest('.date-picker')) {
+      const value = parseInt(target.value)
+      switch (target.className) {
+        case 'year':
+          if (value < 2010) target.value = '2010'
+          else if (value > 2020) target.value = '2020'
+          break
+        case 'month':
+          if (value < 1) target.value = '01'
+          else if (value > 12) target.value = '12'
+          else if (target.value.length === 1) target.value = '0' + target.value
+          break
+
+        case 'day':
+          if (value < 1) target.value = '01'
+          else if (value > 31) target.value = '31'
+          else if (target.value.length === 1) target.value = '0' + target.value
+          break
+      }
+    }
+  }
+
+  datePickerKeyValidator(e: KeyboardEvent): boolean {
+    return (
+      e.code.includes('Digit') ||
+      e.code.includes('Arrow') ||
+      (e.code === 'KeyA' && e.metaKey) ||
+      e.code === 'Backspace' ||
+      e.code === 'Tab'
+    )
+  }
+
+  keydownEventHandler(e: KeyboardEvent): void {
+    const { target } = e
+    if (!(target instanceof HTMLElement)) return
+
+    if (target.closest('.date-picker')) {
+      if (!this.datePickerKeyValidator(e)) {
+        e.preventDefault()
+      }
+    }
+  }
   clickEventHandler(e: MouseEvent) {
     e.preventDefault()
 
@@ -20,11 +72,8 @@ export default class CreateHistoryView implements View {
 
     if (target.closest('.close-icon') || !target.closest('.history-form')) {
       const modal = document.querySelector('.modal')
-
       if (!modal) return
-
       e.stopImmediatePropagation()
-
       modal.classList.toggle('remove')
 
       Promise.all(
