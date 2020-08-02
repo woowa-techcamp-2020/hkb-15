@@ -1,0 +1,136 @@
+.payment-manager {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+
+  display: flex;
+  flex-direction: row;
+
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  background-color: rgba(#000, 0.7);
+  backdrop-filter: blur(30px) saturate(1.7);
+
+  opacity: 0;
+
+  transition: opacity 500ms ease;
+  will-change: opacity;
+
+  .bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .header {
+    flex: 1;
+    color: #fff;
+    font-family: inherit;
+    padding-left: 50px;
+    position: sticky;
+    top: 0;
+
+    .title {
+      font-size: 60px;
+      font-weight: 700;
+      margin-top: 70px;
+    }
+
+    .add-payment-method-btn {
+      margin-top: 50px;
+      font-family: inherit;
+      font-weight: 600;
+      font-size: 20px;
+      color: #000;
+      background-color: #fff;
+      padding: 8px 20px 8px 8px;
+      border-radius: 9999px;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 30px rgba(#000, 0.3);
+
+      .icon {
+        margin-right: 10px;
+        font-size: 40px;
+      }
+    }
+  }
+
+  .cards-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+
+    .card-wrapper {
+      margin-top: 25px;
+      margin-right: -25px;
+      transition: transform 300ms ease;
+      position: relative;
+
+      &:first-child {
+        margin-top: 30px;
+      }
+
+      &:last-child {
+        margin-bottom: 30px;
+      }
+
+      &:hover {
+        transform: translateX(-50px);
+
+        .actions-container {
+          opacity: 1;
+          pointer-events: all;
+        }
+      }
+
+      .actions-container {
+        position: absolute;
+        left: -12px;
+        top: -12px;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 200ms ease;
+        will-change: opacity, transform;
+        background-color: #fff;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        border-radius: 9999px;
+        padding: 3px;
+        z-index: 1;
+
+        .icon {
+          font-size: 35px;
+        }
+
+        .delete .icon {
+          color: var(--red);
+        }
+      }
+
+      .card {
+        transform: translateX(100%);
+        transition: transform 300ms ease;
+        will-change: transform;
+      }
+    }
+  }
+}
+
+.payment-manager.loaded {
+  opacity: 1;
+
+  .card {
+    transform: translateX(0%) !important;
+  }
+}

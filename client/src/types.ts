@@ -1,9 +1,11 @@
 export type Content = Record<string, string | number | string[]> | Content[]
+
 export interface Category {
   id: number
   name: string
   type: string
 }
+
 export interface Payment {
   id: number
   name: string

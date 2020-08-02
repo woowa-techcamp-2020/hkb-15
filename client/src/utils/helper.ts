@@ -57,12 +57,14 @@ export const dommer = (markup: TemplateStringsArray | string) => {
   return frag
 }
 
-const getChildHtml = (child: string): string => {
+const getChildHtml = (child: string | string[]): string => {
   if (!child) return ''
   if (Array.isArray(child)) {
     return `${child.reduce((a, b) => a + getChildHtml(b), '')}`
   } else return child
 }
+
+export const loadHtml = getChildHtml
 
 export const Container = ({
   className = 'default',
@@ -78,4 +80,26 @@ export const Container = ({
 
 export const sum = <T>(objArr: object[], prop: string, initialValue: T): T => {
   return objArr.reduce((sum, item) => sum + item[prop], initialValue)
+}
+
+export const getPaymentEnKeyName = (paymentName: string) => {
+  if (paymentName.startsWith('카카오')) {
+    return 'kakao'
+  } else if (paymentName.startsWith('신한')) {
+    return 'shinhan'
+  } else if (paymentName.startsWith('삼성')) {
+    return 'samsung'
+  } else if (paymentName.startsWith('롯데')) {
+    return 'lotte'
+  } else if (paymentName.startsWith('우리')) {
+    return 'woori'
+  } else if (paymentName.startsWith('현금')) {
+    return 'cash'
+  } else if (paymentName.startsWith('현대')) {
+    return 'hyundai'
+  } else if (paymentName.startsWith('비씨')) {
+    return 'bc'
+  } else {
+    return ''
+  }
 }
