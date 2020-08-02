@@ -1,115 +1,134 @@
-import { View, History } from '../../types'
+import { View, History, CalendarDayData } from '../../types'
 import cem from '../../utils/custom-event'
 import './styles'
-import { dayStr, numberWithCommas, groupBy } from '../../utils/helper'
+import {
+  Container,
+  dayStr,
+  numberWithCommas,
+  groupBy,
+  sum,
+} from '../../utils/helper'
 
 export default class HistoryView implements View {
   constructor() {
     cem.subscribe('storeupdated', (e: CustomEvent) => this.render(e))
   }
 
+  getEmptyCellData(date: number): CalendarDayData {
+    return {
+      incomeSum: 0,
+      expenditureSum: 0,
+      date,
+      isHoliday: false,
+      isInThisMonth: false,
+    }
+  }
+
+  getTypeSum(histories: History[], type: 'expenditure' | 'income'): number {
+    return sum(
+      histories.filter((history) => history.type === type),
+      'amount',
+      0
+    )
+  }
+
   getCalendarData(year: number, month: number, histories: History[]) {
+    const calendarData: CalendarDayData[] = []
     const historiesByDate = groupBy(histories, 'date')
-    const startDay = new Date(year, month, 1)
-    const endDay = new Date(year, month + 1, 0)
+    const thisMonthStartDay = new Date(year, month, 1).getDay()
+    const lastMonthEndDate = new Date(year, month, 0).getDate()
+    const thisMonthEndDate = new Date(year, month + 1, 0).getDate()
+    const lastMonthStartDate = lastMonthEndDate - thisMonthStartDay + 1
+
+    for (let i = 0; i < thisMonthStartDay; i++) {
+      const date = i + lastMonthStartDate
+      calendarData.push(this.getEmptyCellData(date))
+    }
+
+    for (let i = 0; i < thisMonthEndDate; i++) {
+      const date = i + 1
+      const dateIndex = new Date(year, month, date).toISOString().slice(0, 10)
+      const histories = historiesByDate[dateIndex] ?? []
+
+      calendarData.push({
+        date,
+        isInThisMonth: true,
+        isHoliday: false,
+        expenditureSum: this.getTypeSum(histories, 'expenditure'),
+        incomeSum: this.getTypeSum(histories, 'income'),
+      })
+    }
+
+    const neededCellCnt = 42 - calendarData.length
+    for (let i = 0; i < neededCellCnt; i++) {
+      const date = i + 1
+      calendarData.push(this.getEmptyCellData(date))
+    }
+
+    calendarData
+      .filter((data, index) => index % 7 === 0)
+      .forEach((data) => (data.isHoliday = true))
+
+    return calendarData
   }
 
   render(e: CustomEvent): void {
     if (e.detail.path !== '/calendar') return
 
     const { histories, year, month } = e.detail
-    this.getCalendarData(year, month, histories)
-
+    const calendarData = this.getCalendarData(year, month - 1, histories)
     const contentWrap = document.querySelector('.content-wrap')
-    contentWrap.innerHTML = this.createCalendar()
+    contentWrap.innerHTML = this.Calendar(calendarData)
   }
 
-  createCalendar() {
-    return `
-  <div class="calendar">
-    ${this.createHeader()}
-    ${this.createTable()}
-  </div>
-  `
+  Calendar(data: CalendarDayData[]): string {
+    return Container({
+      className: 'calendar',
+      child: [this.TableHeader(), this.Table(data)],
+    })
   }
 
-  createHeader() {
-    return `
-<div class="header">
-  ${dayStr.reduce((a, b) => a + this.createDayIndicator(b, b === 'SUN'), '')}
-</div>
-`
-  }
+  TableHeader = (): string =>
+    Container({
+      className: 'header',
+      child: dayStr.map((day) => this.DayIndicator(day, day === 'SUN')),
+    })
 
-  createDayIndicator(day: string, isHoliday: boolean): string {
-    return `
-  <div class="day-indicator ${isHoliday ? 'holiday' : ''}">${day}</div>  
-  `
-  }
+  DayIndicator = (day: string, isHoliday: boolean): string =>
+    Container({
+      className: `day-indicator ${isHoliday ? 'holiday' : ''}`,
+      child: day,
+    })
 
-  createTable() {
-    return `
-<div class="table">
-  ${this.createDateCell(1, true, true, 2000, 5000)}
-  <div class="date-cell 1">2</div>
-  <div class="date-cell 1">3</div>
-  <div class="date-cell 1">4</div>
-  <div class="date-cell 1">5</div>
-  <div class="date-cell 1">6</div>
-  <div class="date-cell 1">7</div>
+  Table = (data: CalendarDayData[]): string =>
+    Container({
+      className: 'table',
+      child: data.map((dayData) => this.DateCell(dayData)),
+    })
 
-  <div class="date-cell 1">1</div>
-  <div class="date-cell 1">2</div>
-  <div class="date-cell 1">3</div>
-  <div class="date-cell 1">4</div>
-  <div class="date-cell 1">5</div>
-  <div class="date-cell 1">6</div>
-  <div class="date-cell 1">7</div>
+  DateCell = (data: CalendarDayData): string =>
+    Container({
+      className: `date-cell ${data.isInThisMonth ? '' : 'blur'}`,
+      child: [
+        Container({
+          className: `date-indicator ${data.isHoliday ? 'holiday' : ''}`,
+          child: data.date,
+        }),
+        Container({
+          className: `sum-indicator`,
+          child: [
+            this.SumIndicator(data.incomeSum, 'income'),
+            this.SumIndicator(data.incomeSum, 'expenditure'),
+          ],
+        }),
+      ],
+    })
 
-  <div class="date-cell 1"></div>
-  <div class="date-cell 1"></div>
-  <div class="date-cell 1"></div>
-  <div class="date-cell 1"></div>
-  <div class="date-cell 1"></div>
-  <div class="date-cell 1"></div>
-  <div class="date-cell 1"></div>
-
-  <div class="date-cell 1"></div>
-  <div class="date-cell 1"></div>
-  <div class="date-cell 1"></div>
-  <div class="date-cell 1"></div>
-  <div class="date-cell 1"></div>
-  <div class="date-cell 1"></div>
-  <div class="date-cell 1"></div>
-
-  <div class="date-cell 1"></div>
-  <div class="date-cell 1"></div>
-  <div class="date-cell 1"></div>
-  <div class="date-cell 1"></div>
-  <div class="date-cell 1"></div>
-  <div class="date-cell 1"></div>
-  <div class="date-cell 1"></div>
-</div>
-  `
-  }
-
-  createDateCell(
-    date: number,
-    isInThisMonth: boolean,
-    isHoliday: boolean,
-    incomeSum: number,
-    expeditureSum: number
-  ): string {
-    return `
-<div class="date-cell">
-  <div class="date-indicator 
-  ${isInThisMonth ? '' : 'blur'} 
-  ${isHoliday ? 'holiday' : ''}"
-  >${date}</div>
-  <div class="sum-indicator">
-    <div class="income">+${numberWithCommas(incomeSum)}</div>
-    <div class="expenditure">-${numberWithCommas(expeditureSum)}</div>
-  </div>
-</div>`
+  SumIndicator = (sum: number, type: 'income' | 'expenditure'): string => {
+    if (sum === 0) return ''
+    return Container({
+      className: type,
+      child: `${type === 'income' ? '+' : '-'}${numberWithCommas(sum)}`,
+    })
   }
 }
