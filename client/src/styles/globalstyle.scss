@@ -29,6 +29,15 @@ html {
   }
 }
 
+button {
+  padding: 0;
+  margin: 0;
+  background: none;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
 .body-wrap {
   display: flex;
   flex-direction: column;
