@@ -33,10 +33,13 @@ export default class HistoryView implements View {
     const contentWrap = document.querySelector('.content-wrap')
 
     contentWrap.innerHTML = `
-${Object.keys(historiesByDate).reduce(
-  (a: string, b: string) => a + this.createDateColumn(b, historiesByDate[b]),
-  ''
-)}
+${Object.keys(historiesByDate)
+  .sort()
+  .reverse()
+  .reduce(
+    (a: string, b: string) => a + this.createDateColumn(b, historiesByDate[b]),
+    ''
+  )}
 ${this.createFloatingButton()}
 `
   }
