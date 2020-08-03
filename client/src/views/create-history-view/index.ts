@@ -190,7 +190,7 @@ export default class CreateHistoryView implements View {
 
     const type = indicator.innerText
     const categoryPicker = document.querySelector('.category-picker')
-    categoryPicker.innerHTML = this.createCategorySelector(type)
+    categoryPicker.innerHTML = this.createCategoryIndicators(type)
   }
 
   async clickEventHandler(e: MouseEvent) {
@@ -225,18 +225,26 @@ export default class CreateHistoryView implements View {
 `
   }
 
-  createCategorySelector(type: string): string {
-    return /*html*/ `${loadHtml(
-      this.categories
-        .filter((category) => category.type === type)
-        .map((category, index) => {
-          return /*html*/ `<div class='category-indicator ${
-            index === 0 ? 'selected' : ''
-          }' id="category-${category.id}">
-            ${category.name}
-          </div>`
-        })
-    )}`
+  createCategoryIndicators(type = 'expenditure', categoryId?: number): string {
+    return /*html*/ `
+${loadHtml(
+  this.categories
+    .filter((category) => category.type === type)
+    .map((category, index) => {
+      return /*html*/ `<div class='category-indicator ${
+        categoryId
+          ? category.id === categoryId
+            ? 'selected'
+            : ''
+          : index === 0
+          ? 'selected'
+          : ''
+      }' id="category-${category.id}">
+        ${category.name}
+      </div>`
+    })
+)}
+`
   }
 
   createModal(): string {
@@ -254,7 +262,10 @@ export default class CreateHistoryView implements View {
         <input class="day" maxlength="2" value="${this.day}" />       
       </div>
       <div class="category-picker"> 
-        ${this.createCategorySelector('expenditure')}         
+      ${this.createCategoryIndicators(
+        this.history?.type,
+        this.history?.categoryId
+      )}           
       </div>  
       <div class="card-picker" dir="ltr">
         <div class="card-container">
