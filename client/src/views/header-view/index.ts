@@ -4,6 +4,10 @@ import { monthStr, numberWithCommas, dommer } from '../../utils/helper'
 import './styles'
 
 export default class HeaderView implements View {
+  state: WindowHistoryState
+  incomeSum: number
+  expenditureSum: number
+
   constructor() {
     const header = document.querySelector('header')
 
@@ -29,7 +33,17 @@ export default class HeaderView implements View {
         return this.cardClickHandler()
       }
     })
-    cem.subscribe('storeupdated', (e: CustomEvent) => this.render(e))
+
+    cem.subscribe('storeupdated', (e: CustomEvent) => {
+      this.setAttributes(e.detail)
+      this.render()
+    })
+  }
+
+  setAttributes({ state, store }): void {
+    this.state = state
+    this.expenditureSum = store.expenditureSum
+    this.incomeSum = store.incomeSum
   }
 
   getPathFromLink(aTag: Element): string {
@@ -154,17 +168,17 @@ export default class HeaderView implements View {
     node.classList.toggle(styleName)
   }
 
-  render(e: CustomEvent): void {
-    const { path, year, month, type, expenditureSum, incomeSum } = e.detail
+  render(): void {
     document.querySelector('header').innerHTML = `
       ${this.createNavigator()}
-      ${this.createMonthSelector(year, month)}
-      ${this.createSumIndicator(incomeSum, expenditureSum, type)}
+      ${this.createMonthSelector()}
+      ${this.createSumIndicator()}
     `
-    this.setInsetStyle(path)
+    this.setInsetStyle(this.state.path)
   }
 
-  createMonthSelector(year: number, month: number): string {
+  createMonthSelector(): string {
+    const { year, month } = this.state
     const prevYear = month === 1 ? year - 1 : year
     const prevMonth = month === 1 ? 12 : month - 1
     const nextYear = month === 12 ? year + 1 : year
@@ -182,7 +196,7 @@ export default class HeaderView implements View {
 `
   }
 
-  createMonthIndicator(year: number, month: number) {
+  createMonthIndicator(year: number, month: number): string {
     return `
 <div class="month-indicator">
   <div class="year">${year}</div>
@@ -191,22 +205,16 @@ export default class HeaderView implements View {
 `
   }
 
-  createSumIndicator(
-    incomeSum: number,
-    expeditureSum: number,
-    type: string
-  ): string {
-    console.log(type)
-
+  createSumIndicator(): string {
     return `
 <div class="sum-indicator-wrap">
   <div class="sum-indicator">
     <div class="money-button income ${
-      type && type == 'income' ? 'selected' : ''
-    }">+${numberWithCommas(incomeSum)}</div>
+      this.state.type && this.state.type == 'income' ? 'selected' : ''
+    }">+${numberWithCommas(this.incomeSum)}</div>
     <div class="money-button expenditure ${
-      type && type == 'expenditure' ? 'selected' : ''
-    }">-${numberWithCommas(expeditureSum)}</div>
+      this.state.type && this.state.type == 'expenditure' ? 'selected' : ''
+    }">-${numberWithCommas(this.expenditureSum)}</div>
   </div>
 </div>
 `
