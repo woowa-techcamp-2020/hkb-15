@@ -149,7 +149,10 @@ export default class CreateHistoryView implements View {
     }
 
     await this.closeModal(false)
-    cem.fire('historycreate', { historyData, state: history.state })
+    cem.fire(this.history ? 'historyupdate' : 'historycreate', {
+      historyData,
+      state: history.state,
+    })
   }
 
   closeHandler(target: HTMLElement) {
