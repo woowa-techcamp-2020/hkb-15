@@ -247,6 +247,30 @@ ${loadHtml(
 `
   }
 
+  createCardPicker(paymentId?: number): string {
+    return /*html*/ `
+<div class="card-picker" dir="ltr">
+  <div class="card-container">
+    ${loadHtml(
+      this.payments.map(
+        (payment, index) => `
+        <div class="card ${getPaymentEnKeyName(payment.name)} ${
+          paymentId
+            ? payment.id === paymentId
+              ? 'selected'
+              : ''
+            : index === 0
+            ? 'selected'
+            : ''
+        }" id="payment-${payment.id}">
+          <i class="icon">checkmark_circle_fill</i>
+        </div>`
+      )
+    )}
+  </div>
+</div>`
+  }
+
   createModal(): string {
     return /*html*/ `
 <div class="modal">
@@ -267,21 +291,8 @@ ${loadHtml(
         this.history?.categoryId
       )}           
       </div>  
-      <div class="card-picker" dir="ltr">
-        <div class="card-container">
-          ${loadHtml(
-            this.payments.map(
-              (payment, index) => `
-              <div class="card ${getPaymentEnKeyName(payment.name)} ${
-                index === 0 ? 'selected' : ''
-              }" id="payment-${payment.id}">
-                <i class="icon">checkmark_circle_fill</i>
-              </div>
-            `
-            )
-          )}
-        </div>
-      </div>
+      ${this.createCardPicker(this.history?.paymentId)}
+
       <div class="input-wrap">
         <input class="content-input" maxlength="20" placeholder="Label" name="content" />
         <input class="amount-input" maxlength="10" placeholder="Amount" name="amount" />
