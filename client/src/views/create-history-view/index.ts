@@ -212,6 +212,19 @@ export default class CreateHistoryView implements View {
     contentWrap.innerHTML += this.createModal()
   }
 
+  createTypePicker(selectedType = 'expenditure'): string {
+    return /*html*/ `
+<div class="type-picker">
+  <div class="type-indicator income ${
+    selectedType == 'income' ? 'selected' : ''
+  }">Income</div>
+  <div class="type-indicator expenditure ${
+    selectedType == 'expenditure' ? 'selected' : ''
+  }">Expenditure</div>
+</div>
+`
+  }
+
   createCategorySelector(type: string): string {
     return /*html*/ `${loadHtml(
       this.categories
@@ -234,18 +247,15 @@ export default class CreateHistoryView implements View {
       <div class="icon-wrap">
         <i class="icon close-icon">xmark_circle_fill</i>
       </div>
-      <div class="type-picker">
-        <div class="type-indicator income">income</div>
-        <div class="type-indicator expenditure selected">expenditure</div>
-      </div>
+      ${this.createTypePicker(this.history?.type)}
       <div class="date-picker">
         <input class="year" maxlength="4" value="${this.year}" />.
         <input class="month" maxlength="2" value="${this.month}" />.
         <input class="day" maxlength="2" value="${this.day}" />       
       </div>
-      <div class="category-picker">
+      <div class="category-picker"> 
         ${this.createCategorySelector('expenditure')}         
-      </div>
+      </div>  
       <div class="card-picker" dir="ltr">
         <div class="card-container">
           ${loadHtml(
