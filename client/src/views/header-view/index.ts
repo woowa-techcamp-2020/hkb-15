@@ -183,7 +183,7 @@ export default class HeaderView implements View {
     const prevMonth = month === 1 ? 12 : month - 1
     const nextYear = month === 12 ? year + 1 : year
     const nextMonth = month === 12 ? 1 : month + 1
-    return `
+    return /*html*/ `
 <div class="month-selector-wrapper">
   <div class="month-selector">
     ${this.createMonthIndicator(prevYear, prevMonth)}
@@ -197,7 +197,7 @@ export default class HeaderView implements View {
   }
 
   createMonthIndicator(year: number, month: number): string {
-    return `
+    return /*html*/ `
 <div class="month-indicator">
   <div class="year">${year}</div>
   <div class="month">${monthStr[month]}</div>
@@ -206,7 +206,7 @@ export default class HeaderView implements View {
   }
 
   createSumIndicator(): string {
-    return `
+    return /*html*/ `
 <div class="sum-indicator-wrap">
   <div class="sum-indicator">
     <div class="money-button income ${
@@ -221,7 +221,7 @@ export default class HeaderView implements View {
   }
 
   createNavigator(): string {
-    return `
+    return /*html*/ `
 <nav>
   <div class="icon-wrap">
     <a href="/"><i class="icon">clock</i></a>
@@ -238,7 +238,7 @@ export default class HeaderView implements View {
   <div class="icon-wrap credit-card">
     <button class="credit-card-btn">
       <i class="icon">creditcard</i>
-    </button
+    </button>
   </div>
 </nav>
 `

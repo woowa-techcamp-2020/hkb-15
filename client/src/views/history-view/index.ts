@@ -63,7 +63,7 @@ ${this.createFloatingButton()}
   }
 
   createDateColumn(date: string, histories: History[]) {
-    return `
+    return /*html*/ `
 <div class="date-history-column">
   ${this.createDateIndicator(date)}
   ${histories.reduce(
@@ -75,13 +75,13 @@ ${this.createFloatingButton()}
   }
 
   createDateIndicator(date: string): string {
-    return `
+    return /*html*/ `
 <div class="date-indicator">${dateWithDay(date)}</div>
 `
   }
 
   createHistoryCard(history: History): string {
-    return `
+    return /*html*/ `
 <div class="history-card" id="history-1">
   <div class="front">
     <div class="payment">KakaoBank</div>
@@ -99,7 +99,7 @@ ${this.createFloatingButton()}
   }
 
   createFloatingButton(): string {
-    return `
+    return /*html*/ `
 <div class="float">
     <i class="icon">plus_circle_fill</i>
     <div class="text">Add History</div>
