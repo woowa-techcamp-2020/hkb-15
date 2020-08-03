@@ -9,6 +9,7 @@ class Model {
     cem.subscribe('statepop', (e: CustomEvent) => this.fetchData(e))
     cem.subscribe('statechange', (e: CustomEvent) => this.fetchData(e))
     cem.subscribe('historycreate', (e: CustomEvent) => this.createHistory(e))
+    cem.subscribe('historyupdate', (e: CustomEvent) => this.updateHistory(e))
     cem.subscribe('historymodalpopup', (e: CustomEvent) => this.getModalData(e))
   }
 
@@ -35,6 +36,23 @@ class Model {
 
     if (historyData.isThisMonth) {
       this.store.histories.push(newHistory)
+      this.initializeHistories()
+      cem.fire('storeupdated', { state, store: this.store })
+    }
+  }
+
+  async updateHistory(e: CustomEvent) {
+    const { historyData, state } = e.detail
+
+    const updatedHistory: History = await (
+      await apis.updateHistory(historyData)
+    ).json()
+
+    if (historyData.isThisMonth) {
+      const arrId = this.store.histories.findIndex(
+        (history) => history.id === historyData.id
+      )
+      this.store.histories[arrId] = updatedHistory
       this.initializeHistories()
       cem.fire('storeupdated', { state, store: this.store })
     }
