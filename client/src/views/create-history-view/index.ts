@@ -1,12 +1,22 @@
-import { View, History } from '../../types'
-import { getNumber } from '../../utils/helper'
+import { View, History, Category, Payment } from '../../types'
+import { getNumber, addLeadingZeros } from '../../utils/helper'
 import cem from '../../utils/custom-event'
 
 import './styles'
 
 export default class CreateHistoryView implements View {
+  year: string
+  month: string
+  day: string
+  categories: Category[]
+  payments: Payment[]
+
   constructor() {
-    cem.subscribe('createhistorymodal', (e: CustomEvent) => this.render(e))
+    cem.subscribe('createhistorymodal', (e: CustomEvent) => {
+      //setting default date info for today
+      this.setAttributes(e.detail)
+      this.render()
+    })
 
     const contentWrap = document.querySelector('.content-wrap')
     contentWrap.addEventListener('click', (e: MouseEvent) =>
@@ -18,6 +28,15 @@ export default class CreateHistoryView implements View {
     contentWrap.addEventListener('focusout', (e: FocusEvent) =>
       this.focusoutEventHandler(e)
     )
+  }
+
+  setAttributes({ categories, payments }): void {
+    const today = new Date()
+    this.year = today.getFullYear().toString()
+    this.month = addLeadingZeros(today.getMonth() + 1, 2)
+    this.day = addLeadingZeros(today.getDate() + 1, 2)
+    this.categories = categories
+    this.payments = payments
   }
 
   getInputValue(selector: string): string {
@@ -55,13 +74,15 @@ export default class CreateHistoryView implements View {
     target: HTMLInputElement,
     min: string,
     max: string,
+    initial: string,
     length: number
   ) {
     const value = +target.value
 
-    if (value < +min || !value) target.value = min
-    else if (value > +max) target.value = max
-    else if (target.value.length !== length) target.value = '0' + target.value
+    if (value < +min || !value) target.value = initial
+    else if (value > +max) target.value = initial
+    else if (target.value.length !== length)
+      target.value = addLeadingZeros(+target.value, length)
   }
 
   focusoutEventHandler(e: FocusEvent) {
@@ -71,13 +92,13 @@ export default class CreateHistoryView implements View {
     if (target.closest('.date-picker')) {
       switch (target.className) {
         case 'year':
-          this.dateValidator(target, '2000', '2030', 4)
+          this.dateValidator(target, '2000', '2030', this.year, 4)
           break
         case 'month':
-          this.dateValidator(target, '01', '12', 2)
+          this.dateValidator(target, '01', '12', this.month, 2)
           break
         case 'day':
-          this.dateValidator(target, '01', '31', 2)
+          this.dateValidator(target, '01', '31', this.day, 2)
           break
       }
     }
@@ -166,7 +187,7 @@ export default class CreateHistoryView implements View {
     this.submissionHandler(target)
   }
 
-  render(e: Event): void {
+  render(): void {
     const contentWrap = document.querySelector('.content-wrap')
     contentWrap.innerHTML += this.createModal()
   }
@@ -184,9 +205,10 @@ export default class CreateHistoryView implements View {
         <div class="type-indicator expenditure selected">expenditure</div>
       </div>
       <div class="date-picker">
-        <input class="year" type="text" maxlength="4" value="2020"></input>.
-        <input class="month" type="text" maxlength="2" value="06"></input>.
-        <input class="day" type="text" maxlength="2" value="20"></input>          
+        <input class="year" type="text" maxlength="4" value="${this.year}">
+        </input>.
+        <input class="month" type="text" maxlength="2" value="${this.month}"></input>.
+        <input class="day" type="text" maxlength="2" value="${this.day}"></input>          
       </div>
       <div class="category-picker">
         <div class="category-indicator selected" id="category-1">Food</div>
