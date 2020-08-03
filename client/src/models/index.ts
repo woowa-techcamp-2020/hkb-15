@@ -9,13 +9,23 @@ class Model {
     cem.subscribe('statepop', (e: CustomEvent) => this.fetchData(e))
     cem.subscribe('statechange', (e: CustomEvent) => this.fetchData(e))
     cem.subscribe('historycreate', (e: CustomEvent) => this.createHistory(e))
-    cem.subscribe('getdata', (e: CustomEvent) => this.getData(e))
+    cem.subscribe('historymodalpopup', (e: CustomEvent) => this.getModalData(e))
   }
 
-  getData(e: CustomEvent) {
-    const { state, nextEvent } = e.detail
-    cem.fire(nextEvent, { state, store: this.store })
+  getModalData(e: CustomEvent) {
+    const { state, historyId } = e.detail
+    const { categories, payments } = this.store
+
+    let history: History = this.store.histories.find(
+      (history) => history.id === historyId
+    )
+
+    cem.fire('createhistorymodal', {
+      state,
+      store: { categories, payments, history },
+    })
   }
+
   async createHistory(e: CustomEvent) {
     const { historyData, state } = e.detail
 
