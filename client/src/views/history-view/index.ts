@@ -7,7 +7,12 @@ import {
 } from '../../types'
 import cem from '../../utils/custom-event'
 import './styles'
-import { numberWithCommas, groupBy, dateWithDay } from '../../utils/helper'
+import {
+  numberWithCommas,
+  groupBy,
+  dateWithDay,
+  getNumber,
+} from '../../utils/helper'
 
 export default class HistoryView implements View {
   state: WindowHistoryState
@@ -27,6 +32,7 @@ export default class HistoryView implements View {
       this.clickEventHandler(e)
     )
   }
+
   setAttributes({ state, store }): void {
     const { histories, categories, payments } = store
     this.state = state
@@ -40,11 +46,13 @@ export default class HistoryView implements View {
 
     const { target } = e
     if (!(target instanceof HTMLElement)) return
+    this.floatButtonClickHandler(e, target)
+  }
 
-    if (target.closest('.float')) {
-      e.stopImmediatePropagation()
-      cem.fire('getdata', { nextEvent: 'createhistorymodal' })
-    }
+  floatButtonClickHandler(e: MouseEvent, target: HTMLElement) {
+    if (!target.closest('.float')) return
+    e.stopImmediatePropagation()
+    cem.fire('historymodalpopup', { state: this.state })
   }
 
   render(): void {
@@ -82,9 +90,11 @@ ${this.createFloatingButton()}
 
   createHistoryCard(history: History): string {
     return /*html*/ `
-<div class="history-card" id="history-1">
+<div class="history-card" id="history-${history.id}">
   <div class="front">
-    <div class="payment">KakaoBank</div>
+    <div class="payment">${
+      this.payments.find((payment) => payment.id === history.paymentId).name
+    }</div>
     <div class="content">${history.content}</div>
   </div>
   <div class="back">
