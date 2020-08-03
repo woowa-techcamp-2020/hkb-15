@@ -6,13 +6,19 @@ class Model {
   store: Store = {}
 
   constructor() {
-    cem.subscribe('statepop', (e: CustomEvent) => this.getData(e))
-    cem.subscribe('statechange', (e: CustomEvent) => this.getData(e))
+    cem.subscribe('statepop', (e: CustomEvent) => this.fetchData(e))
+    cem.subscribe('statechange', (e: CustomEvent) => this.fetchData(e))
     cem.subscribe('historycreate', (e: CustomEvent) => this.createHistory(e))
+    cem.subscribe('getdata', (e: CustomEvent) => this.getData(e))
+  }
+
+  getData(e: CustomEvent) {
+    const { state, nextEvent } = e.detail
+    cem.fire(nextEvent, { state, store: this.store })
   }
 
   async createHistory(e: CustomEvent) {
-    const { historyData, state } = e.detail
+    const { historyData, state, nextEvent } = e.detail
 
     const newHistory: History = await (
       await apis.createHistory(historyData)
@@ -25,11 +31,11 @@ class Model {
         this.store.expenditureSum += newHistory.amount
       }
     }
-    cem.fire('storeupdated', { ...state, ...this.store })
+    cem.fire('storeupdated', { state, store: this.store })
   }
 
-  async getData(e: CustomEvent) {
-    const { year, month, type } = e.detail
+  async fetchData(e: CustomEvent) {
+    const { year, month, type, nextEvent } = e.detail
     await this.setDefault()
     await this.setHistory(year, month)
     const store = { ...this.store }
@@ -38,7 +44,8 @@ class Model {
         (history) => history.type == type
       )
     }
-    cem.fire('storeupdated', { ...e.detail, ...store })
+
+    cem.fire('storeupdated', { state: e.detail, store })
   }
 
   async setDefault(): Promise<void> {
