@@ -24,6 +24,10 @@ export default class HeaderView implements View {
       if (shader) {
         return this.shaderClickHandler(shader)
       }
+
+      if (target.closest('.credit-card-btn')) {
+        return this.cardClickHandler()
+      }
     })
     cem.subscribe('storeupdated', (e: CustomEvent) => this.render(e))
   }
@@ -60,6 +64,10 @@ export default class HeaderView implements View {
     }
 
     cem.fire('statechange', state)
+  }
+
+  cardClickHandler(): void {
+    cem.fire('activatepaymentsmanager')
   }
 
   shaderClickHandler(shader: HTMLElement): void {
@@ -215,6 +223,14 @@ export default class HeaderView implements View {
   </div>
   <div class="icon-wrap">
     <a href="/analytics"><i class="icon">chart_bar</i></a>
+  </div>
+  <div class="separator">
+    <span class="line"></span>
+  </div>
+  <div class="icon-wrap credit-card">
+    <button class="credit-card-btn">
+      <i class="icon">creditcard</i>
+    </button
   </div>
 </nav>
 `

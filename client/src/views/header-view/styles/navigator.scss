@@ -9,6 +9,20 @@ nav {
   width: calc(100% - #{$content-padding * 2});
   max-width: $content-width;
 
+  .separator {
+    flex: 1;
+    display: grid;
+    place-items: center;
+
+    .line {
+      display: inline-block;
+      left: 50%;
+      height: 70%;
+      width: 1px;
+      background-color: var(--black);
+    }
+  }
+
   .icon-wrap {
     flex: 1;
     text-align: center;
@@ -20,6 +34,7 @@ nav {
       border-radius: 10px;
       line-height: 47px;
       font-size: 32px;
+      color: var(--black);
     }
 
     .selected {

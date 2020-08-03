@@ -7,7 +7,7 @@
     "strict": false,
     "baseUrl": "./",
     "paths": {
-      "@/*": ["./src/*"]
+      "src/*": ["./src/*"]
     },
     "esModuleInterop": true
   }
