@@ -27,9 +27,7 @@ export default class PaymentManager {
         (payment, i) =>
           `<div class="card-wrapper">
             <div class="actions-container">
-              <button class="action delete">
-                <i class="icon">multiply_circle_fill</i>
-              </button>
+              <button class="action delete"></button>
             </div>
             <div class="card ${getPaymentEnKeyName(
               payment.name

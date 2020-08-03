@@ -106,15 +106,15 @@
         align-items: center;
         justify-content: center;
         border-radius: 9999px;
-        padding: 3px;
         z-index: 1;
+        width: 35px;
+        height: 35px;
 
-        .icon {
-          font-size: 35px;
-        }
-
-        .delete .icon {
-          color: var(--red);
+        .delete {
+          width: 27px;
+          height: 27px;
+          background-image: url('../../assets/icons/x.svg');
+          background-size: contain;
         }
       }
 
