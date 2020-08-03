@@ -1,5 +1,10 @@
 import { View, History, Category, Payment } from '../../types'
-import { getNumber, addLeadingZeros } from '../../utils/helper'
+import {
+  getNumber,
+  addLeadingZeros,
+  loadHtml,
+  getPaymentEnKeyName,
+} from '../../utils/helper'
 import cem from '../../utils/custom-event'
 
 import './styles'
@@ -14,7 +19,7 @@ export default class CreateHistoryView implements View {
   constructor() {
     cem.subscribe('createhistorymodal', (e: CustomEvent) => {
       //setting default date info for today
-      this.setAttributes(e.detail)
+      this.setAttributes(e.detail.store)
       this.render()
     })
 
@@ -174,6 +179,15 @@ export default class CreateHistoryView implements View {
     }
   }
 
+  typeChangeHandler(target: HTMLElement): void {
+    const indicator = target.closest('.type-indicator')
+    if (!indicator || !(indicator instanceof HTMLElement)) return
+
+    const type = indicator.innerText
+    const categoryPicker = document.querySelector('.category-picker')
+    categoryPicker.innerHTML = this.createCategorySelector(type)
+  }
+
   async clickEventHandler(e: MouseEvent) {
     e.preventDefault()
 
@@ -184,6 +198,7 @@ export default class CreateHistoryView implements View {
     this.pickerHandler(target, '.type-picker', '.type-indicator')
     this.pickerHandler(target, '.category-picker', '.category-indicator')
     this.pickerHandler(target, '.card-picker', '.card', true)
+    this.typeChangeHandler(target)
     this.submissionHandler(target)
   }
 
@@ -192,8 +207,22 @@ export default class CreateHistoryView implements View {
     contentWrap.innerHTML += this.createModal()
   }
 
+  createCategorySelector(type: string): string {
+    return /*html*/ `${loadHtml(
+      this.categories
+        .filter((category) => category.type === type)
+        .map((category, index) => {
+          return /*html*/ `<div class='category-indicator ${
+            index === 0 ? 'selected' : ''
+          }' id="category-${category.id}">
+            ${category.name}
+          </div>`
+        })
+    )}`
+  }
+
   createModal(): string {
-    return `
+    return /*html*/ `
 <div class="modal">
   <div class="history-form-wrap">
     <form class="history-form">
@@ -205,40 +234,34 @@ export default class CreateHistoryView implements View {
         <div class="type-indicator expenditure selected">expenditure</div>
       </div>
       <div class="date-picker">
-        <input class="year" type="text" maxlength="4" value="${this.year}">
-        </input>.
-        <input class="month" type="text" maxlength="2" value="${this.month}"></input>.
-        <input class="day" type="text" maxlength="2" value="${this.day}"></input>          
+        <input class="year" maxlength="4" value="${this.year}" />.
+        <input class="month" maxlength="2" value="${this.month}" />.
+        <input class="day" maxlength="2" value="${this.day}" />       
       </div>
       <div class="category-picker">
-        <div class="category-indicator selected" id="category-1">Food</div>
-        <div class="category-indicator" id="category-2">Medical</div>
-        <div class="category-indicator" id="category-3">Transport</div>
-        <div class="category-indicator" id="category-4">Culture</div>
-        <div class="category-indicator" id="category-5">Beauty</div>
+        ${this.createCategorySelector('expenditure')}         
       </div>
       <div class="card-picker" dir="ltr">
         <div class="card-container">
-          <div class="card hyundai selected" id="type-1">
-            <i class="icon">checkmark_circle_fill</i>
-          </div>
-          <div class="card lotte" id="type-2">
-            <i class="icon">checkmark_circle_fill</i>
-          </div>
-          <div class="card kakao" id="type-3">
-            <i class="icon">checkmark_circle_fill</i>
-          </div>
-          <div class="card shinhan" id="type-4">
-            <i class="icon">checkmark_circle_fill</i>
-          </div>
+          ${loadHtml(
+            this.payments.map(
+              (payment, index) => `
+              <div class="card ${getPaymentEnKeyName(payment.name)} ${
+                index === 0 ? 'selected' : ''
+              }" id="payment-${payment.id}">
+                <i class="icon">checkmark_circle_fill</i>
+              </div>
+            `
+            )
+          )}
         </div>
       </div>
       <div class="input-wrap">
-        <input class="content-input" type="text" maxlength="20" placeholder="Label" name="content"></input>
-        <input class="amount-input" type="text" maxlength="10" placeholder="Amount" name="amount"></input>
+        <input class="content-input" maxlength="20" placeholder="Label" name="content" />
+        <input class="amount-input" maxlength="10" placeholder="Amount" name="amount" />
       </div>
       <div class="submit-button-wrap">
-        <input class="submit-button" type="submit" value="Done" disabled></input>
+        <input class="submit-button" type="submit" value="Done" disabled />
       </div>
     </form> 
   </div>
