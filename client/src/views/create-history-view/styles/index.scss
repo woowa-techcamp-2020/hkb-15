@@ -196,6 +196,7 @@
           scroll-snap-type: x mandatory;
           padding-left: 150px;
           padding-right: 150px;
+          padding-bottom: 14px; // cards box-shadow
 
           &::-webkit-scrollbar {
             display: none;
