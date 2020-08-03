@@ -15,6 +15,7 @@ export default class CreateHistoryView implements View {
   day: string
   categories: Category[]
   payments: Payment[]
+  history: History
 
   constructor() {
     cem.subscribe('createhistorymodal', (e: CustomEvent) => {
@@ -35,13 +36,14 @@ export default class CreateHistoryView implements View {
     )
   }
 
-  setAttributes({ categories, payments }): void {
-    const today = new Date()
+  setAttributes({ categories, payments, history }): void {
+    const today = history ? new Date(history.date) : new Date()
     this.year = today.getFullYear().toString()
     this.month = addLeadingZeros(today.getMonth() + 1, 2)
     this.day = addLeadingZeros(today.getDate() + 1, 2)
     this.categories = categories
     this.payments = payments
+    this.history = history
   }
 
   getInputValue(selector: string): string {
