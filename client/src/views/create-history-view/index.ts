@@ -139,7 +139,8 @@ export default class CreateHistoryView implements View {
     const day = +this.getInputValue('.date-picker .day')
 
     const historyData: History = {
-      type: this.getElementInnerText('.type-picker .selected'),
+      id: this.history?.id,
+      type: this.getElementInnerText('.type-picker .selected').toLowerCase(),
       date: `${year}-${month}-${day}`,
       content: this.getInputValue('.content-input'),
       amount: +this.getInputValue('.amount-input'),
@@ -149,6 +150,7 @@ export default class CreateHistoryView implements View {
     }
 
     await this.closeModal(false)
+
     cem.fire(this.history ? 'historyupdate' : 'historycreate', {
       historyData,
       state: history.state,
@@ -286,19 +288,24 @@ ${loadHtml(
         <input class="day" maxlength="2" value="${this.day}" />       
       </div>
       <div class="category-picker"> 
-      ${this.createCategoryIndicators(
-        this.history?.type,
-        this.history?.categoryId
-      )}           
-      </div>  
+        ${this.createCategoryIndicators(
+          this.history?.type,
+          this.history?.categoryId
+        )}           
+      </div>   
       ${this.createCardPicker(this.history?.paymentId)}
-
       <div class="input-wrap">
-        <input class="content-input" maxlength="20" placeholder="Label" name="content" />
-        <input class="amount-input" maxlength="10" placeholder="Amount" name="amount" />
+        <input class="content-input" maxlength="20" placeholder="Label" name="content" value="${
+          this.history?.content ?? ''
+        }" />
+        <input class="amount-input" maxlength="10" placeholder="Amount" name="amount" value="${
+          this.history?.amount ?? ''
+        }" />
       </div>
       <div class="submit-button-wrap">
-        <input class="submit-button" type="submit" value="Done" disabled />
+        <input class="submit-button" type="submit" value="Done" ${
+          this.history ? '' : 'disabled'
+        } />
       </div>
     </form> 
   </div>
