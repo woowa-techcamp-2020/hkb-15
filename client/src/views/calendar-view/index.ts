@@ -7,6 +7,7 @@ import {
   numberWithCommas,
   groupBy,
   sum,
+  addLeadingZeros,
 } from '../../utils/helper'
 
 export default class CalendarView implements View {
@@ -45,6 +46,9 @@ export default class CalendarView implements View {
     )
   }
 
+  getDateIndex = (year: number, month: number, day: number): string =>
+    `${year}-${addLeadingZeros(month, 2)}-${addLeadingZeros(day, 2)}`
+
   getCalendarData() {
     const year = this.state.year
     const month = this.state.month - 1
@@ -62,7 +66,7 @@ export default class CalendarView implements View {
 
     for (let i = 0; i < thisMonthEndDate; i++) {
       const date = i + 1
-      const dateIndex = new Date(year, month, date).toISOString().slice(0, 10)
+      const dateIndex = this.getDateIndex(year, month, date)
       const histories = historiesByDate[dateIndex] ?? []
 
       calendarData.push({
