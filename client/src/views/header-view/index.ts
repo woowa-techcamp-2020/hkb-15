@@ -9,35 +9,15 @@ export default class HeaderView implements View {
   expenditureSum: number
 
   constructor() {
-    const header = document.querySelector('header')
-
-    header.addEventListener('click', (e: MouseEvent) => {
-      e.preventDefault()
-
-      const { target } = e
-      if (!(target instanceof HTMLElement)) return
-
-      const a = target.closest('a')
-      if (a) return this.navigationIconClickHandler(a)
-
-      const button = target.closest('.money-button')
-      if (button) return this.moneyButtonClickHandler(button)
-
-      const shader = target.closest<HTMLElement>('.shader')
-
-      if (shader) {
-        return this.shaderClickHandler(shader)
-      }
-
-      if (target.closest('.credit-card-btn')) {
-        return this.cardClickHandler()
-      }
-    })
-
     cem.subscribe('storeupdated', (e: CustomEvent) => {
       this.setAttributes(e.detail)
       this.render()
     })
+
+    const header = document.querySelector('header')
+    header.addEventListener('click', (e: MouseEvent) =>
+      this.clickEventHandler(e)
+    )
   }
 
   setAttributes({ state, store }): void {
@@ -46,45 +26,66 @@ export default class HeaderView implements View {
     this.incomeSum = store.incomeSum
   }
 
+  clickEventHandler(e: MouseEvent) {
+    e.preventDefault()
+
+    const { target } = e
+    if (!(target instanceof HTMLElement)) return
+
+    this.navigationIconClickHandler(target)
+    this.typeButtonClickHandler(target)
+    this.shaderClickHandler(target)
+    this.cardClickHandler(target)
+  }
+
   getPathFromLink(aTag: Element): string {
     const path = aTag.getAttribute('href')
     return path
   }
 
   navigationIconClickHandler(target: Element): void {
-    const path = this.getPathFromLink(target)
+    const a = target.closest('a')
+    if (!a) return
+
+    const path = this.getPathFromLink(a)
     this.setInsetStyle(path)
     cem.fire('statechange', Object.assign({}, history.state, { path }))
   }
 
-  moneyButtonClickHandler(targetButton: Element): void {
+  typeButtonClickHandler(target: HTMLElement): void {
+    const button = target.closest('.money-button')
+    if (!button) return
+
     const state = { ...history.state }
-    const sumIndicator = targetButton.closest('.sum-indicator')
+    const sumIndicator = button.closest('.sum-indicator')
     const selectedButton = sumIndicator.querySelector('.selected')
-    const type = targetButton.classList.contains('income')
-      ? 'income'
-      : 'expenditure'
+    const type = button.classList.contains('income') ? 'income' : 'expenditure'
 
     if (!selectedButton) {
       state.type = type
-      targetButton.classList.toggle('selected')
-    } else if (selectedButton === targetButton) {
+      button.classList.toggle('selected')
+    } else if (selectedButton === button) {
       delete state.type
       selectedButton.classList.toggle('selected')
     } else {
       state.type = type
       selectedButton.classList.toggle('selected')
-      targetButton.classList.toggle('selected')
+      button.classList.toggle('selected')
     }
 
     cem.fire('statechange', state)
   }
 
-  cardClickHandler(): void {
+  cardClickHandler(target: HTMLElement): void {
+    if (!target.closest('.credit-card-btn')) return
     cem.fire('activatepaymentsmanager')
   }
 
-  shaderClickHandler(shader: HTMLElement): void {
+  shaderClickHandler(target: HTMLElement): void {
+    const shader = target.closest<HTMLElement>('.shader')
+
+    if (!shader) return
+
     const toRight = shader.classList.contains('left')
 
     const transform = `translateX(${((toRight ? +1 : -1) * 100) / 3}%)`
