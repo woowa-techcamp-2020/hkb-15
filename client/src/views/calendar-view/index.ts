@@ -66,7 +66,7 @@ export default class CalendarView implements View {
 
     for (let i = 0; i < thisMonthEndDate; i++) {
       const date = i + 1
-      const dateIndex = this.getDateIndex(year, month, date)
+      const dateIndex = this.getDateIndex(year, month + 1, date)
       const histories = historiesByDate[dateIndex] ?? []
 
       calendarData.push({
