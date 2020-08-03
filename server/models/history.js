@@ -22,10 +22,7 @@ class History extends Model {
     )
   }
   static async findAll(attributes, where) {
-    const { year, month } = where
-    const startDate = new Date(year, month - 1, 1).toISOString().slice(0, 10)
-    const endDate = new Date(year, month, 0).toISOString().slice(0, 10)
-    const rawWhere = `date BETWEEN '${startDate}' AND '${endDate}'`
+    const rawWhere = `year(date)=${where.year} AND month(date)=${where.month}`
     return await super.findAll(attributes, where, rawWhere)
   }
 }
