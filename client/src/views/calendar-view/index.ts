@@ -1,4 +1,4 @@
-import { View, History, CalendarDayData } from '../../types'
+import { View, History, WindowHistoryState, CalendarDayData } from '../../types'
 import cem from '../../utils/custom-event'
 import './styles'
 import {
@@ -9,9 +9,22 @@ import {
   sum,
 } from '../../utils/helper'
 
-export default class HistoryView implements View {
+export default class CalendarView implements View {
+  state: WindowHistoryState
+  histories: History[]
+
   constructor() {
-    cem.subscribe('storeupdated', (e: CustomEvent) => this.render(e))
+    cem.subscribe('storeupdated', (e: CustomEvent) => {
+      if (e.detail.state.path !== '/calendar') return
+      this.setAttributes(e.detail)
+      this.render()
+    })
+  }
+
+  setAttributes({ state, store }): void {
+    const { histories } = store
+    this.state = state
+    this.histories = histories
   }
 
   getEmptyCellData(date: number): CalendarDayData {
@@ -32,9 +45,11 @@ export default class HistoryView implements View {
     )
   }
 
-  getCalendarData(year: number, month: number, histories: History[]) {
+  getCalendarData() {
+    const year = this.state.year
+    const month = this.state.month - 1
     const calendarData: CalendarDayData[] = []
-    const historiesByDate = groupBy(histories, 'date')
+    const historiesByDate = groupBy(this.histories, 'date')
     const thisMonthStartDay = new Date(year, month, 1).getDay()
     const lastMonthEndDate = new Date(year, month, 0).getDate()
     const thisMonthEndDate = new Date(year, month + 1, 0).getDate()
@@ -72,11 +87,8 @@ export default class HistoryView implements View {
     return calendarData
   }
 
-  render(e: CustomEvent): void {
-    if (e.detail.path !== '/calendar') return
-
-    const { histories, year, month } = e.detail
-    const calendarData = this.getCalendarData(year, month - 1, histories)
+  render(): void {
+    const calendarData = this.getCalendarData()
     const contentWrap = document.querySelector('.content-wrap')
     contentWrap.innerHTML = this.Calendar(calendarData)
   }
