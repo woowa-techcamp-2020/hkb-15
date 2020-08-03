@@ -1,16 +1,38 @@
-import { View, History } from '../../types'
+import {
+  View,
+  History,
+  Payment,
+  Category,
+  WindowHistoryState,
+} from '../../types'
 import cem from '../../utils/custom-event'
 import './styles'
 import { numberWithCommas, groupBy, dateWithDay } from '../../utils/helper'
 
 export default class HistoryView implements View {
+  state: WindowHistoryState
+  histories: History[]
+  categories: Category[]
+  payments: Payment[]
+
   constructor() {
-    cem.subscribe('storeupdated', (e: CustomEvent) => this.render(e))
+    cem.subscribe('storeupdated', (e: CustomEvent) => {
+      if (e.detail.state.path !== '/') return
+      this.setAttributes(e.detail)
+      this.render()
+    })
 
     const contentWrap = document.querySelector('.content-wrap')
     contentWrap.addEventListener('click', (e: MouseEvent) =>
       this.clickEventHandler(e)
     )
+  }
+  setAttributes({ state, store }): void {
+    const { histories, categories, payments } = store
+    this.state = state
+    this.histories = histories
+    this.categories = categories
+    this.payments = payments
   }
 
   clickEventHandler(e: MouseEvent) {
@@ -21,17 +43,13 @@ export default class HistoryView implements View {
 
     if (target.closest('.float')) {
       e.stopImmediatePropagation()
-      cem.fire('createhistorymodal')
+      cem.fire('getdata', { nextEvent: 'createhistorymodal' })
     }
   }
 
-  render(e: CustomEvent): void {
-    if (e.detail.path !== '/') return
-    const { histories } = e.detail
-    const historiesByDate = groupBy(histories, 'date')
-
+  render(): void {
+    const historiesByDate = groupBy(this.histories, 'date')
     const contentWrap = document.querySelector('.content-wrap')
-
     contentWrap.innerHTML = `
 ${Object.keys(historiesByDate)
   .sort()
