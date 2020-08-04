@@ -44,11 +44,11 @@ export default class HistoryView implements View {
 
     const { target } = e
     if (!(target instanceof HTMLElement)) return
-    this.floatButtonClickHandler(e, target)
+    this.createHistoryButtonClickHandler(e, target)
     this.historyCardClickHandler(e, target)
   }
 
-  floatButtonClickHandler(e: MouseEvent, target: HTMLElement) {
+  createHistoryButtonClickHandler(e: MouseEvent, target: HTMLElement) {
     if (!target.closest('.float')) return
     e.stopImmediatePropagation()
     cem.fire('historymodalgetdata', { state: this.state })
