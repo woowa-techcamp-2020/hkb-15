@@ -105,3 +105,8 @@ export const getPaymentEnKeyName = (paymentName: string) => {
     return ''
   }
 }
+
+const lit = (s: TemplateStringsArray, ...args: unknown[]) =>
+  s.map((ss, i) => `${ss}${args[i] || ''}`).join('')
+
+export const html = lit
