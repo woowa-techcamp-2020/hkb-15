@@ -1,0 +1,41 @@
+.content-wrap {
+  .bar-chart {
+    width: 100%;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 24px;
+    margin-top: 3px;
+
+    .item-row {
+      display: flex;
+      border-top: 1px solid var(--black);
+      height: 24px;
+
+      .name {
+        width: 100%;
+        max-width: 100px;
+      }
+      .percent {
+        width: 100%;
+        max-width: 100px;
+      }
+
+      .bar-wrap {
+        width: 100%;
+        padding: 3px 10px;
+
+        .bar {
+          height: 100%;
+          background: var(--blue);
+        }
+      }
+
+      .amount {
+        display: flex;
+        justify-content: flex-end;
+        max-width: 120px;
+        width: 100%;
+      }
+    }
+  }
+}
