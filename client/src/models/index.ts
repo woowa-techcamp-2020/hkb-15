@@ -6,11 +6,11 @@ class Model {
   store: Store = {}
 
   constructor() {
-    cem.subscribe('statepop', (e: CustomEvent) => this.fetchData(e))
-    cem.subscribe('statechange', (e: CustomEvent) => this.fetchData(e))
-    cem.subscribe('historycreate', (e: CustomEvent) => this.createHistory(e))
-    cem.subscribe('historyupdate', (e: CustomEvent) => this.updateHistory(e))
-    cem.subscribe('historymodalpopup', (e: CustomEvent) => this.getModalData(e))
+    cem.subscribe('statepop', this.fetchData.bind(this))
+    cem.subscribe('statechange', this.fetchData.bind(this))
+    cem.subscribe('historycreate', this.createHistory.bind(this))
+    cem.subscribe('historyupdate', this.updateHistory.bind(this))
+    cem.subscribe('historymodalpopup', this.getModalData.bind(this))
   }
 
   getModalData(e: CustomEvent) {

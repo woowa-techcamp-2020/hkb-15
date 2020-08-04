@@ -28,9 +28,7 @@ export default class HistoryView implements View {
     })
 
     const contentWrap = document.querySelector('.content-wrap')
-    contentWrap.addEventListener('click', (e: MouseEvent) =>
-      this.clickEventHandler(e)
-    )
+    contentWrap.addEventListener('click', this.clickEventHandler.bind(this))
   }
 
   setAttributes({ state, store }): void {

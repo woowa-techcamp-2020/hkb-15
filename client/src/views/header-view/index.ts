@@ -15,9 +15,7 @@ export default class HeaderView implements View {
     })
 
     const header = document.querySelector('header')
-    header.addEventListener('click', (e: MouseEvent) =>
-      this.clickEventHandler(e)
-    )
+    header.addEventListener('click', this.clickEventHandler.bind(this))
   }
 
   setAttributes({ state, store }): void {
