@@ -7,10 +7,10 @@ import PaymentManager from './views/payment-manager'
 
 export default class Router {
   constructor() {
-    const headerView = new HeaderView()
-    const historyView = new HistoryView()
-    const createHistoryView = new CreateHistoryView()
-    const calendarView = new CalendarView()
+    new HeaderView()
+    new HistoryView()
+    new CreateHistoryView()
+    new CalendarView()
     new PaymentManager()
 
     window.addEventListener('popstate', (event) => {
@@ -24,6 +24,11 @@ export default class Router {
   }
 
   stateChangeHandler(event?: Record<'state', Record<string, string | number>>) {
-    history.pushState(event.state, '', event.state.path as string)
+    if (event.state.isReplace) {
+      delete event.state.isReplace
+      history.replaceState(event.state, '', event.state.path as string)
+    } else {
+      history.pushState(event.state, '', event.state.path as string)
+    }
   }
 }
