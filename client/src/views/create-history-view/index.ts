@@ -22,18 +22,12 @@ export default class CreateHistoryView implements View {
       //setting default date info for today
       this.setAttributes(e.detail.store)
       this.render()
-    })
 
-    const contentWrap = document.querySelector('.content-wrap')
-    contentWrap.addEventListener('click', (e: MouseEvent) =>
-      this.clickEventHandler(e)
-    )
-    contentWrap.addEventListener('keydown', (e: KeyboardEvent) =>
-      this.keydownEventHandler(e)
-    )
-    contentWrap.addEventListener('focusout', (e: FocusEvent) =>
-      this.focusoutEventHandler(e)
-    )
+      const modal = document.querySelector('.modal')
+      modal.addEventListener('click', this.clickEventHandler.bind(this))
+      modal.addEventListener('keydown', this.keydownEventHandler.bind(this))
+      modal.addEventListener('focusout', this.focusoutEventHandler.bind(this))
+    })
   }
 
   setAttributes({ categories, payments, history }): void {
@@ -190,7 +184,7 @@ export default class CreateHistoryView implements View {
     const indicator = target.closest('.type-indicator')
     if (!indicator || !(indicator instanceof HTMLElement)) return
 
-    const type = indicator.innerText
+    const type = indicator.innerText.toLowerCase()
     const categoryPicker = document.querySelector('.category-picker')
     categoryPicker.innerHTML = this.createCategoryIndicators(type)
   }
