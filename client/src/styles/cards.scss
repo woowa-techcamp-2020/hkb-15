@@ -10,22 +10,35 @@
   background-color: var(--blue);
   background-image: radial-gradient(
     circle at 0% 0%,
-    var(--start, var(--blue)),
-    var(--end, var(--red))
+    var(--start, #fff),
+    var(--end, #e0e0e3)
   );
 
   &::before {
     content: var(--name, 'Card');
 
     font-family: 'PAYW Pro', 'PAYW Pro KR', sans-serif;
-    font-size: calc(var(--size) / 13);
+    font-size: calc(var(--size) / 14);
     font-weight: 600;
-    color: var(--text-color, #fff);
+    color: var(--text-color, #333);
 
     display: inline-block;
     margin: calc(var(--size) / 13) 0 0 calc(var(--size) / 13);
 
     text-shadow: 0 1px 2px rgba(#000, 0.3);
+  }
+
+  --name-color-white: rgba(255, 255, 255, 0.5);
+
+  .name {
+    position: absolute;
+    top: calc(var(--size) / 11 * 2);
+    left: calc(var(--size) / 13);
+    font-size: calc(var(--size) / 20);
+    font-weight: 600;
+    color: var(--name-color, rgba(#000, 0.5));
+    display: inline-block;
+    width: calc(100% - calc(var(--size) / 13 * 3));
   }
 
   &.kakao {
@@ -47,6 +60,7 @@
     --start: #467aff;
     --end: #1b45b2;
     --text-color: #c4d0fd;
+    --name-color: var(--name-color-white);
   }
 
   &.lotte {
@@ -54,6 +68,7 @@
     --start: #f13e74;
     --end: #7e4242;
     --text-color: #ffb0c3;
+    --name-color: var(--name-color-white);
   }
 
   &.woori {
@@ -75,6 +90,7 @@
     --start: #795e44;
     --end: #2e2a27;
     --text-color: #f5d1c1;
+    --name-color: var(--name-color-white);
   }
 
   &.bc {
