@@ -92,23 +92,30 @@ export const getNumber = (str: string) =>
   str ? Number(str.replace(/[^0-9]/g, '')) : undefined
 
 export const getPaymentEnKeyName = (paymentName: string) => {
-  if (paymentName.startsWith('카카오')) {
+  const pName = paymentName.toLowerCase()
+
+  if (pName.includes('카카오') || pName.includes('kakao')) {
     return 'kakao'
-  } else if (paymentName.startsWith('신한')) {
+  } else if (pName.includes('신한') || pName.includes('shinhan')) {
     return 'shinhan'
-  } else if (paymentName.startsWith('삼성')) {
+  } else if (pName.includes('삼성') || pName.includes('samsung')) {
     return 'samsung'
-  } else if (paymentName.startsWith('롯데')) {
+  } else if (pName.includes('롯데') || pName.includes('lotte')) {
     return 'lotte'
-  } else if (paymentName.startsWith('우리')) {
+  } else if (pName.includes('우리') || pName.includes('woori')) {
     return 'woori'
-  } else if (paymentName.startsWith('현금')) {
+  } else if (pName.includes('현금') || pName.includes('cash')) {
     return 'cash'
-  } else if (paymentName.startsWith('현대')) {
+  } else if (pName.includes('현대') || pName.includes('hyundai')) {
     return 'hyundai'
-  } else if (paymentName.startsWith('비씨')) {
+  } else if (pName.includes('비씨') || pName.includes('bc')) {
     return 'bc'
   } else {
     return ''
   }
 }
+
+const lit = (s: TemplateStringsArray, ...args: unknown[]) =>
+  s.map((ss, i) => `${ss}${args[i] || ''}`).join('')
+
+export const html = lit
