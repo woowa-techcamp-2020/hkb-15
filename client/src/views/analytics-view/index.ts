@@ -1,7 +1,7 @@
 import { View, History, WindowHistoryState, Category } from '../../types'
 import cem from '../../utils/custom-event'
 import './styles'
-import { groupBy, sum } from 'src/utils/helper'
+import { groupBy, sum, loadHtml } from 'src/utils/helper'
 
 export default class AnalyticsView implements View {
   state: WindowHistoryState
@@ -28,7 +28,7 @@ export default class AnalyticsView implements View {
     this.categories = categories
   }
 
-  calculateAmountSum(key: string): object {
+  calculateAmountSum(key: string): Array<object> {
     const groupedHistory = groupBy(this.histories, key)
     return Object.keys(groupedHistory)
       .map((key) => ({
@@ -39,8 +39,37 @@ export default class AnalyticsView implements View {
   }
 
   createBarChart(): string {
-    const sums = this.calculateAmountSum('categoryId')
-    console.log(sums)
-    return ''
+    const totalsum = sum(this.histories, 'amount', 0)
+    const sumsByCategory = this.calculateAmountSum('categoryId')
+    console.log(sumsByCategory)
+    console.log(this.categories)
+    return /*html*/ `
+<div class="bar-chart">
+    ${loadHtml(
+      sumsByCategory.map((data) => {
+        const name = this.categories.find(
+          (category) => category.id === +data.id
+        ).name
+        const percent = ((+data.sum / totalsum) * 100).toFixed(2)
+        const amount = +data.sum
+
+        return /*html*/ `
+      <div class="item-row">
+        <div class="name">${
+          this.categories.find((category) => category.id === +data.id).name
+        }</div>
+        <div class="percent">${percent}%</div>
+        <div class="bar-wrap">
+          <div class="bar" style="width: ${percent}%"></div>
+        </div>
+        <div class="amount">${amount}</div>
+      </div>
+      `
+      })
+    )}
+</div>
+    
+    
+    `
   }
 }
