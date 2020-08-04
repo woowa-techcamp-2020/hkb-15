@@ -10,7 +10,7 @@ class Model {
     cem.subscribe('statechange', this.fetchData.bind(this))
     cem.subscribe('historycreate', this.createHistory.bind(this))
     cem.subscribe('historyupdate', this.updateHistory.bind(this))
-    cem.subscribe('historymodalpopup', this.getModalData.bind(this))
+    cem.subscribe('historymodalgetdata', this.getModalData.bind(this))
   }
 
   getModalData(e: CustomEvent) {
@@ -21,7 +21,7 @@ class Model {
       (history) => history.id === historyId
     )
 
-    cem.fire('createhistorymodal', {
+    cem.fire('historymodalcreate', {
       state,
       store: { categories, payments, history },
     })
@@ -60,8 +60,10 @@ class Model {
 
   async fetchData(e: CustomEvent) {
     const { year, month, type } = e.detail
-    await this.fetchDefault()
-    await this.fetchHistory(year, month)
+    await this.fetchCategories()
+    await this.fetchPayments()
+    await this.fetchHistories(year, month)
+
     const store = { ...this.store }
     if (type) {
       store.histories = store.histories.filter(
@@ -87,13 +89,17 @@ class Model {
     this.store.expenditureSum = expenditureSum
   }
 
-  async fetchDefault(): Promise<void> {
+  async fetchPayments(): Promise<void> {
     if (this.store.payments) return
     this.store.payments = await (await apis.findPayment()).json()
+  }
+
+  async fetchCategories(): Promise<void> {
+    if (this.store.categories) return
     this.store.categories = await (await apis.findCategory()).json()
   }
 
-  async fetchHistory(year: number, month: number): Promise<void> {
+  async fetchHistories(year: number, month: number): Promise<void> {
     this.store.histories = await (
       await apis.findHistory({ year, month })
     ).json()

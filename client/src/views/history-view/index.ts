@@ -51,7 +51,7 @@ export default class HistoryView implements View {
   floatButtonClickHandler(e: MouseEvent, target: HTMLElement) {
     if (!target.closest('.float')) return
     e.stopImmediatePropagation()
-    cem.fire('historymodalpopup', { state: this.state })
+    cem.fire('historymodalgetdata', { state: this.state })
   }
 
   historyCardClickHandler(e: MouseEvent, target: HTMLElement) {
@@ -59,7 +59,7 @@ export default class HistoryView implements View {
     if (!historyCard) return
     e.stopImmediatePropagation()
     const historyId = getNumber(historyCard.id)
-    cem.fire('historymodalpopup', { historyId, state: this.state })
+    cem.fire('historymodalgetdata', { historyId, state: this.state })
   }
 
   render(): void {

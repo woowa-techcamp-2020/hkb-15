@@ -18,7 +18,7 @@ export default class CreateHistoryView implements View {
   history: History
 
   constructor() {
-    cem.subscribe('createhistorymodal', (e: CustomEvent) => {
+    cem.subscribe('historymodalcreate', (e: CustomEvent) => {
       //setting default date info for today
       this.setAttributes(e.detail.store)
       this.render()
