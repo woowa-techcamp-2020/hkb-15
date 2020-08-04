@@ -1,6 +1,7 @@
 import { View, History, WindowHistoryState, Category } from '../../types'
 import cem from '../../utils/custom-event'
 import './styles'
+import { groupBy, sum } from 'src/utils/helper'
 
 export default class AnalyticsView implements View {
   state: WindowHistoryState
@@ -17,7 +18,7 @@ export default class AnalyticsView implements View {
 
   render(): void {
     const contentWrap = document.querySelector('.content-wrap')
-    contentWrap.innerHTML = ''
+    contentWrap.innerHTML = this.createBarChart()
   }
 
   setAttributes({ store, state }): void {
@@ -25,5 +26,21 @@ export default class AnalyticsView implements View {
     this.state = state
     this.histories = histories
     this.categories = categories
+  }
+
+  calculateAmountSum(key: string): object {
+    const groupedHistory = groupBy(this.histories, key)
+    return Object.keys(groupedHistory)
+      .map((key) => ({
+        id: key,
+        sum: sum(groupedHistory[key], 'amount', 0),
+      }))
+      .sort((a, b) => b.sum - a.sum)
+  }
+
+  createBarChart(): string {
+    const sums = this.calculateAmountSum('categoryId')
+    console.log(sums)
+    return ''
   }
 }
