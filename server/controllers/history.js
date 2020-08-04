@@ -12,7 +12,8 @@ exports.findAll = async (req, res) => {
 
 exports.update = async (req, res) => {
   await History.update(req.body)
-  res.status(200).send({ completed: true })
+  const history = await History.findOne('*', { id: req.body.id })
+  res.send(history)
 }
 
 exports.delete = async (req, res) => {

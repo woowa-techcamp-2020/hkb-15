@@ -31,7 +31,8 @@ export interface Store {
 }
 
 export interface View {
-  render(e: Event): void
+  render(): void
+  setAttributes(data?: object): void
 }
 
 export interface CalendarDayData {
@@ -46,4 +47,5 @@ export type WindowHistoryState = {
   path?: string
   year?: number
   month?: number
+  type?: string
 }

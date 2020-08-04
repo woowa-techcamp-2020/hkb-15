@@ -39,6 +39,12 @@ export function dateWithDay(dateStr: string): string {
   return `${dayStr[day]}, ${date}${dateExtension}`
 }
 
+export function addLeadingZeros(number: number, length: number) {
+  let s = number.toString()
+  while (s.length < length) s = '0' + s
+  return s
+}
+
 export const dommer = (markup: TemplateStringsArray | string) => {
   const frag = document.createDocumentFragment()
 

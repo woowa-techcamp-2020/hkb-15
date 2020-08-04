@@ -1,23 +1,43 @@
-import { View, History } from '../../types'
-import { getNumber } from '../../utils/helper'
+import { View, History, Category, Payment } from '../../types'
+import {
+  getNumber,
+  addLeadingZeros,
+  loadHtml,
+  getPaymentEnKeyName,
+} from '../../utils/helper'
 import cem from '../../utils/custom-event'
 
 import './styles'
 
 export default class CreateHistoryView implements View {
-  constructor() {
-    cem.subscribe('createhistorymodal', (e: CustomEvent) => this.render(e))
+  year: string
+  month: string
+  day: string
+  categories: Category[]
+  payments: Payment[]
+  history: History
 
-    const contentWrap = document.querySelector('.content-wrap')
-    contentWrap.addEventListener('click', (e: MouseEvent) =>
-      this.clickEventHandler(e)
-    )
-    contentWrap.addEventListener('keydown', (e: KeyboardEvent) =>
-      this.keydownEventHandler(e)
-    )
-    contentWrap.addEventListener('focusout', (e: FocusEvent) =>
-      this.focusoutEventHandler(e)
-    )
+  constructor() {
+    cem.subscribe('historymodalcreate', (e: CustomEvent) => {
+      //setting default date info for today
+      this.setAttributes(e.detail.store)
+      this.render()
+
+      const modal = document.querySelector('.modal')
+      modal.addEventListener('click', this.clickEventHandler.bind(this))
+      modal.addEventListener('keydown', this.keydownEventHandler.bind(this))
+      modal.addEventListener('focusout', this.focusoutEventHandler.bind(this))
+    })
+  }
+
+  setAttributes({ categories, payments, history }): void {
+    const today = history ? new Date(history.date) : new Date()
+    this.year = today.getFullYear().toString()
+    this.month = addLeadingZeros(today.getMonth() + 1, 2)
+    this.day = addLeadingZeros(today.getDate() + 1, 2)
+    this.categories = categories
+    this.payments = payments
+    this.history = history
   }
 
   getInputValue(selector: string): string {
@@ -55,13 +75,15 @@ export default class CreateHistoryView implements View {
     target: HTMLInputElement,
     min: string,
     max: string,
+    initial: string,
     length: number
   ) {
     const value = +target.value
 
-    if (value < +min || !value) target.value = min
-    else if (value > +max) target.value = max
-    else if (target.value.length !== length) target.value = '0' + target.value
+    if (value < +min || !value) target.value = initial
+    else if (value > +max) target.value = initial
+    else if (target.value.length !== length)
+      target.value = addLeadingZeros(+target.value, length)
   }
 
   focusoutEventHandler(e: FocusEvent) {
@@ -71,13 +93,13 @@ export default class CreateHistoryView implements View {
     if (target.closest('.date-picker')) {
       switch (target.className) {
         case 'year':
-          this.dateValidator(target, '2000', '2030', 4)
+          this.dateValidator(target, '2000', '2030', this.year, 4)
           break
         case 'month':
-          this.dateValidator(target, '01', '12', 2)
+          this.dateValidator(target, '01', '12', this.month, 2)
           break
         case 'day':
-          this.dateValidator(target, '01', '31', 2)
+          this.dateValidator(target, '01', '31', this.day, 2)
           break
       }
     }
@@ -111,7 +133,8 @@ export default class CreateHistoryView implements View {
     const day = +this.getInputValue('.date-picker .day')
 
     const historyData: History = {
-      type: this.getElementInnerText('.type-picker .selected'),
+      id: this.history?.id,
+      type: this.getElementInnerText('.type-picker .selected').toLowerCase(),
       date: `${year}-${month}-${day}`,
       content: this.getInputValue('.content-input'),
       amount: +this.getInputValue('.amount-input'),
@@ -121,7 +144,11 @@ export default class CreateHistoryView implements View {
     }
 
     await this.closeModal(false)
-    cem.fire('historycreate', { historyData, state: history.state })
+
+    cem.fire(this.history ? 'historyupdate' : 'historycreate', {
+      historyData,
+      state: history.state,
+    })
   }
 
   closeHandler(target: HTMLElement) {
@@ -153,6 +180,15 @@ export default class CreateHistoryView implements View {
     }
   }
 
+  typeChangeHandler(target: HTMLElement): void {
+    const indicator = target.closest('.type-indicator')
+    if (!indicator || !(indicator instanceof HTMLElement)) return
+
+    const type = indicator.innerText.toLowerCase()
+    const categoryPicker = document.querySelector('.category-picker')
+    categoryPicker.innerHTML = this.createCategoryIndicators(type)
+  }
+
   async clickEventHandler(e: MouseEvent) {
     e.preventDefault()
 
@@ -163,60 +199,107 @@ export default class CreateHistoryView implements View {
     this.pickerHandler(target, '.type-picker', '.type-indicator')
     this.pickerHandler(target, '.category-picker', '.category-indicator')
     this.pickerHandler(target, '.card-picker', '.card', true)
+    this.typeChangeHandler(target)
     this.submissionHandler(target)
   }
 
-  render(e: Event): void {
+  render(): void {
     const contentWrap = document.querySelector('.content-wrap')
     contentWrap.innerHTML += this.createModal()
   }
 
+  createTypePicker(selectedType = 'expenditure'): string {
+    return /*html*/ `
+<div class="type-picker">
+  <div class="type-indicator income ${
+    selectedType == 'income' ? 'selected' : ''
+  }">Income</div>
+  <div class="type-indicator expenditure ${
+    selectedType == 'expenditure' ? 'selected' : ''
+  }">Expenditure</div>
+</div>
+`
+  }
+
+  createCategoryIndicators(type = 'expenditure', categoryId?: number): string {
+    return /*html*/ `
+${loadHtml(
+  this.categories
+    .filter((category) => category.type === type)
+    .map((category, index) => {
+      return /*html*/ `<div class='category-indicator ${
+        categoryId
+          ? category.id === categoryId
+            ? 'selected'
+            : ''
+          : index === 0
+          ? 'selected'
+          : ''
+      }' id="category-${category.id}">
+        ${category.name}
+      </div>`
+    })
+)}
+`
+  }
+
+  createCardPicker(paymentId?: number): string {
+    return /*html*/ `
+<div class="card-picker" dir="ltr">
+  <div class="card-container">
+    ${loadHtml(
+      this.payments.map(
+        (payment, index) => `
+        <div class="card ${getPaymentEnKeyName(payment.name)} ${
+          paymentId
+            ? payment.id === paymentId
+              ? 'selected'
+              : ''
+            : index === 0
+            ? 'selected'
+            : ''
+        }" id="payment-${payment.id}">
+          <i class="icon">checkmark_circle_fill</i>
+        </div>`
+      )
+    )}
+  </div>
+</div>`
+  }
+
   createModal(): string {
-    return `
+    return /*html*/ `
 <div class="modal">
   <div class="history-form-wrap">
     <form class="history-form">
       <div class="icon-wrap">
         <i class="icon close-icon">xmark_circle_fill</i>
       </div>
-      <div class="type-picker">
-        <div class="type-indicator income">income</div>
-        <div class="type-indicator expenditure selected">expenditure</div>
-      </div>
+      ${this.createTypePicker(this.history?.type)}
       <div class="date-picker">
-        <input class="year" type="text" maxlength="4" value="2020"></input>.
-        <input class="month" type="text" maxlength="2" value="06"></input>.
-        <input class="day" type="text" maxlength="2" value="20"></input>          
+        <input class="year" maxlength="4" value="${this.year}" />.
+        <input class="month" maxlength="2" value="${this.month}" />.
+        <input class="day" maxlength="2" value="${this.day}" />       
       </div>
-      <div class="category-picker">
-        <div class="category-indicator selected" id="category-1">Food</div>
-        <div class="category-indicator" id="category-2">Medical</div>
-        <div class="category-indicator" id="category-3">Transport</div>
-        <div class="category-indicator" id="category-4">Culture</div>
-        <div class="category-indicator" id="category-5">Beauty</div>
-      </div>
-      <div class="card-picker" dir="ltr">
-        <div class="card-container">
-          <div class="card hyundai selected" id="type-1">
-            <i class="icon">checkmark_circle_fill</i>
-          </div>
-          <div class="card lotte" id="type-2">
-            <i class="icon">checkmark_circle_fill</i>
-          </div>
-          <div class="card kakao" id="type-3">
-            <i class="icon">checkmark_circle_fill</i>
-          </div>
-          <div class="card shinhan" id="type-4">
-            <i class="icon">checkmark_circle_fill</i>
-          </div>
-        </div>
-      </div>
+      <div class="category-picker"> 
+        ${this.createCategoryIndicators(
+          this.history?.type,
+          this.history?.categoryId
+        )}           
+      </div>   
+      ${this.createCardPicker(this.history?.paymentId)}
       <div class="input-wrap">
-        <input class="content-input" type="text" maxlength="20" placeholder="Label" name="content"></input>
-        <input class="amount-input" type="text" maxlength="10" placeholder="Amount" name="amount"></input>
+        <input class="content-input" maxlength="20" placeholder="Label" name="content" value="${
+          this.history?.content ?? ''
+        }" />
+        <input class="amount-input" maxlength="10" placeholder="Amount" name="amount" value="${
+          this.history?.amount ?? ''
+        }" />
       </div>
       <div class="submit-button-wrap">
-        <input class="submit-button" type="submit" value="Done" disabled></input>
+        <input class="submit-button" type="submit" value="Done" ${
+          this.history ? '' : 'disabled'
+        } />
       </div>
     </form> 
   </div>

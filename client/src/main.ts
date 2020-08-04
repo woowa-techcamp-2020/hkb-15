@@ -11,7 +11,8 @@ cem.fire(
   'statechange',
   history.state ?? {
     path: '/',
-    year: 2020,
-    month: 7,
+    year: new Date().getFullYear(),
+    month: new Date().getMonth() + 1,
+    isReplace: true,
   }
 )

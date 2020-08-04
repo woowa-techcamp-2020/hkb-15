@@ -39,13 +39,16 @@ const DELETE = async (url = ''): Promise<Response> =>
 export default {
   logIn: async (data: Input) => await POST('/user/login', data),
   signUp: async (data: Input) => await POST('/user', data),
+
   createHistory: async (data: Input) => await POST('/history', data),
   findHistory: async (data: Input) => await GET('/history', data),
   updateHistory: async (data: Input) => await PUT('/history', data),
   deleteHistory: async (id: number) => await DELETE(`/history/${id}`),
+
   createPayment: async (data: Input) => await POST('/payment', data),
   findPayment: async (data?: Input) => await GET('/payment', data),
   updatePayment: async (data: Input) => await PUT('/payment', data),
   deletePayment: async (id: number) => await DELETE(`/payment/${id}`),
+
   findCategory: async (data?: Input) => await GET('/category', data),
 }

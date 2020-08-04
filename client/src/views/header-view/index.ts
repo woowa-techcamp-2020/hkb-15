@@ -4,32 +4,36 @@ import { monthStr, numberWithCommas, dommer } from '../../utils/helper'
 import './styles'
 
 export default class HeaderView implements View {
+  state: WindowHistoryState
+  incomeSum: number
+  expenditureSum: number
+
   constructor() {
-    const header = document.querySelector('header')
-
-    header.addEventListener('click', (e: MouseEvent) => {
-      e.preventDefault()
-
-      const { target } = e
-      if (!(target instanceof HTMLElement)) return
-
-      const a = target.closest('a')
-      if (a) return this.navigationIconClickHandler(a)
-
-      const button = target.closest('.money-button')
-      if (button) return this.moneyButtonClickHandler(button)
-
-      const shader = target.closest<HTMLElement>('.shader')
-
-      if (shader) {
-        return this.shaderClickHandler(shader)
-      }
-
-      if (target.closest('.credit-card-btn')) {
-        return this.cardClickHandler()
-      }
+    cem.subscribe('storeupdated', (e: CustomEvent) => {
+      this.setAttributes(e.detail)
+      this.render()
     })
-    cem.subscribe('storeupdated', (e: CustomEvent) => this.render(e))
+
+    const header = document.querySelector('header')
+    header.addEventListener('click', this.clickEventHandler.bind(this))
+  }
+
+  setAttributes({ state, store }): void {
+    this.state = state
+    this.expenditureSum = store.expenditureSum
+    this.incomeSum = store.incomeSum
+  }
+
+  clickEventHandler(e: MouseEvent) {
+    e.preventDefault()
+
+    const { target } = e
+    if (!(target instanceof HTMLElement)) return
+
+    this.navigationIconClickHandler(target)
+    this.typeButtonClickHandler(target)
+    this.shaderClickHandler(target)
+    this.cardClickHandler(target)
   }
 
   getPathFromLink(aTag: Element): string {
@@ -38,39 +42,48 @@ export default class HeaderView implements View {
   }
 
   navigationIconClickHandler(target: Element): void {
-    const path = this.getPathFromLink(target)
+    const a = target.closest('a')
+    if (!a) return
+
+    const path = this.getPathFromLink(a)
     this.setInsetStyle(path)
     cem.fire('statechange', Object.assign({}, history.state, { path }))
   }
 
-  moneyButtonClickHandler(targetButton: Element): void {
+  typeButtonClickHandler(target: HTMLElement): void {
+    const button = target.closest('.money-button')
+    if (!button) return
+
     const state = { ...history.state }
-    const sumIndicator = targetButton.closest('.sum-indicator')
+    const sumIndicator = button.closest('.sum-indicator')
     const selectedButton = sumIndicator.querySelector('.selected')
-    const type = targetButton.classList.contains('income')
-      ? 'income'
-      : 'expenditure'
+    const type = button.classList.contains('income') ? 'income' : 'expenditure'
 
     if (!selectedButton) {
       state.type = type
-      targetButton.classList.toggle('selected')
-    } else if (selectedButton === targetButton) {
+      button.classList.toggle('selected')
+    } else if (selectedButton === button) {
       delete state.type
       selectedButton.classList.toggle('selected')
     } else {
       state.type = type
       selectedButton.classList.toggle('selected')
-      targetButton.classList.toggle('selected')
+      button.classList.toggle('selected')
     }
 
     cem.fire('statechange', state)
   }
 
-  cardClickHandler(): void {
+  cardClickHandler(target: HTMLElement): void {
+    if (!target.closest('.credit-card-btn')) return
     cem.fire('activatepaymentsmanager')
   }
 
-  shaderClickHandler(shader: HTMLElement): void {
+  shaderClickHandler(target: HTMLElement): void {
+    const shader = target.closest<HTMLElement>('.shader')
+
+    if (!shader) return
+
     const toRight = shader.classList.contains('left')
 
     const transform = `translateX(${((toRight ? +1 : -1) * 100) / 3}%)`
@@ -154,22 +167,22 @@ export default class HeaderView implements View {
     node.classList.toggle(styleName)
   }
 
-  render(e: CustomEvent): void {
-    const { path, year, month, type, expenditureSum, incomeSum } = e.detail
+  render(): void {
     document.querySelector('header').innerHTML = `
       ${this.createNavigator()}
-      ${this.createMonthSelector(year, month)}
-      ${this.createSumIndicator(incomeSum, expenditureSum, type)}
+      ${this.createMonthSelector()}
+      ${this.createSumIndicator()}
     `
-    this.setInsetStyle(path)
+    this.setInsetStyle(this.state.path)
   }
 
-  createMonthSelector(year: number, month: number): string {
+  createMonthSelector(): string {
+    const { year, month } = this.state
     const prevYear = month === 1 ? year - 1 : year
     const prevMonth = month === 1 ? 12 : month - 1
     const nextYear = month === 12 ? year + 1 : year
     const nextMonth = month === 12 ? 1 : month + 1
-    return `
+    return /*html*/ `
 <div class="month-selector-wrapper">
   <div class="month-selector">
     ${this.createMonthIndicator(prevYear, prevMonth)}
@@ -182,8 +195,8 @@ export default class HeaderView implements View {
 `
   }
 
-  createMonthIndicator(year: number, month: number) {
-    return `
+  createMonthIndicator(year: number, month: number): string {
+    return /*html*/ `
 <div class="month-indicator">
   <div class="year">${year}</div>
   <div class="month">${monthStr[month]}</div>
@@ -191,29 +204,23 @@ export default class HeaderView implements View {
 `
   }
 
-  createSumIndicator(
-    incomeSum: number,
-    expeditureSum: number,
-    type: string
-  ): string {
-    console.log(type)
-
-    return `
+  createSumIndicator(): string {
+    return /*html*/ `
 <div class="sum-indicator-wrap">
   <div class="sum-indicator">
     <div class="money-button income ${
-      type && type == 'income' ? 'selected' : ''
-    }">+${numberWithCommas(incomeSum)}</div>
+      this.state.type && this.state.type == 'income' ? 'selected' : ''
+    }">+${numberWithCommas(this.incomeSum)}</div>
     <div class="money-button expenditure ${
-      type && type == 'expenditure' ? 'selected' : ''
-    }">-${numberWithCommas(expeditureSum)}</div>
+      this.state.type && this.state.type == 'expenditure' ? 'selected' : ''
+    }">-${numberWithCommas(this.expenditureSum)}</div>
   </div>
 </div>
 `
   }
 
   createNavigator(): string {
-    return `
+    return /*html*/ `
 <nav>
   <div class="icon-wrap">
     <a href="/"><i class="icon">clock</i></a>
@@ -230,7 +237,7 @@ export default class HeaderView implements View {
   <div class="icon-wrap credit-card">
     <button class="credit-card-btn">
       <i class="icon">creditcard</i>
-    </button
+    </button>
   </div>
 </nav>
 `

@@ -6,9 +6,25 @@ class Model {
   store: Store = {}
 
   constructor() {
-    cem.subscribe('statepop', (e: CustomEvent) => this.getData(e))
-    cem.subscribe('statechange', (e: CustomEvent) => this.getData(e))
-    cem.subscribe('historycreate', (e: CustomEvent) => this.createHistory(e))
+    cem.subscribe('statepop', this.fetchData.bind(this))
+    cem.subscribe('statechange', this.fetchData.bind(this))
+    cem.subscribe('historycreate', this.createHistory.bind(this))
+    cem.subscribe('historyupdate', this.updateHistory.bind(this))
+    cem.subscribe('historymodalgetdata', this.getModalData.bind(this))
+  }
+
+  getModalData(e: CustomEvent) {
+    const { state, historyId } = e.detail
+    const { categories, payments } = this.store
+
+    let history: History = this.store.histories.find(
+      (history) => history.id === historyId
+    )
+
+    cem.fire('historymodalcreate', {
+      state,
+      store: { categories, payments, history },
+    })
   }
 
   async createHistory(e: CustomEvent) {
@@ -17,53 +33,78 @@ class Model {
     const newHistory: History = await (
       await apis.createHistory(historyData)
     ).json()
+
     if (historyData.isThisMonth) {
       this.store.histories.push(newHistory)
-      if (newHistory.type === 'income') {
-        this.store.incomeSum += newHistory.amount
-      } else {
-        this.store.expenditureSum += newHistory.amount
-      }
+      this.initializeHistories()
+      cem.fire('storeupdated', { state, store: this.store })
     }
-    cem.fire('storeupdated', { ...state, ...this.store })
   }
 
-  async getData(e: CustomEvent) {
+  async updateHistory(e: CustomEvent) {
+    const { historyData, state } = e.detail
+
+    const updatedHistory: History = await (
+      await apis.updateHistory(historyData)
+    ).json()
+
+    if (historyData.isThisMonth) {
+      const arrId = this.store.histories.findIndex(
+        (history) => history.id === historyData.id
+      )
+      this.store.histories[arrId] = updatedHistory
+      this.initializeHistories()
+      cem.fire('storeupdated', { state, store: this.store })
+    }
+  }
+
+  async fetchData(e: CustomEvent) {
     const { year, month, type } = e.detail
-    await this.setDefault()
-    await this.setHistory(year, month)
+    await this.fetchCategories()
+    await this.fetchPayments()
+    await this.fetchHistories(year, month)
+
     const store = { ...this.store }
     if (type) {
       store.histories = store.histories.filter(
         (history) => history.type == type
       )
     }
-    cem.fire('storeupdated', { ...e.detail, ...store })
+
+    cem.fire('storeupdated', { state: e.detail, store })
   }
 
-  async setDefault(): Promise<void> {
-    if (this.store.payments) return
-    this.store.payments = await (await apis.findPayment()).json()
-    this.store.categories = await (await apis.findCategory()).json()
-  }
-
-  async setHistory(year: number, month: number): Promise<void> {
+  initializeHistories() {
     let expenditureSum = 0,
       incomeSum = 0
-
-    this.store.histories = await (
-      await apis.findHistory({ year, month })
-    ).json()
 
     this.store.histories.forEach((history) => {
       history.type === 'income'
         ? (incomeSum += history.amount)
         : (expenditureSum += history.amount)
-      history.date = history.date.toString().slice(0, 10)
+      history.date = history.date.slice(0, 10)
     })
 
     this.store.incomeSum = incomeSum
     this.store.expenditureSum = expenditureSum
+  }
+
+  async fetchPayments(): Promise<void> {
+    if (this.store.payments) return
+    this.store.payments = await (await apis.findPayment()).json()
+  }
+
+  async fetchCategories(): Promise<void> {
+    if (this.store.categories) return
+    this.store.categories = await (await apis.findCategory()).json()
+  }
+
+  async fetchHistories(year: number, month: number): Promise<void> {
+    this.store.histories = await (
+      await apis.findHistory({ year, month })
+    ).json()
+
+    this.initializeHistories()
   }
 }
 
