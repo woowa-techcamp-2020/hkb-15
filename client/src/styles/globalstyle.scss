@@ -1,13 +1,27 @@
 @use './cards';
 @use './reset';
 @use './fonts';
+@use './mixins' as *;
 
 :root {
   --black: #333333;
+  --white: #fff;
+  --white-rgb: 255, 255, 255;
   --blue: #166ff3;
   --red: #f8123b;
   --gray: #979797;
   --light-blue: #f5f5f7;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --black: #f0f0f0;
+    --white: #000;
+    --white-rgb: 0, 0, 0;
+    --light-blue: #333;
+    --blue: #54aafc;
+    --red: #f75f54;
+  }
 }
 
 html {
@@ -15,6 +29,7 @@ html {
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
   font-size: 90%;
+  background-color: var(--white);
 }
 
 body {
@@ -52,6 +67,11 @@ button {
   font-family: 'PAYW Pro', 'PAYW Pro KR', sans-serif;
   color: #333;
   scroll-behavior: smooth;
-  background-image: linear-gradient(to bottom, #fff, #fff, var(--light-blue));
+  background-image: linear-gradient(
+    to bottom,
+    var(--white),
+    var(--white),
+    var(--light-blue)
+  );
   background-attachment: fixed;
 }

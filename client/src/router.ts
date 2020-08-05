@@ -1,16 +1,18 @@
 import cem from './utils/custom-event'
 import HeaderView from './views/header-view'
 import HistoryView from './views/history-view'
-import CreateHistoryView from './views/create-history-view'
 import CalendarView from './views/calendar-view'
+import AnalyticsView from './views/analytics-view'
+import CreateHistoryView from './views/create-history-view'
 import PaymentManager from './views/payment-manager'
 
 export default class Router {
   constructor() {
     new HeaderView()
     new HistoryView()
-    new CreateHistoryView()
     new CalendarView()
+    new AnalyticsView()
+    new CreateHistoryView()
     new PaymentManager()
 
     window.addEventListener('popstate', (event) => {
