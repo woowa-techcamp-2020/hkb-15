@@ -148,7 +148,10 @@ export default class CalendarView implements View {
     if (sum === 0) return ''
     return Container({
       className: type,
-      child: `${type === 'income' ? '+' : '-'}${numberWithCommas(sum)}`,
+      child: `
+<div class="sum">${type === 'income' ? '+' : '-'}${numberWithCommas(sum)}</div>
+<i class="icon">circle_fill</i>
+`,
     })
   }
 }

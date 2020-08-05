@@ -19,4 +19,10 @@
     @include meta.load-css('./calendar-header');
     @include meta.load-css('./calendar-table');
   }
+
+  @media only screen and (max-width: 972px) {
+    .calendar {
+      --calendar-width: 100vw;
+    }
+  }
 }
