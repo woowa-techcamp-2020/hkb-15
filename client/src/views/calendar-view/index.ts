@@ -94,7 +94,11 @@ export default class CalendarView implements View {
   render(): void {
     const calendarData = this.getCalendarData()
     const contentWrap = document.querySelector('.content-wrap')
-    contentWrap.innerHTML = this.Calendar(calendarData)
+    contentWrap.innerHTML = /*html*/ `
+<div class='calendar-view'>
+  ${this.Calendar(calendarData)}
+</div>
+`
   }
 
   Calendar(data: CalendarDayData[]): string {

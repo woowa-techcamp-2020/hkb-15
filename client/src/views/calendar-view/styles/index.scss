@@ -1,10 +1,11 @@
 @use 'sass:meta';
 
-.content-wrap {
-  margin-top: 81px;
-  background-image: none;
+.calendar-view {
+  padding-bottom: 120px;
 
   .calendar {
+    margin-top: 81px;
+    background-image: none;
     display: flex;
     flex-direction: column;
     --calendar-width: 972px;
