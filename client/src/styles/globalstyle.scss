@@ -62,7 +62,6 @@ button {
   flex-direction: column;
   width: 100%;
   min-height: 100vh;
-  padding-bottom: 120px;
   align-items: center;
   font-family: 'PAYW Pro', 'PAYW Pro KR', sans-serif;
   color: #333;
@@ -74,4 +73,8 @@ button {
     var(--light-blue)
   );
   background-attachment: fixed;
+
+  .content-wrap {
+    padding-bottom: 120px;
+  }
 }
