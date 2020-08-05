@@ -7,7 +7,7 @@ import Color from 'color'
 
 export default class AnalyticsView implements View {
   state: WindowHistoryState
-  histories: History[]
+  expenditureHistories: History[]
   categories: Category[]
   sumsByCategory: {
     /** Category ID */
@@ -45,12 +45,14 @@ export default class AnalyticsView implements View {
   setAttributes({ store, state }): void {
     const { histories, categories } = store
     this.state = state
-    this.histories = histories
+    this.expenditureHistories = (histories as History[]).filter(
+      (history) => history.type === 'expenditure'
+    )
     this.categories = categories
   }
 
   calculateAmountSum(key: string): { id: number; sum: number }[] {
-    const groupedHistory = groupBy(this.histories, key)
+    const groupedHistory = groupBy(this.expenditureHistories, key)
     return Object.keys(groupedHistory)
       .map((key) => ({
         id: +key,
@@ -60,15 +62,13 @@ export default class AnalyticsView implements View {
   }
 
   createBarChart(): string {
-    const totalsum = sum(this.histories, 'amount', 0)
+    const totalsum = sum(this.expenditureHistories, 'amount', 0)
     this.sumsByCategory = this.calculateAmountSum('categoryId').map((data) => ({
       ...data,
       category: this.categories.find((category) => category.id === data.id)
         .name,
       percent: +((data.sum / totalsum) * 100).toFixed(2),
     }))
-
-    console.log(this.sumsByCategory)
 
     return html`
       <div class="pie-chart"></div>
