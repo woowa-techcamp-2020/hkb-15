@@ -73,17 +73,17 @@
 
     @for $category-count from 1 to 10 {
       .item-row:nth-child(#{$category-count}) .bar {
-        background: lighten($red, $category-count * 5);
+        background: lighten($red, ($category-count - 1) * 5);
         animation-delay: $category-count * 100ms;
       }
     }
 
     @include dark-mode {
-      $red: #f75f54;
+      $red: #ee4337;
 
       @for $category-count from 1 to 10 {
         .item-row:nth-child(#{$category-count}) .bar {
-          background: lighten($red, $category-count * 5);
+          background: lighten($red, ($category-count - 1) * 5);
         }
       }
     }
