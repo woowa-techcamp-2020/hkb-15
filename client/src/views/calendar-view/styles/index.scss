@@ -24,6 +24,7 @@
   .date-detail {
     display: none;
     flex-direction: column;
+    align-items: center;
     margin-top: 50px;
     width: calc(100% - #{$content-padding * 2});
 
