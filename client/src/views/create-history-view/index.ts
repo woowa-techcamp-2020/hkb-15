@@ -53,12 +53,18 @@ export default class CreateHistoryView implements View {
   }
 
   async closeModal(isRemove: boolean) {
-    const modal = document.querySelector('.modal')
+    const modal = document.querySelector<HTMLElement>('.modal')
     modal.classList.toggle('remove')
-    await Promise.all(
-      modal.getAnimations().map((animation) => animation.finished)
-    )
-    if (isRemove) modal.remove()
+
+    // Experiemental feature
+    // await Promise.all(
+    //   modal.getAnimations().map((animation) => animation.finished)
+    // )
+
+    // Replace with compatible technology
+    modal.addEventListener('transitionend', () => {
+      if (isRemove) modal.remove()
+    })
   }
 
   numberKeyValidator(e: KeyboardEvent): boolean {
