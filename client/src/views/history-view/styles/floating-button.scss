@@ -15,7 +15,7 @@
   cursor: pointer;
 
   .icon {
-    color: white;
+    color: var(--white);
     font-size: 45px;
     background-color: var(--black);
     border-radius: 500px;
@@ -28,6 +28,6 @@
     font-weight: 600;
     font-size: 20px;
     line-height: 24px;
-    color: white;
+    color: var(--white);
   }
 }

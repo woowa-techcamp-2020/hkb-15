@@ -26,15 +26,20 @@
       left: 0;
       background-image: linear-gradient(
         to right,
-        #fff,
-        #fff 40%,
-        rgba(#fff, 0)
+        var(--white),
+        var(--white) 40%,
+        rgba(var(--white-rgb), 0)
       );
     }
 
     &.right {
       right: 0;
-      background-image: linear-gradient(to left, #fff, #fff 40%, rgba(#fff, 0));
+      background-image: linear-gradient(
+        to left,
+        var(--white),
+        var(--white) 40%,
+        rgba(var(--white-rgb), 0)
+      );
     }
 
     &.forcedly-shaded {
@@ -64,6 +69,7 @@
     }
 
     .month {
+      color: var(--black);
       margin-top: 2px;
       font-weight: bold;
       font-size: 50px;
