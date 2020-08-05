@@ -10,7 +10,7 @@ export default class LoginView implements View {
   render(): void {
     const contentWrap = document.querySelector('.content-wrap')
     contentWrap.innerHTML = /*html*/ `
-      <button class="github-sign-in-button" onclick="location.href='http://bank.zoomkoding.com/auth/github/callback">
+      <button class="github-sign-in-button" onclick="location.href='http://bank.zoomkoding.com/auth/github/callback'">
         <i class="icon">logo_github</i>
         Sign In With Github
       </button>
