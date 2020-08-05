@@ -1,33 +1,37 @@
 const passport = require('passport')
-const bcrypt = require('bcrypt')
-const LocalStrategy = require('passport-local').Strategy
+const GitHubStrategy = require('passport-github').Strategy
 const User = require('../models/user')
-const createHttpError = require('http-errors')
+const createError = require('http-errors')
 
-passport.serializeUser(async (user, done) => done(null, user.id))
-passport.deserializeUser(async (id, done) =>
-  done(null, await User.findOne('id, username, nickname', { id }))
+passport.serializeUser((user, done) => done(null, user.id))
+passport.deserializeUser((id, done) =>
+  User.findOne('id, username', { id }).then((user) => done(null, user))
 )
 
 passport.use(
-  new LocalStrategy((username, password, done) => {
-    User.findOne('id, username, nickname, password', { username }).then(
-      (user) => {
-        if (!user) return done(null, false)
-        return bcrypt.compare(password, user.password, (err, res) => {
-          if (res) return done(null, user)
-          return done(null, false)
-        })
-      }
-    )
-  })
+  new GitHubStrategy(
+    {
+      clientID: process.env.GITHUB_CLIENT_ID,
+      clientSecret: process.env.GITHUB_CLIENT_SECRET,
+      callbackURL: process.env.GITHUB_CALLBACK_URL,
+    },
+
+    function (accessToken, refreshToken, profile, next) {
+      User.findOne('*', { username: profile.username }).then(async (user) => {
+        return next(
+          null,
+          user ?? (await User.create({ username: profile.username }))
+        )
+      })
+    }
+  )
 )
 
 function isAuthenticated(req, res, next) {
   if (req.isAuthenticated()) return next()
-  else throw createHttpError(401, 'Auth Error')
+  else throw createError(401, 'Auth Error')
 }
 
-const authenticate = () => passport.authenticate('local')
+const authenticate = passport.authenticate('github')
 
 module.exports = { authenticate, isAuthenticated }
