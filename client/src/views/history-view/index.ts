@@ -1,18 +1,12 @@
-import {
-  View,
-  History,
-  Payment,
-  Category,
-  WindowHistoryState,
-} from '../../types'
-import cem from '../../utils/custom-event'
+import { View, History, Payment, Category, WindowHistoryState } from 'src/types'
+import cem from 'src/utils/custom-event'
 import './styles'
 import {
   numberWithCommas,
   groupBy,
   dateWithDay,
   getNumber,
-} from '../../utils/helper'
+} from 'src/utils/helper'
 
 export default class HistoryView implements View {
   state: WindowHistoryState

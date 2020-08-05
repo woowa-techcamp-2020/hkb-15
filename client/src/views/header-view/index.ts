@@ -1,6 +1,6 @@
-import { View, WindowHistoryState } from '../../types'
-import cem from '../../utils/custom-event'
-import { monthStr, numberWithCommas, dommer } from '../../utils/helper'
+import { View, WindowHistoryState } from 'src/types'
+import cem from 'src/utils/custom-event'
+import { monthStr, numberWithCommas, dommer } from 'src/utils/helper'
 import './styles'
 
 export default class HeaderView implements View {
@@ -51,7 +51,7 @@ export default class HeaderView implements View {
   }
 
   typeButtonClickHandler(target: HTMLElement): void {
-    const button = target.closest('.money-button')
+    const button = target.closest<HTMLElement>('.money-button')
     if (!button) return
 
     const state = { ...history.state }
@@ -71,7 +71,9 @@ export default class HeaderView implements View {
       button.classList.toggle('selected')
     }
 
-    cem.fire('statechange', state)
+    button.addEventListener('transitionend', () => {
+      cem.fire('statechange', state)
+    })
   }
 
   cardClickHandler(target: HTMLElement): void {
