@@ -17,6 +17,7 @@
     "@babel/cli": "^7.10.5",
     "@babel/core": "^7.10.5",
     "@babel/preset-env": "^7.10.4",
+    "@types/color": "^3.0.1",
     "autoprefixer": "^9.8.5",
     "parcel": "^1.12.4",
     "postcss-modules": "^3.2.0",
@@ -26,6 +27,8 @@
     "typescript": "^3.9.7"
   },
   "dependencies": {
-    "core-js": "^3.6.5"
+    "color": "^3.1.2",
+    "core-js": "^3.6.5",
+    "woowahan-chart": "^2.1.1"
   }
 }
