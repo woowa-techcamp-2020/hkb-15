@@ -23,10 +23,11 @@
 
   .date-detail {
     display: none;
+    width: 100%;
     flex-direction: column;
     align-items: center;
     margin-top: 50px;
-    width: calc(100% - #{$content-padding * 2});
+    padding: 0 $content-padding;
 
     @include meta.load-css('../../history-view/styles/history-card');
   }
