@@ -210,8 +210,8 @@ export default class CreateHistoryView implements View {
   }
 
   render(): void {
-    const contentWrap = document.querySelector('.content-wrap')
-    contentWrap.innerHTML += this.createModal()
+    const historyView = document.querySelector('.history-view')
+    historyView.innerHTML += this.createModal()
   }
 
   createTypePicker(selectedType = 'expenditure'): string {
