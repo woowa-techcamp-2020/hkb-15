@@ -55,12 +55,14 @@ button {
   border: none;
   outline: none;
   cursor: pointer;
+  font-family: inherit;
 }
 
 .body-wrap {
   display: flex;
   flex-direction: column;
   width: 100%;
+  overflow-x: hidden;
   min-height: 100vh;
   padding-bottom: 120px;
   align-items: center;
