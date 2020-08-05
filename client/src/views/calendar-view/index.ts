@@ -1,4 +1,10 @@
-import { View, History, WindowHistoryState, CalendarDayData } from '../../types'
+import {
+  View,
+  History,
+  Payment,
+  WindowHistoryState,
+  CalendarDayData,
+} from '../../types'
 import cem from '../../utils/custom-event'
 import './styles'
 import {
@@ -8,24 +14,77 @@ import {
   groupBy,
   sum,
   addLeadingZeros,
+  loadHtml,
 } from '../../utils/helper'
 
 export default class CalendarView implements View {
   state: WindowHistoryState
   histories: History[]
+  payments: Payment[]
+  historiesByDate: object
 
   constructor() {
     cem.subscribe('storeupdated', (e: CustomEvent) => {
       if (e.detail.state.path !== '/calendar') return
       this.setAttributes(e.detail)
       this.render()
+
+      const calendarView = document.querySelector('.calendar-view')
+      calendarView.addEventListener('click', this.clickEventHandler.bind(this))
     })
   }
 
+  clickEventHandler(e: MouseEvent) {
+    e.preventDefault()
+
+    const { target } = e
+    if (!(target instanceof HTMLElement)) return
+    this.dataCellClickHandler(e, target)
+  }
+
+  dataCellClickHandler(e: MouseEvent, target: HTMLElement) {
+    const dataCell = target.closest('.date-cell')
+    if (!dataCell) return
+    e.stopImmediatePropagation()
+
+    const day = +(dataCell.querySelector('.date-indicator') as HTMLElement)
+      .innerText
+
+    const dateIndex = this.getDateIndex(this.state.year, this.state.month, day)
+
+    const dateDetail = document.querySelector('.date-detail')
+    dateDetail.innerHTML = loadHtml(
+      this.historiesByDate[dateIndex]?.map((history: History) =>
+        this.createHistoryCard(history)
+      )
+    )
+  }
+
+  createHistoryCard(history: History): string {
+    return /*html*/ `
+<div class="history-card" id="history-${history.id}">
+  <div class="front">
+    <div class="payment">${
+      this.payments.find((payment) => payment.id === history.paymentId).name
+    }</div>
+    <div class="content">${history.content}</div>
+  </div>
+  <div class="back">
+    <div class="amount ${history.type === 'income' ? 'income' : ''}">
+      ${history.type === 'expenditure' ? '-' : '+'}${numberWithCommas(
+      history.amount
+    )}
+    </div>
+  </div>
+</div>
+`
+  }
+
   setAttributes({ state, store }): void {
-    const { histories } = store
+    const { histories, payments } = store
     this.state = state
     this.histories = histories
+    this.payments = payments
   }
 
   getEmptyCellData(date: number): CalendarDayData {
@@ -58,6 +117,8 @@ export default class CalendarView implements View {
     const lastMonthEndDate = new Date(year, month, 0).getDate()
     const thisMonthEndDate = new Date(year, month + 1, 0).getDate()
     const lastMonthStartDate = lastMonthEndDate - thisMonthStartDay + 1
+
+    this.historiesByDate = historiesByDate
 
     for (let i = 0; i < thisMonthStartDay; i++) {
       const date = i + lastMonthStartDate
@@ -97,6 +158,7 @@ export default class CalendarView implements View {
     contentWrap.innerHTML = /*html*/ `
 <div class='calendar-view'>
   ${this.Calendar(calendarData)}
+  <div class='date-detail'></div>
 </div>
 `
   }

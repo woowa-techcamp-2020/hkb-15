@@ -1,4 +1,5 @@
 @use 'sass:meta';
+@use '../../../styles/variables' as *;
 
 .calendar-view {
   padding-bottom: 120px;
@@ -20,11 +21,24 @@
     @include meta.load-css('./calendar-table');
   }
 
+  .date-detail {
+    display: none;
+    flex-direction: column;
+    margin-top: 50px;
+    width: calc(100% - #{$content-padding * 2});
+
+    @include meta.load-css('../../history-view/styles/history-card');
+  }
+
   @media only screen and (max-width: 972px) {
     .calendar {
       --calendar-width: 100vw;
       padding: 10px 22px;
       height: calc(var(--calendar-width) * 0.8);
+    }
+
+    .date-detail {
+      display: flex;
     }
   }
 }
