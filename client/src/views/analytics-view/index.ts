@@ -3,7 +3,6 @@ import cem from 'src/utils/custom-event'
 import './styles'
 import { groupBy, sum, loadHtml, html } from 'src/utils/helper'
 import { PieChart, LineChart } from 'woowahan-chart'
-import Color from 'color'
 
 const pieColorVariants = [
   '#FF5959',
@@ -171,7 +170,7 @@ export default class AnalyticsView implements View {
     return html`
       <div class="analytics-options">
         <button class="ao-btn checked by-categories">By Categories</button>
-        <button class="ao-btn daily">Daily</button>
+        <button class="ao-btn daily">By Dates</button>
       </div>
 
       <div class="analytics-container">
