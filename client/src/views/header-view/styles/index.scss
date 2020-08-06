@@ -1,5 +1,5 @@
 @use 'sass:meta';
-@use '../../../styles/variables.scss' as *;
+@use 'src/styles/variables' as *;
 
 header {
   width: 100%;

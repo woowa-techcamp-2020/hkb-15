@@ -4,9 +4,8 @@ import {
   Payment,
   WindowHistoryState,
   CalendarDayData,
-} from '../../types'
-import cem from '../../utils/custom-event'
-import './styles'
+} from 'src/types'
+
 import {
   Container,
   dayStr,
@@ -15,7 +14,10 @@ import {
   sum,
   addLeadingZeros,
   loadHtml,
-} from '../../utils/helper'
+} from 'src/utils/helper'
+
+import cem from 'src/utils/custom-event'
+import './styles'
 
 export default class CalendarView implements View {
   state: WindowHistoryState

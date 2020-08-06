@@ -21,7 +21,7 @@
     --white-rgb: 0, 0, 0;
     --light-blue: #333;
     --blue: #54aafc;
-    --red: #f75f54;
+    --red: #ee4337;
     --background: #66666691;
   }
 }
@@ -57,12 +57,14 @@ button {
   border: none;
   outline: none;
   cursor: pointer;
+  font-family: inherit;
 }
 
 .body-wrap {
   display: flex;
   flex-direction: column;
   width: 100%;
+  overflow-x: hidden;
   min-height: 100vh;
   align-items: center;
   font-family: 'PAYW Pro', 'PAYW Pro KR', sans-serif;

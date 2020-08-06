@@ -1,11 +1,11 @@
-import { View, History, Category, Payment } from '../../types'
+import { View, History, Category, Payment } from 'src/types'
 import {
   getNumber,
   addLeadingZeros,
   loadHtml,
   getPaymentEnKeyName,
-} from '../../utils/helper'
-import cem from '../../utils/custom-event'
+} from 'src/utils/helper'
+import cem from 'src/utils/custom-event'
 
 import './styles'
 

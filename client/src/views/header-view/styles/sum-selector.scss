@@ -1,4 +1,4 @@
-@use '../../../styles/variables.scss' as *;
+@use 'src/styles/variables' as *;
 
 .sum-indicator-wrap {
   margin-top: 54px;
@@ -22,6 +22,8 @@
       text-align: center;
       font-weight: bold;
       font-feature-settings: 'tnum' on, 'lnum' on;
+
+      transition: background 200ms ease;
 
       cursor: pointer;
     }
