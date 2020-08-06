@@ -1,17 +1,14 @@
-const Model = require('./model')
+const { Model, DataType } = require('./model')
 
 class User extends Model {
   static init() {
     return super.init(
       {
-        id: { dataType: 'int', required: false },
-        username: { dataType: 'varchar', required: true },
-        isDeleted: { dataType: 'tinyint', required: false },
-        createdAt: { dataType: 'datetime', required: false },
-        updatedAt: { dataType: 'datetime', required: false },
+        username: { dataType: DataType.varchar, required: true },
+        isDeleted: { dataType: DataType.bool, defaultValue: '0' },
       },
       {
-        defaultWhere: { isDeleted: 0 },
+        defaultWhere: { isDeleted: '0' },
       }
     )
   }

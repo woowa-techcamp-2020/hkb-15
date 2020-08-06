@@ -6,7 +6,7 @@ exports.create = async (req, res) => {
 }
 
 exports.findAll = async (req, res) => {
-  const payments = await Payment.findAll('*', { userId: req.user.id })
+  const payments = await Payment.findAll({ where: { userId: req.user.id } })
   res.send(payments)
 }
 

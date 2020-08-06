@@ -1,29 +1,29 @@
-const Model = require('./model')
+const { Model, DataType } = require('./model')
 
 class History extends Model {
   static init() {
     return super.init(
       {
-        id: { dataType: 'int', required: false },
-        userId: { dataType: 'int', required: true },
-        categoryId: { dataType: 'int', required: true },
-        paymentId: { dataType: 'int', required: true },
-        type: { dataType: 'varchar', required: true },
-        amount: { dataType: 'int', required: true },
-        content: { dataType: 'text', required: true },
-        date: { dataType: 'datetime', required: true },
-        isDeleted: { dataType: 'tinyint', required: false },
-        createdAt: { dataType: 'datetime', required: false },
-        updatedAt: { dataType: 'datetime', required: false },
+        userId: { dataType: DataType.int, required: true },
+        categoryId: { dataType: DataType.int, required: true },
+        paymentId: { dataType: DataType.int, required: true },
+        type: { dataType: DataType.varchar, required: true },
+        amount: { dataType: DataType.int, required: true },
+        content: { dataType: DataType.text, required: true },
+        date: { dataType: DataType.date, required: true },
+        isDeleted: {
+          dataType: DataType.bool,
+          defaultValue: '0',
+        },
       },
       {
-        defaultWhere: { isDeleted: 0 },
+        defaultWhere: { isDeleted: '0' },
       }
     )
   }
-  static async findAll(attributes, where) {
+  static async findAll({ attributes, where }) {
     const rawWhere = `year(date)=${where.year} AND month(date)=${where.month}`
-    return await super.findAll(attributes, where, rawWhere)
+    return await super.findAll({ attributes, where, rawWhere })
   }
 }
 
