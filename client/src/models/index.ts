@@ -13,6 +13,13 @@ class Model {
     cem.subscribe('historymodalgetdata', this.getModalData.bind(this))
   }
 
+  async sanitizeResponse(promise: Promise<Response>): Promise<object> {
+    const res = await promise
+    if (res.status === 401) {
+      cem.fire('login')
+    } else return await res.json()
+  }
+
   getModalData(e: CustomEvent) {
     const { state, historyId } = e.detail
     const { categories, payments } = this.store
@@ -30,9 +37,9 @@ class Model {
   async createHistory(e: CustomEvent) {
     const { historyData, state } = e.detail
 
-    const newHistory: History = await (
-      await apis.createHistory(historyData)
-    ).json()
+    const newHistory = (await this.sanitizeResponse(
+      apis.createHistory(historyData)
+    )) as History
 
     if (historyData.isThisMonth) {
       this.store.histories.push(newHistory)
@@ -44,9 +51,9 @@ class Model {
   async updateHistory(e: CustomEvent) {
     const { historyData, state } = e.detail
 
-    const updatedHistory: History = await (
-      await apis.updateHistory(historyData)
-    ).json()
+    const updatedHistory = (await this.sanitizeResponse(
+      apis.updateHistory(historyData)
+    )) as History
 
     if (historyData.isThisMonth) {
       const arrId = this.store.histories.findIndex(
@@ -91,18 +98,18 @@ class Model {
 
   async fetchPayments(): Promise<void> {
     if (this.store.payments) return
-    this.store.payments = await (await apis.findPayment()).json()
+    this.store.payments = await this.sanitizeResponse(apis.findPayment())
   }
 
   async fetchCategories(): Promise<void> {
     if (this.store.categories) return
-    this.store.categories = await (await apis.findCategory()).json()
+    this.store.categories = await this.sanitizeResponse(apis.findCategory())
   }
 
   async fetchHistories(year: number, month: number): Promise<void> {
-    this.store.histories = await (
-      await apis.findHistory({ year, month })
-    ).json()
+    this.store.histories = await this.sanitizeResponse(
+      apis.findHistory({ year, month })
+    )
 
     this.initializeHistories()
   }

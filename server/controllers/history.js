@@ -1,12 +1,15 @@
 const History = require('../models/history')
 
 exports.create = async (req, res) => {
-  const history = await History.create({ userId: 1, ...req.body })
+  const history = await History.create({ userId: req.user.id, ...req.body })
   res.send(history)
 }
 
 exports.findAll = async (req, res) => {
-  const histories = await History.findAll('*', { userId: 1, ...req.query })
+  const histories = await History.findAll('*', {
+    userId: req.user.id,
+    ...req.query,
+  })
   res.send(histories)
 }
 

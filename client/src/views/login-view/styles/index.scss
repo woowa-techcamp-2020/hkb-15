@@ -1,0 +1,17 @@
+.content-wrap {
+  .github-sign-in-button {
+    height: 56px;
+    width: 300px;
+    background: var(--black);
+    color: var(--white);
+    border-radius: 15px;
+    line-height: 30px;
+    font-size: 25px;
+    text-align: center;
+    font-weight: bold;
+
+    .icon {
+      margin-right: 10px;
+    }
+  }
+}

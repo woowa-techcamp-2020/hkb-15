@@ -1,12 +1,12 @@
 const Payment = require('../models/payment')
 
 exports.create = async (req, res) => {
-  const payment = await Payment.create({ userId: 1, ...req.body })
+  const payment = await Payment.create({ userId: req.user.id, ...req.body })
   res.send(payment)
 }
 
 exports.findAll = async (req, res) => {
-  const payments = await Payment.findAll('*', { userId: 1 })
+  const payments = await Payment.findAll('*', { userId: req.user.id })
   res.send(payments)
 }
 
