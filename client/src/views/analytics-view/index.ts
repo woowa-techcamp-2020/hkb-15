@@ -72,8 +72,11 @@ export default class AnalyticsView implements View {
   render(): void {
     const contentWrap = document.querySelector('.content-wrap')
 
-    contentWrap.innerHTML = this.createBarChart()
-
+    contentWrap.innerHTML = /*html*/ `
+<div class='analytics-view'>
+  ${this.createBarChart()}
+</div>
+`
     document
       .querySelector<HTMLElement>('.analytics-options')
       .addEventListener('click', (e) => {

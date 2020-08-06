@@ -1,4 +1,5 @@
 import cem from './utils/custom-event'
+import LoginView from './views/login-view'
 import HeaderView from './views/header-view'
 import HistoryView from './views/history-view'
 import CalendarView from './views/calendar-view'
@@ -14,6 +15,7 @@ export default class Router {
     new AnalyticsView()
     new CreateHistoryView()
     new PaymentManager()
+    new LoginView()
 
     window.addEventListener('popstate', (event) => {
       if (event.state === null) return

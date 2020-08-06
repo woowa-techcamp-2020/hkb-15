@@ -9,13 +9,15 @@ export default class HeaderView implements View {
   expenditureSum: number
 
   constructor() {
+    const header = document.querySelector('header')
+    header.addEventListener('click', this.clickEventHandler.bind(this))
+
     cem.subscribe('storeupdated', (e: CustomEvent) => {
       this.setAttributes(e.detail)
       this.render()
     })
 
-    const header = document.querySelector('header')
-    header.addEventListener('click', this.clickEventHandler.bind(this))
+    cem.subscribe('login', (e: CustomEvent) => (header.innerHTML = ''))
   }
 
   setAttributes({ state, store }): void {

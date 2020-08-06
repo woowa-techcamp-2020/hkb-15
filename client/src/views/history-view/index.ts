@@ -19,10 +19,10 @@ export default class HistoryView implements View {
       if (e.detail.state.path !== '/') return
       this.setAttributes(e.detail)
       this.render()
-    })
 
-    const contentWrap = document.querySelector('.content-wrap')
-    contentWrap.addEventListener('click', this.clickEventHandler.bind(this))
+      const historyView = document.querySelector('.history-view')
+      historyView.addEventListener('click', this.clickEventHandler.bind(this))
+    })
   }
 
   setAttributes({ state, store }): void {
@@ -59,15 +59,18 @@ export default class HistoryView implements View {
   render(): void {
     const historiesByDate = groupBy(this.histories, 'date')
     const contentWrap = document.querySelector('.content-wrap')
-    contentWrap.innerHTML = `
-${Object.keys(historiesByDate)
-  .sort()
-  .reverse()
-  .reduce(
-    (a: string, b: string) => a + this.createDateColumn(b, historiesByDate[b]),
-    ''
-  )}
-${this.createFloatingButton()}
+    contentWrap.innerHTML = /*html*/ `
+<div class="history-view">
+  ${Object.keys(historiesByDate)
+    .sort()
+    .reverse()
+    .reduce(
+      (a: string, b: string) =>
+        a + this.createDateColumn(b, historiesByDate[b]),
+      ''
+    )}
+  ${this.createFloatingButton()}
+</div>
 `
   }
 

@@ -1,0 +1,23 @@
+.login-view {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+
+  .github-sign-in-button {
+    height: 56px;
+    width: 300px;
+    background: var(--black);
+    color: var(--white);
+    border-radius: 15px;
+    line-height: 30px;
+    font-size: 25px;
+    text-align: center;
+    font-weight: bold;
+
+    .icon {
+      margin-right: 10px;
+    }
+  }
+}

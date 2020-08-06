@@ -34,7 +34,7 @@ export default class CreateHistoryView implements View {
     const today = history ? new Date(history.date) : new Date()
     this.year = today.getFullYear().toString()
     this.month = addLeadingZeros(today.getMonth() + 1, 2)
-    this.day = addLeadingZeros(today.getDate() + 1, 2)
+    this.day = addLeadingZeros(today.getDate(), 2)
     this.categories = categories
     this.payments = payments
     this.history = history
@@ -210,8 +210,8 @@ export default class CreateHistoryView implements View {
   }
 
   render(): void {
-    const contentWrap = document.querySelector('.content-wrap')
-    contentWrap.innerHTML += this.createModal()
+    const historyView = document.querySelector('.history-view')
+    historyView.innerHTML += this.createModal()
   }
 
   createTypePicker(selectedType = 'expenditure'): string {

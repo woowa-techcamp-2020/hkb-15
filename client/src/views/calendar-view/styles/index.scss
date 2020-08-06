@@ -1,10 +1,12 @@
 @use 'sass:meta';
+@use '../../../styles/variables' as *;
 
-.content-wrap {
-  margin-top: 81px;
-  background-image: none;
+.calendar-view {
+  padding-bottom: 120px;
 
   .calendar {
+    margin-top: 81px;
+    background-image: none;
     display: flex;
     flex-direction: column;
     --calendar-width: 972px;
@@ -13,9 +15,32 @@
     box-shadow: 0px 5px 50px rgba(0, 0, 0, 0.1);
     border-radius: 30px;
     padding: 34px 22px;
-    background-color: white;
+    background: var(--white);
 
     @include meta.load-css('./calendar-header');
     @include meta.load-css('./calendar-table');
+  }
+
+  .date-detail {
+    display: none;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 50px;
+    padding: 0 $content-padding;
+
+    @include meta.load-css('../../history-view/styles/history-card');
+  }
+
+  @media only screen and (max-width: 972px) {
+    .calendar {
+      --calendar-width: 100vw;
+      padding: 10px 22px;
+      height: calc(var(--calendar-width) * 0.8);
+    }
+
+    .date-detail {
+      display: flex;
+    }
   }
 }

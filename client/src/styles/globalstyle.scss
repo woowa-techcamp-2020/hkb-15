@@ -6,6 +6,7 @@
 :root {
   --black: #333333;
   --white: #fff;
+  --background: #fff;
   --white-rgb: 255, 255, 255;
   --blue: #166ff3;
   --red: #f8123b;
@@ -21,6 +22,7 @@
     --light-blue: #333;
     --blue: #54aafc;
     --red: #ee4337;
+    --background: #66666691;
   }
 }
 
@@ -64,7 +66,6 @@ button {
   width: 100%;
   overflow-x: hidden;
   min-height: 100vh;
-  padding-bottom: 120px;
   align-items: center;
   font-family: 'PAYW Pro', 'PAYW Pro KR', sans-serif;
   color: #333;
@@ -76,4 +77,11 @@ button {
     var(--light-blue)
   );
   background-attachment: fixed;
+
+  .content-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
 }

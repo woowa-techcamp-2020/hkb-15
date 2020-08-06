@@ -1,7 +1,8 @@
 @use 'sass:meta';
 @use 'src/styles/variables' as *;
 
-.content-wrap {
+.history-view {
+  padding-bottom: 120px;
   width: calc(100% - #{$content-padding * 2});
   max-width: $content-width;
   margin-top: 81px;

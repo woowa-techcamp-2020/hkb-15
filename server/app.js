@@ -1,4 +1,3 @@
-const createError = require('http-errors')
 const express = require('express')
 const path = require('path')
 const session = require('express-session')
@@ -36,8 +35,7 @@ app.use(passport.session())
 
 app.use('/', router)
 
-// catch 404 and forward to error handler
-app.use((req, res, next) => next(createError(404)))
+app.use((req, res) => res.redirect('/'))
 
 // error handler
 app.use((err, req, res) => {

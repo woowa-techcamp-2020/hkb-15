@@ -7,7 +7,7 @@ const defaultOptions = (method: Method): RequestInit => ({
   },
 })
 
-const serverUrl = 'http://localhost:3000'
+const serverUrl = ''
 
 const createQuery = (data: Input): string => {
   return data
@@ -30,16 +30,13 @@ const PUT = async (url = '', data: Input): Promise<Response> =>
     ...defaultOptions('PUT'),
   })
 
-const GET = async (url = '', data: Input): Promise<Response> =>
+const GET = async (url = '', data?: Input): Promise<Response> =>
   await fetch(`${serverUrl}${url}${createQuery(data)}`, defaultOptions('GET'))
 
 const DELETE = async (url = ''): Promise<Response> =>
   await fetch(`${serverUrl}${url}`, defaultOptions('DELETE'))
 
 export default {
-  logIn: async (data: Input) => await POST('/user/login', data),
-  signUp: async (data: Input) => await POST('/user', data),
-
   createHistory: async (data: Input) => await POST('/history', data),
   findHistory: async (data: Input) => await GET('/history', data),
   updateHistory: async (data: Input) => await PUT('/history', data),
