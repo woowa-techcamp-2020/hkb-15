@@ -54,18 +54,10 @@ export default class AnalyticsView implements View {
     ) {
       target.parentElement
         .querySelectorAll('.ao-btn')
-        .forEach((btn) => btn.classList.remove('checked'))
-      target.classList.add('checked')
+        .forEach((btn) => btn.classList.toggle('checked'))
 
-      if (target.classList.contains('daily')) {
-        document.querySelector('section.by-categories').classList.add('hidden')
-        document.querySelector('section.daily').classList.remove('hidden')
-      } else {
-        document
-          .querySelector('section.by-categories')
-          .classList.remove('hidden')
-        document.querySelector('section.daily').classList.add('hidden')
-      }
+      document.querySelector('section.by-categories').classList.toggle('hidden')
+      document.querySelector('section.daily').classList.toggle('hidden')
     }
   }
 
