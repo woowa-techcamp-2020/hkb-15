@@ -33,6 +33,30 @@ class Model {
     this.defaultWhere = defaultWhere
   }
 
+  static sync = async function () {
+    const createTableQuery = `
+    CREATE TABLE IF NOT EXISTS ${wrapBacktick(this.name)} (
+      \`id\` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+      ${Object.keys(this.attributes).reduce((strSum, attribute) => {
+        const { dataType, required, defaultValue } = this.attributes[attribute]
+        return (
+          strSum +
+          `${wrapBacktick(attribute)} ${dataType} ${
+            required ? 'NOT NULL' : 'NULL'
+          }${defaultValue ? ` DEFAULT '${defaultValue}'` : ''}, 
+          `
+        )
+      }, '')}
+
+      \`createdAt\` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+      \`updatedAt\` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+      PRIMARY KEY (\`id\`),
+      UNIQUE KEY \`id\` (\`id\`)
+    ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4;`
+    console.log(createTableQuery)
+    return await this.pool.query(createTableQuery)
+  }
+
   static validate = function (input) {
     const validatedInput = {}
     for (const [name, value] of Object.entries(input)) {
