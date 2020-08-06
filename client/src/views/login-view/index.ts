@@ -11,8 +11,8 @@ export default class LoginView implements View {
     const contentWrap = document.querySelector('.content-wrap')
     contentWrap.innerHTML = /*html*/ `
 <div class="login-view">
+    <div class="title">Woowahan<br>Financial Ledger</div>
   <button class="github-sign-in-button" onclick="location.href='http://bank.zoomkoding.com/auth/github/callback'">
-    <i class="icon">logo_github</i>
     Sign In With Github
   </button>
 </div>
