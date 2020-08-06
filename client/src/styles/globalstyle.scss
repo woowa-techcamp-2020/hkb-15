@@ -12,6 +12,8 @@
   --red: #f8123b;
   --gray: #979797;
   --light-blue: #f5f5f7;
+  --gradient-start: #62a1ff;
+  --gradient-end: #ff5ac7;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -23,6 +25,8 @@
     --blue: #54aafc;
     --red: #ee4337;
     --background: #66666691;
+    --gradient-start: #b6d3ff;
+    --gradient-end: #fec2e9;
   }
 }
 

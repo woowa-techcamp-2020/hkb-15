@@ -1,23 +1,53 @@
 .login-view {
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 84px 115px 90px 115px;
   width: 100vw;
   height: 100vh;
+  background: var(--white);
+
+  .title {
+    width: max-content;
+    font-family: inherit;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 70px;
+    line-height: 70px;
+    padding-bottom: 10px;
+    background: -webkit-linear-gradient(
+      left,
+      var(--gradient-start),
+      var(--gradient-end)
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
 
   .github-sign-in-button {
-    height: 56px;
-    width: 300px;
+    height: 62px;
+    width: 307px;
     background: var(--black);
     color: var(--white);
-    border-radius: 15px;
+    border-radius: 35px;
     line-height: 30px;
     font-size: 25px;
     text-align: center;
-    font-weight: bold;
+    font-weight: 600;
+  }
 
-    .icon {
-      margin-right: 10px;
+  @media only screen and (max-width: 600px) {
+    align-items: center;
+    justify-content: center;
+
+    .title {
+      display: flex;
+      text-align: center;
+      width: auto;
+    }
+
+    .github-sign-in-button {
+      margin-top: 50px;
     }
   }
 }
