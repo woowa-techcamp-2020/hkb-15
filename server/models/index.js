@@ -2,27 +2,16 @@ const fs = require('fs')
 const path = require('path')
 const WoowaORM = require('../woowa-orm')
 
-function getModels() {
-  return fs
-    .readdirSync(__dirname)
-    .filter((file) => {
-      return (
-        file.indexOf('.') !== 0 &&
-        file !== 'index.js' &&
-        file !== 'model.js' &&
-        file.slice(-3) === '.js'
-      )
-    })
-    .map((file) => require(path.join(__dirname, file)))
-}
-
 function init({ sync = false }) {
-  WoowaORM.createConnection({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-  })
+  new WoowaORM(
+    {
+      host: process.env.DB_HOST,
+      user: process.env.DB_USER,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_NAME,
+    },
+    sync
+  )
 
   const models = getModels()
   models.forEach((model) => model.init())
@@ -32,6 +21,19 @@ function init({ sync = false }) {
       console.log('database synchronized')
     })
   }
+}
+
+function getModels() {
+  return fs
+    .readdirSync(__dirname)
+    .filter((file) => {
+      return (
+        file.indexOf('.') !== 0 &&
+        file !== 'index.js' &&
+        file.slice(-3) === '.js'
+      )
+    })
+    .map((file) => require(path.join(__dirname, file)))
 }
 
 module.exports = { init }
