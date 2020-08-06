@@ -32,7 +32,7 @@ class Model {
   static validationError = createHttpError(400, 'invalid input')
 
   /**
-   * @param {Record<string, { dataType: string, required: boolean }>} attributes
+   * @param {Record<string, { dataType: string, required: boolean, defaultValue: unknown }>} attributes
    */
   static init = function (attributes, { defaultWhere }) {
     this.attributes = attributes
@@ -75,28 +75,24 @@ class Model {
         continue
       }
       switch (this.attributes[name].dataType) {
-        case 'tinyint':
+        case DataType.bool:
           if (value == 0 || value == 1) validatedInput[name] = value
           else throw this.validationError
           break
-        case 'int':
-          if (typeof value === 'number' || Number(value).toString() === value) {
+        case DataType.int:
+          if (typeof value === 'number' || !isNaN(Number(value))) {
             validatedInput[name] = value
           } else throw this.validationError
           break
-        case 'datetime':
-          validatedInput[name] = `'${value}'`
+        case DataType.datetime:
+        case DataType.date:
+        case DataType.timestamp:
+          if (!isNaN(Date.parse(value))) validatedInput[name] = `'${value}'`
+          else throw this.validationError
           break
-        case 'varchar':
+        case DataType.varchar:
+        case DataType.text:
           validatedInput[name] = `'${value}'`
-          break
-        case 'text':
-          validatedInput[name] = `'${value}'`
-          break
-        case 'enum':
-          if (typeof value === 'number' || Number(value).toString() === value) {
-            validatedInput[name] = value
-          } else throw this.validationError
           break
         default:
           throw this.validationError
@@ -105,12 +101,13 @@ class Model {
     return validatedInput
   }
 
-  static generateFindQueryStmt = function (
+  static generateFindQueryStmt = function ({
     isOne,
     attributes = '*',
     where = {},
-    rawWhere
-  ) {
+    rawWhere,
+    sortBy,
+  }) {
     const validatedWhere = this.validate({ ...where, ...this.defaultWhere })
     const queryStmt = `
       SELECT ${attributes === '*' ? '*' : wrapBacktick(attributes)} 
@@ -125,6 +122,7 @@ class Model {
       } 
       ${!rawWhere || isEmpty(validatedWhere) ? `` : ` AND `}
       ${rawWhere ?? ''}
+      ${sortBy ? `ORDER BY ${sortBy.columnName} ${sortBy.order} ` : ''}
       ${isOne ? 'LIMIT 1' : ''}
     `
     return queryStmt
@@ -142,10 +140,6 @@ class Model {
       )
     `
     return queryStmt
-  }
-
-  static generateOrderSubQueryStmt = function () {
-    return ''
   }
 
   static generateUpdateQueryStmt = function (input) {
@@ -168,24 +162,13 @@ class Model {
     return queryStmt
   }
 
-  static findOne = async function (attributes, where, rawWhere) {
-    const queryStmt = this.generateFindQueryStmt(
-      true,
-      attributes,
-      where,
-      rawWhere
-    )
+  static findOne = async function (params = { attributes: '*' }) {
+    const queryStmt = this.generateFindQueryStmt({ ...params, isOne: true })
     return (await this.pool.query(queryStmt))[0][0]
   }
 
-  static findAll = async function (attributes, where, rawWhere) {
-    const queryStmt = this.generateFindQueryStmt(
-      false,
-      attributes,
-      where,
-      rawWhere
-    )
-    console.log(queryStmt)
+  static findAll = async function (params = { attributes: '*' }) {
+    const queryStmt = this.generateFindQueryStmt({ ...params, isOne: false })
     return (await this.pool.query(queryStmt))[0]
   }
 
