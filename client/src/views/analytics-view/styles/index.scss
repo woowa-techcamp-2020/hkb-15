@@ -2,6 +2,8 @@
 @use 'src/styles/mixins' as *;
 
 .content-wrap {
+  position: relative;
+
   .analytics-options {
     width: 100%;
     display: flex;
@@ -27,16 +29,35 @@
     }
   }
 
-  .hidden {
-    display: none !important;
+  .analytics-container {
+    position: relative;
+    width: 100%;
   }
 
-  .by-categories {
+  section.by-categories {
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    transition: transform 400ms ease, opacity 400ms ease;
+
+    &.hidden {
+      // transform: translateX(-100vw);
+      // opacity: 0;
+      display: none;
+    }
+  }
+
+  section.daily {
+    width: 100%;
+    transition: transform 400ms ease, opacity 400ms ease;
+
+    &.hidden {
+      // transform: translateX(100vw);
+      // opacity: 0;
+      display: none;
+    }
   }
 
   .pie-chart {

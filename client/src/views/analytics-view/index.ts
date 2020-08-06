@@ -179,36 +179,38 @@ export default class AnalyticsView implements View {
         <button class="ao-btn daily">Daily</button>
       </div>
 
-      <section class="by-categories">
-        <div class="pie-chart"></div>
-        <div class="bar-chart">
-          ${loadHtml(
-            this.sumsByCategory.map((data) => {
-              const percent = ((+data.sum / totalsum) * 100).toFixed(2)
-              const amount = +data.sum
+      <div class="analytics-container">
+        <section class="by-categories">
+          <div class="pie-chart"></div>
+          <div class="bar-chart">
+            ${loadHtml(
+              this.sumsByCategory.map((data) => {
+                const percent = ((+data.sum / totalsum) * 100).toFixed(2)
+                const amount = +data.sum
 
-              return html`
-                <div class="item-row">
-                  <div class="name">
-                    ${this.categories.find(
-                      (category) => category.id === data.id
-                    ).name}
+                return html`
+                  <div class="item-row">
+                    <div class="name">
+                      ${this.categories.find(
+                        (category) => category.id === data.id
+                      ).name}
+                    </div>
+                    <div class="percent">${percent}%</div>
+                    <div class="bar-wrap">
+                      <div class="bar" style="width: ${percent}%"></div>
+                    </div>
+                    <div class="amount">${amount.toLocaleString()}</div>
                   </div>
-                  <div class="percent">${percent}%</div>
-                  <div class="bar-wrap">
-                    <div class="bar" style="width: ${percent}%"></div>
-                  </div>
-                  <div class="amount">${amount.toLocaleString()}</div>
-                </div>
-              `
-            })
-          )}
-        </div>
-      </section>
+                `
+              })
+            )}
+          </div>
+        </section>
 
-      <section class="daily hidden">
-        <div class="line-chart"></div>
-      </section>
+        <section class="daily hidden">
+          <div class="line-chart"></div>
+        </section>
+      </div>
     `
   }
 }
