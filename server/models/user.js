@@ -1,17 +1,14 @@
-const Model = require('./model')
+const { Model, DataTypes } = require('woowahan-orm')
 
 class User extends Model {
   static init() {
     return super.init(
       {
-        id: { dataType: 'int', required: false },
-        username: { dataType: 'varchar', required: true },
-        isDeleted: { dataType: 'tinyint', required: false },
-        createdAt: { dataType: 'datetime', required: false },
-        updatedAt: { dataType: 'datetime', required: false },
+        username: { dataType: DataTypes.STRING, required: true },
+        isDeleted: { dataType: DataTypes.BOOLEAN, defaultValue: '0' },
       },
       {
-        defaultWhere: { isDeleted: 0 },
+        defaultWhere: { isDeleted: '0' },
       }
     )
   }
