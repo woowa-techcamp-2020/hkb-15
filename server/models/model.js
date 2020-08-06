@@ -2,6 +2,16 @@ const createHttpError = require('http-errors')
 const mysql = require('mysql2/promise')
 const { isEmpty, wrapBacktick } = require('../utils/helper')
 
+const DataType = {
+  bool: 'tinyint(1)',
+  int: 'int(11)',
+  date: 'date',
+  datetime: 'datetime',
+  timestamp: 'timestamp',
+  varchar: 'varchar(255)',
+  text: 'text',
+}
+
 class Model {
   static pool = mysql.createPool({
     host: process.env.DB_HOST,
@@ -166,4 +176,4 @@ class Model {
   }
 }
 
-module.exports = Model
+module.exports = { DataType, Model }
