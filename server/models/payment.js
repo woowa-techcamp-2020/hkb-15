@@ -1,13 +1,13 @@
-const { Model, DataType } = require('./model')
+const { Model, DataTypes } = require('../woowa-orm')
 
 class Payment extends Model {
   static init() {
     return super.init(
       {
-        userId: { dataType: DataType.int, required: true },
-        name: { dataType: DataType.varchar, required: true },
+        userId: { dataType: DataTypes.INTEGER, required: true },
+        name: { dataType: DataTypes.STRING, required: true },
         isDeleted: {
-          dataType: DataType.bool,
+          dataType: DataTypes.BOOLEAN,
           defaultValue: '0',
         },
       },

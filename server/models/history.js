@@ -1,18 +1,18 @@
-const { Model, DataType } = require('./model')
+const { Model, DataTypes } = require('../woowa-orm')
 
 class History extends Model {
   static init() {
     return super.init(
       {
-        userId: { dataType: DataType.int, required: true },
-        categoryId: { dataType: DataType.int, required: true },
-        paymentId: { dataType: DataType.int, required: true },
-        type: { dataType: DataType.varchar, required: true },
-        amount: { dataType: DataType.int, required: true },
-        content: { dataType: DataType.text, required: true },
-        date: { dataType: DataType.date, required: true },
+        userId: { dataType: DataTypes.INTEGER, required: true },
+        categoryId: { dataType: DataTypes.INTEGER, required: true },
+        paymentId: { dataType: DataTypes.INTEGER, required: true },
+        type: { dataType: DataTypes.STRING, required: true },
+        amount: { dataType: DataTypes.INTEGER, required: true },
+        content: { dataType: DataTypes.TEXT, required: true },
+        date: { dataType: DataTypes.DATE, required: true },
         isDeleted: {
-          dataType: DataType.bool,
+          dataType: DataTypes.BOOLEAN,
           defaultValue: '0',
         },
       },

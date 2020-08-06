@@ -4,7 +4,7 @@ const queryGenerator = require('./query-generators')
 
 const DataTypes = {
   BOOLEAN: 'tinyint(1)',
-  INT: 'int(11)',
+  INTEGER: 'int(11)',
   DATE: 'date',
   DATETIME: 'datetime',
   TIMESTAMP: 'timestamp',
@@ -26,7 +26,7 @@ class WoowaORM {
   }
 
   static defaultAttributes = {
-    id: { dataType: DataTypes.INT },
+    id: { dataType: DataTypes.INTEGER },
     createdAt: { dataType: DataTypes.TIMESTAMP },
     updatedAt: { dataType: DataTypes.TIMESTAMP },
   }
@@ -66,7 +66,7 @@ class WoowaORM {
           if (value == 0 || value == 1) validatedInput[name] = value
           else throw this.validationError(name)
           break
-        case DataTypes.INT:
+        case DataTypes.INTEGER:
           if (typeof value === 'number' || !isNaN(Number(value))) {
             validatedInput[name] = value
           } else throw this.validationError(name)

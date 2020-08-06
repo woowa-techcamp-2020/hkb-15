@@ -1,5 +1,6 @@
 const fs = require('fs')
 const path = require('path')
+const WoowaORM = require('../woowa-orm')
 
 function getModels() {
   return fs
@@ -16,6 +17,13 @@ function getModels() {
 }
 
 function init({ sync = false }) {
+  WoowaORM.createConnection({
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+  })
+
   const models = getModels()
   models.forEach((model) => model.init())
 

@@ -1,13 +1,13 @@
-const { Model, DataType } = require('./model')
+const { Model, DataTypes } = require('../woowa-orm')
 
 class Category extends Model {
   static init() {
     return super.init(
       {
-        type: { dataType: DataType.varchar, required: true },
-        name: { dataType: DataType.varchar, required: true },
+        type: { dataType: DataTypes.STRING, required: true },
+        name: { dataType: DataTypes.STRING, required: true },
         isDeleted: {
-          dataType: DataType.bool,
+          dataType: DataTypes.BOOLEAN,
           defaultValue: '0',
         },
       },
