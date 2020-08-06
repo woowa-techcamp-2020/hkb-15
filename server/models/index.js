@@ -2,25 +2,21 @@ const fs = require('fs')
 const path = require('path')
 const WoowaORM = require('woowahan-orm')
 
-function init({ sync = false }) {
-  new WoowaORM(
+function init() {
+  WoowaORM(
     {
       host: process.env.DB_HOST,
       user: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
     },
-    sync
+    {
+      sync: true,
+    }
   )
 
   const models = getModels()
   models.forEach((model) => model.init())
-
-  if (sync) {
-    Promise.all(models.map(async (model) => await model.sync())).then(() => {
-      console.log('database synchronized')
-    })
-  }
 }
 
 function getModels() {

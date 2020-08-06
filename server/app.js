@@ -6,7 +6,7 @@ const passport = require('passport')
 const cors = require('cors')
 
 require('dotenv').config()
-require('./models').init({ sync: true })
+require('./models').init()
 
 const router = require('./routes')
 
