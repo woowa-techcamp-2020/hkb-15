@@ -6,6 +6,10 @@
   height: 55px;
   margin-bottom: 37px;
 
+  @media only screen and (max-width: 750px) {
+    margin-bottom: 0px;
+  }
+
   .day-indicator {
     display: flex;
     justify-content: center;

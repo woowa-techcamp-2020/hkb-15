@@ -1,7 +1,16 @@
 @use '../../../styles/variables' as *;
 @use '../../../styles/mixins' as *;
 
-.content-wrap {
+.analytics-view {
+  padding-bottom: 120px;
+  width: 100%;
+  width: calc(100% - #{$content-padding * 2});
+  max-width: $content-width;
+  margin-top: 81px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
   .bar-chart {
     width: 100%;
     line-height: 24px;
@@ -10,6 +19,7 @@
 
     .item-row {
       display: flex;
+      width: 100%;
       background-color: var(--light-blue);
       padding: 15px;
       border-radius: 10px;

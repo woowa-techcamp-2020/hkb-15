@@ -1,4 +1,10 @@
-.content-wrap {
+.login-view {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+
   .github-sign-in-button {
     height: 56px;
     width: 300px;

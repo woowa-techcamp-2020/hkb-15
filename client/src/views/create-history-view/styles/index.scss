@@ -49,7 +49,7 @@
     bottom: 0px;
     max-height: calc(100% - 100px);
 
-    background: white;
+    background: var(--background);
     border-radius: 30px 30px 0px 0px;
     overflow-y: scroll;
     overflow-x: hidden;
@@ -93,6 +93,7 @@
           background: var(--light-blue);
           border-radius: 15px;
 
+          color: var(--black);
           font-weight: 600;
           font-size: 25px;
           line-height: 30px;
@@ -106,7 +107,7 @@
 
           &.selected {
             background: var(--black);
-            color: white;
+            color: var(--white);
           }
         }
       }
@@ -120,30 +121,35 @@
         width: var(--width);
         height: 36px;
 
+        font-family: inherit;
         font-weight: 600;
         font-size: 30px;
         line-height: 36px;
         text-align: center;
         font-feature-settings: 'tnum' on, 'lnum' on;
+        color: var(--black);
 
         input {
+          background: transparent;
           border: none;
-          -webkit-appearance: none;
+          font-family: inherit;
           font-weight: 600;
           font-size: 30px;
           line-height: 36px;
           text-align: center;
           font-feature-settings: 'tnum' on, 'lnum' on;
+          color: var(--black);
+
           outline: none;
 
           &.year {
-            width: 74px;
+            width: 85px;
           }
           &.month {
-            width: 37px;
+            width: 43px;
           }
           &.day {
-            width: 37px;
+            width: 43px;
           }
           &:focus {
             color: #ff7d1f;
@@ -178,7 +184,7 @@
 
           &.selected {
             background: var(--black);
-            color: white;
+            color: var(--white);
           }
         }
       }
@@ -196,8 +202,8 @@
           flex: none;
 
           scroll-snap-type: x mandatory;
-          padding-left: 150px;
-          padding-right: 150px;
+          padding-left: 145px;
+          padding-right: 170px;
           padding-bottom: 14px; // cards box-shadow
 
           &::-webkit-scrollbar {
@@ -244,7 +250,8 @@
         flex-direction: column;
 
         input {
-          background: white;
+          background: transparent;
+          color: var(--black);
           border: 1px solid var(--gray);
           box-sizing: border-box;
           border-radius: 15px;
