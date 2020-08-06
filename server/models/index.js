@@ -1,6 +1,6 @@
 const fs = require('fs')
 const path = require('path')
-const WoowaORM = require('../woowa-orm')
+const WoowaORM = require('woowahan-orm')
 
 function init({ sync = false }) {
   new WoowaORM(

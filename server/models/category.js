@@ -1,4 +1,4 @@
-const { Model, DataTypes } = require('../woowa-orm')
+const { Model, DataTypes } = require('woowahan-orm')
 
 class Category extends Model {
   static init() {
