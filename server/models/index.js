@@ -11,12 +11,14 @@ function init() {
       database: process.env.DB_NAME,
     },
     {
-      sync: true,
+      sync: process.env.ISDEMO,
     }
   )
 
   const models = getModels()
   models.forEach((model) => model.init())
+
+  if (process.env.ISDEMO) dumpDemoData()
 }
 
 function getModels() {
@@ -30,6 +32,23 @@ function getModels() {
       )
     })
     .map((file) => require(path.join(__dirname, file)))
+}
+
+function dumpDemoData() {
+  setTimeout(() => {
+    const querieStmts = fs
+      .readFileSync(__dirname + '/../demo-data.sql', 'utf8')
+      .split(';')
+
+    Promise.all(
+      querieStmts.map(async (queryStmt) => {
+        if (!queryStmt) return
+        return await WoowaORM.Model.pool.query(queryStmt)
+      })
+    ).then(() => {
+      console.log('Demo Data added')
+    })
+  }, 1000)
 }
 
 module.exports = { init }
