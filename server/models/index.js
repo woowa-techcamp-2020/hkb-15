@@ -1,9 +1,9 @@
 const fs = require('fs')
 const path = require('path')
-const WoowaORM = require('woowahan-orm')
+const WoowahanORM = require('woowahan-orm')
 
 function init() {
-  WoowaORM(
+  WoowahanORM(
     {
       host: process.env.DB_HOST,
       user: process.env.DB_USER,
@@ -11,7 +11,9 @@ function init() {
       database: process.env.DB_NAME,
     },
     {
-      sync: process.env.ISDEMO,
+      sync: {
+        force: process.env.ISDEMO,
+      },
     }
   )
 
@@ -43,11 +45,9 @@ function dumpDemoData() {
     Promise.all(
       querieStmts.map(async (queryStmt) => {
         if (!queryStmt) return
-        return await WoowaORM.Model.pool.query(queryStmt)
+        return await WoowahanORM.Model.pool.query(queryStmt)
       })
-    ).then(() => {
-      console.log('Demo Data added')
-    })
+    ).then(() => console.log('WoowaORM: Demo Data Added'))
   }, 1000)
 }
 
