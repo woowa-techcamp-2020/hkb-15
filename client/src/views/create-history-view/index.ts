@@ -16,6 +16,7 @@ export default class CreateHistoryView implements View {
   categories: Category[]
   payments: Payment[]
   history: History
+  isClosing = false
 
   constructor() {
     cem.subscribe('historymodalcreate', (e: CustomEvent) => {
@@ -34,7 +35,7 @@ export default class CreateHistoryView implements View {
     const today = history ? new Date(history.date) : new Date()
     this.year = today.getFullYear().toString()
     this.month = addLeadingZeros(today.getMonth() + 1, 2)
-    this.day = addLeadingZeros(7, 2)
+    this.day = addLeadingZeros(today.getDate(), 2)
     this.categories = categories
     this.payments = payments
     this.history = history
@@ -52,9 +53,11 @@ export default class CreateHistoryView implements View {
     return (document.querySelector(selector) as HTMLElement).innerText
   }
 
-  async closeModal(isRemove: boolean) {
+  async closeModal() {
+    if (this.isClosing) return
+    this.isClosing = true
     const modal = document.querySelector<HTMLElement>('.modal')
-    modal.classList.toggle('remove')
+    modal.classList.add('remove')
 
     // Experiemental feature
     // await Promise.all(
@@ -63,7 +66,8 @@ export default class CreateHistoryView implements View {
 
     // Replace with compatible technology
     modal.addEventListener('transitionend', () => {
-      if (isRemove) modal.remove()
+      this.isClosing = false
+      modal.remove()
     })
   }
 
@@ -114,7 +118,7 @@ export default class CreateHistoryView implements View {
   submitButtonHandler(): boolean {
     const content = this.getInputValue('.content-input')
     const amount = this.getInputValue('.amount-input')
-    return content.length + amount.length !== 0
+    return content.length !== 0 && amount.length !== 0
   }
 
   keydownEventHandler(e: KeyboardEvent): void {
@@ -149,7 +153,7 @@ export default class CreateHistoryView implements View {
       isThisMonth: history.state.year === year && history.state.month === month,
     }
 
-    await this.closeModal(false)
+    await this.closeModal()
 
     cem.fire(this.history ? 'historyupdate' : 'historycreate', {
       historyData,
@@ -159,7 +163,7 @@ export default class CreateHistoryView implements View {
 
   closeHandler(target: HTMLElement) {
     if (target.closest('.close-icon') || !target.closest('.history-form')) {
-      this.closeModal(true)
+      this.closeModal()
     }
   }
 
@@ -298,7 +302,7 @@ ${loadHtml(
         <input class="content-input" maxlength="20" placeholder="Label" name="content" value="${
           this.history?.content ?? ''
         }" />
-        <input class="amount-input" maxlength="10" placeholder="Amount" name="amount" value="${
+        <input class="amount-input" maxlength="7" placeholder="Amount" name="amount" value="${
           this.history?.amount ?? ''
         }" />
       </div>
