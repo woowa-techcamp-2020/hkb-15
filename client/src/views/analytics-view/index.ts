@@ -124,7 +124,7 @@ export default class AnalyticsView implements View {
         if (max / 10 ** i < 1) {
           break
         } else {
-          head = Math.floor(max / 10 ** i)
+          head = Math.floor(max / 10 ** i) + 1
           exponent = i
         }
       }
@@ -133,7 +133,7 @@ export default class AnalyticsView implements View {
         target: '.line-chart',
         data: dailyExpenditures,
         maxY: head * 10 ** exponent,
-        intervalY: 10 ** exponent,
+        intervalY: 10 ** exponent / 2,
         intervalX: 2,
       })
     }
