@@ -174,6 +174,11 @@ export default class AnalyticsView implements View {
       </div>
 
       <div class="analytics-container">
+        ${this.sumsByCategory.length === 0
+          ? html`<span class="no-expenditures"
+              >No expenditures this month</span
+            >`
+          : ''}
         <section class="by-categories">
           <div class="pie-chart"></div>
           <div class="bar-chart">
