@@ -34,7 +34,7 @@ export default class CreateHistoryView implements View {
     const today = history ? new Date(history.date) : new Date()
     this.year = today.getFullYear().toString()
     this.month = addLeadingZeros(today.getMonth() + 1, 2)
-    this.day = addLeadingZeros(today.getDate(), 2)
+    this.day = addLeadingZeros(7, 2)
     this.categories = categories
     this.payments = payments
     this.history = history
