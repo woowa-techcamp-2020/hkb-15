@@ -1,6 +1,6 @@
 import type { View, History, WindowHistoryState, Category } from 'src/types'
 import cem from 'src/utils/custom-event'
-import './styles'
+import './styles/index.scss'
 import { groupBy, sum, loadHtml, html } from 'src/utils/helper'
 import { PieChart, LineChart } from 'woowahan-chart'
 

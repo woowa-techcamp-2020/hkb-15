@@ -1,6 +1,6 @@
 import { View, History, Payment, Category, WindowHistoryState } from 'src/types'
 import cem from 'src/utils/custom-event'
-import './styles'
+import './styles/index.scss'
 import {
   numberWithCommas,
   groupBy,
