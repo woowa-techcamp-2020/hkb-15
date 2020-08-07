@@ -1,7 +1,7 @@
 import { View, WindowHistoryState } from 'src/types'
 import cem from 'src/utils/custom-event'
 import { monthStr, numberWithCommas, dommer } from 'src/utils/helper'
-import './styles'
+import './styles/index.scss'
 
 export default class HeaderView implements View {
   state: WindowHistoryState

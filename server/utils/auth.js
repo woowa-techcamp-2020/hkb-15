@@ -28,10 +28,10 @@ passport.use(
 )
 
 function isAuthenticated(req, res, next) {
-  // if (req.isAuthenticated()) return next()
-  // else throw createError(401, 'Auth Error')
-  req.user = { id: 1 }
-  return next()
+  if (req.isAuthenticated()) {
+    req.user = { id: 1 }
+    return next()
+  } else throw createError(401, 'Auth Error')
 }
 
 const authenticate = passport.authenticate('github')

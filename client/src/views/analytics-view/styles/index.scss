@@ -40,6 +40,14 @@
   .analytics-container {
     position: relative;
     width: 100%;
+
+    .no-expenditures {
+      font-size: 20px;
+      font-weight: 500;
+      display: block;
+      text-align: center;
+      color: var(--black);
+    }
   }
 
   section.by-categories {

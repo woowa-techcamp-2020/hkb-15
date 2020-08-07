@@ -1,6 +1,6 @@
 import type { View, History, WindowHistoryState, Category } from 'src/types'
 import cem from 'src/utils/custom-event'
-import './styles'
+import './styles/index.scss'
 import { groupBy, sum, loadHtml, html } from 'src/utils/helper'
 import { PieChart, LineChart } from 'woowahan-chart'
 
@@ -124,7 +124,7 @@ export default class AnalyticsView implements View {
         if (max / 10 ** i < 1) {
           break
         } else {
-          head = Math.floor(max / 10 ** i)
+          head = Math.floor(max / 10 ** i) + 1
           exponent = i
         }
       }
@@ -133,7 +133,7 @@ export default class AnalyticsView implements View {
         target: '.line-chart',
         data: dailyExpenditures,
         maxY: head * 10 ** exponent,
-        intervalY: 10 ** exponent,
+        intervalY: 10 ** exponent / 2,
         intervalX: 2,
       })
     }
@@ -174,6 +174,11 @@ export default class AnalyticsView implements View {
       </div>
 
       <div class="analytics-container">
+        ${this.sumsByCategory.length === 0
+          ? html`<span class="no-expenditures"
+              >No expenditures this month</span
+            >`
+          : ''}
         <section class="by-categories">
           <div class="pie-chart"></div>
           <div class="bar-chart">

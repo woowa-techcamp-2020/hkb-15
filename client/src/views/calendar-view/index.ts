@@ -17,7 +17,7 @@ import {
 } from 'src/utils/helper'
 
 import cem from 'src/utils/custom-event'
-import './styles'
+import './styles/index.scss'
 
 export default class CalendarView implements View {
   state: WindowHistoryState

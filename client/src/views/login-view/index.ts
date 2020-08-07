@@ -1,6 +1,6 @@
 import { View } from '../../types'
 import cem from '../../utils/custom-event'
-import './styles'
+import './styles/index.scss'
 
 export default class LoginView implements View {
   constructor() {
