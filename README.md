@@ -1,10 +1,10 @@
-<a href="https://bank.woowahan.dev">
+<a href="http://bank.zoomkoding.com">
   <img src="https://user-images.githubusercontent.com/19797697/88880923-f3fb8400-d268-11ea-8b8d-789b36479499.png" />
 </a>
 
 ---
 
-[Woowahan Financial Ledger](https://bank.woowahan.dev) is a web application that helps you manage your daily expenses. With its simple and flexible UI, you can use the app universally on both desktop and mobile devices(WIP). We provide you sophisticated design elements including dark mode and custom-designed, colorful cards for each vendor which harmonize each other perfectly.
+[Woowahan Financial Ledger](http://bank.zoomkoding.com) is a web application that helps you manage your daily expenses. With its simple and flexible UI, you can use the app universally on both desktop and mobile devices(WIP). We provide you sophisticated design elements including dark mode and custom-designed, colorful cards for each vendor which harmonize each other perfectly.
 
 Unlike the previous To Do projects, we considerably chose [Parcel](https://parceljs.org) to bundle the app instead of webpack to improve the productivity and scalability without hassle.
 
