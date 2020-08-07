@@ -26,7 +26,7 @@ export default class CreateHistoryView implements View {
 
       const modal = document.querySelector('.modal')
       modal.addEventListener('click', this.clickEventHandler.bind(this))
-      modal.addEventListener('keydown', this.keydownEventHandler.bind(this))
+      modal.addEventListener('keyup', this.keyupEventHandler.bind(this))
       modal.addEventListener('focusout', this.focusoutEventHandler.bind(this))
     })
   }
@@ -115,13 +115,13 @@ export default class CreateHistoryView implements View {
     }
   }
 
-  submitButtonHandler(): boolean {
+  isInputValidated(): boolean {
     const content = this.getInputValue('.content-input')
     const amount = this.getInputValue('.amount-input')
     return content.length !== 0 && amount.length !== 0
   }
 
-  keydownEventHandler(e: KeyboardEvent): void {
+  keyupEventHandler(e: KeyboardEvent): void {
     const { target } = e
     if (!(target instanceof HTMLElement)) return
 
@@ -133,7 +133,7 @@ export default class CreateHistoryView implements View {
       '.submit-button'
     ) as HTMLInputElement
 
-    submitButton.disabled = !this.submitButtonHandler()
+    submitButton.disabled = !this.isInputValidated()
   }
 
   async submissionHandler(target: HTMLElement) {
